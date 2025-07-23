@@ -1,9 +1,9 @@
-package com.sejong.chatservice.infrastructure.comment;
+package com.sejong.chatservice.infrastructure.comment.entity;
 
-import com.sejong.chatservice.core.comment.Comment;
+import com.sejong.chatservice.core.comment.domain.Comment;
 import com.sejong.chatservice.core.enums.PostType;
-import com.sejong.chatservice.core.reply.Reply;
-import com.sejong.chatservice.infrastructure.reply.ReplyEntity;
+import com.sejong.chatservice.core.reply.domain.Reply;
+import com.sejong.chatservice.infrastructure.reply.entity.ReplyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +28,9 @@ public class CommentEntity {
     private String content;
     private Long userId;
     private Long postId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(50)")
     private PostType postType;
 
     @OneToMany(mappedBy = "commentEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,19 +53,22 @@ public class CommentEntity {
     }
 
     public Comment toDomain() {
-        List<Reply> replies = replyEntities.stream()
-                .map(ReplyEntity::toDomain)
-                .toList();
-
         return Comment.builder()
-                .id(null)
+                .id(this.id)
                 .content(this.content)
                 .userId(this.userId)
                 .postId(this.postId)
                 .postType(this.postType)
-                .replies(replies)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
+                .replyCount((long)replyEntities.size())
                 .build();
+    }
+
+    public Comment updateComment(String content, LocalDateTime updatedAt) {
+        this.content = content;
+        this.updatedAt = updatedAt;
+
+        return toDomain();
     }
 }

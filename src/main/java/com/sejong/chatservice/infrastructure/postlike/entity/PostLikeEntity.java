@@ -1,7 +1,7 @@
 package com.sejong.chatservice.infrastructure.postlike;
 
 import com.sejong.chatservice.core.enums.PostType;
-import com.sejong.chatservice.core.postlike.PostLike;
+import com.sejong.chatservice.core.postlike.domain.PostLike;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

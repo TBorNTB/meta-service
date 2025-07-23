@@ -16,6 +16,7 @@ public class Reply {
     private Long id;
     private String content;
     private Long userId;
+    private Long parentCommentId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

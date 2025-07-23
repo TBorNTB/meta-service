@@ -1,7 +1,7 @@
 package com.sejong.chatservice.infrastructure.reply;
 
-import com.sejong.chatservice.core.reply.Reply;
-import com.sejong.chatservice.infrastructure.comment.CommentEntity;
+import com.sejong.chatservice.core.reply.domain.Reply;
+import com.sejong.chatservice.infrastructure.comment.entity.CommentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
