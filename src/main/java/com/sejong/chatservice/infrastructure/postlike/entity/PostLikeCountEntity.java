@@ -1,4 +1,4 @@
-package com.sejong.chatservice.infrastructure.postlike;
+package com.sejong.chatservice.infrastructure.postlike.entity;
 
 import com.sejong.chatservice.core.enums.PostType;
 import com.sejong.chatservice.core.postlike.domain.PostLikeCount;
@@ -20,18 +20,21 @@ public class PostLikeCountEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long postId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(50)")
     private PostType postType;
     private Long count;
 
     @Version
     private Long version; // 낙관적 락용
 
-    public static PostLikeCountEntity from(PostLikeCount postLikeCount) {
+    public static PostLikeCountEntity of(Long postId, PostType postType, Long count) {
         return PostLikeCountEntity.builder()
                 .id(null)
-                .postId(postLikeCount.getPostId())
-                .postType(postLikeCount.getPostType())
-                .count(postLikeCount.getCount())
+                .postId(postId)
+                .postType(postType)
+                .count(count)
                 .build();
     }
 
@@ -42,5 +45,13 @@ public class PostLikeCountEntity {
                 .postType(postType)
                 .count(count)
                 .build();
+    }
+
+    public void increment() {
+        this.count++;
+    }
+
+    public void decrement() {
+        this.count--;
     }
 }

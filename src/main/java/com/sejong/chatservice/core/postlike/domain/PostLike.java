@@ -1,4 +1,4 @@
-package com.sejong.chatservice.core.postlike;
+package com.sejong.chatservice.core.postlike.domain;
 
 import com.sejong.chatservice.core.enums.PostType;
 import lombok.AllArgsConstructor;
@@ -18,5 +18,15 @@ public class PostLike {
     private Long userId;
     private Long postId;
     private PostType postType;
-    private LocalDateTime likedAt;
+    private LocalDateTime createdAt;
+
+    public static PostLike from(Long userId, Long postId, PostType postType, LocalDateTime createdAt ) {
+        return PostLike.builder()
+                .id(null)
+                .userId(userId)
+                .postId(postId)
+                .postType(postType)
+                .createdAt(createdAt)
+                .build();
+    }
 }

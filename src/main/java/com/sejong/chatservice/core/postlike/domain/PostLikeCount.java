@@ -1,4 +1,4 @@
-package com.sejong.chatservice.core.postlike;
+package com.sejong.chatservice.core.postlike.domain;
 
 import com.sejong.chatservice.core.enums.PostType;
 import lombok.AllArgsConstructor;
