@@ -5,8 +5,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(LikeController.class)
-@AutoConfigureMockMvc
-class LikeControllerTest {
-
-}
+//@ExtendWith(LikeController.class)
+//@AutoConfigureMockMvc
+//class LikeControllerTest {
+//
+//}
