@@ -1,4 +1,4 @@
-package com.sejong.projectservice.application.error.code;
+package com.sejong.chatservice.application.error.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

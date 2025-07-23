@@ -1,6 +1,6 @@
-package com.sejong.projectservice.application.error.api;
+package com.sejong.chatservice.application.error.api;
 
-import com.sejong.projectservice.application.error.code.ErrorCodeIfs;
+import com.sejong.chatservice.application.error.code.ErrorCodeIfs;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

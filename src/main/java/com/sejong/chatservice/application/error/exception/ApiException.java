@@ -1,8 +1,9 @@
-package com.sejong.projectservice.application.error.exception;
+package com.sejong.chatservice.application.error.exception;
 
-import com.sejong.projectservice.application.error.code.ErrorCodeIfs;
-import lombok.AllArgsConstructor;
+
+import com.sejong.chatservice.application.error.code.ErrorCodeIfs;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public class ApiException extends RuntimeException {
@@ -34,4 +35,6 @@ public class ApiException extends RuntimeException {
         this.errorCodeIfs=errorCodeIfs;
         this.errorDescription=errorDescription;
     }
+
+
 }
