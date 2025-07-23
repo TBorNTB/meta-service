@@ -69,6 +69,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
 
+
 logging:
   level:
     org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor: DEBUG
