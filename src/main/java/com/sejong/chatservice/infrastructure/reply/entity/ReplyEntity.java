@@ -1,4 +1,4 @@
-package com.sejong.chatservice.infrastructure.reply;
+package com.sejong.chatservice.infrastructure.reply.entity;
 
 import com.sejong.chatservice.core.reply.domain.Reply;
 import com.sejong.chatservice.infrastructure.comment.entity.CommentEntity;
@@ -54,10 +54,17 @@ public class ReplyEntity {
     public Reply toDomain() {
         return Reply.builder()
                 .id(id)
+                .parentCommentId(commentEntity.getId())
                 .content(content)
                 .userId(userId)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
+    }
+
+    public ReplyEntity updateReply(String content, LocalDateTime updatedAt) {
+        this.content = content;
+        this.updatedAt = updatedAt;
+        return this;
     }
 }
