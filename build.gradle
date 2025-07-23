@@ -43,6 +43,10 @@ dependencies {
     //  Spring Retry (낙관적 락 재시도 지원)
     implementation 'org.springframework.retry:spring-retry'
 
+    //Eureka 서버
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+
     //  Spring AOP (Retry는 AOP 기반이므로 필요)
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
