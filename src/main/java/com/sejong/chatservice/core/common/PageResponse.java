@@ -1,4 +1,4 @@
-package com.sejong.chatservice.core.dto;
+package com.sejong.chatservice.core.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
