@@ -71,7 +71,7 @@ jobs:
             docker pull 869508798906.dkr.ecr.ap-northeast-2.amazonaws.com/${{ secrets.REPOSITORY_NAME }}:${{ secrets.IMAGE_NAME }}
 
             # 컨테이너 실행
-            docker run -d --name ${{ secrets.IMAGE_NAME }} -p 8080:8080 \
+            docker run -d --name ${{ secrets.IMAGE_NAME }} -P \
               --network ${{secrets.DOCKER_NETWORK_NAME}} \
               -v /home/ubuntu/credentials.json:/app/credentials.json \
               -e GOOGLE_APPLICATION_CREDENTIALS="/app/credentials.json" \
