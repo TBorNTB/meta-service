@@ -33,16 +33,6 @@ spring:
   thymeleaf:
     enabled: false
 
-  eureka:
-    instance:
-      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-      prefer-ip-address: true
-    client:
-      register-with-eureka: true
-      fetch-registry: true
-      service-url:
-        defaultZone: ${EUREKA_DEFAULTZONE}
-
 springdoc:
   api-docs:
     version: openapi_3_0
@@ -53,6 +43,13 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
+
+  cloud:
+    discovery:
+      enabled: true
+    loadbalancer:
+      ribbon:
+        enabled: false
 
 management:
   endpoints:
@@ -65,6 +62,12 @@ management:
       show-details: when-authorized
       show-components: always
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULTZONE}
+    register-with-eureka: true
+    fetch-registry: true
 
 logging:
   level:
