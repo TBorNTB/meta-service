@@ -1,7 +1,7 @@
 package com.sejong.chatservice.application.postlike.service;
 
-import com.sejong.chatservice.application.error.code.ErrorCode;
-import com.sejong.chatservice.application.error.exception.ApiException;
+import com.sejong.chatservice.core.error.code.ErrorCode;
+import com.sejong.chatservice.core.error.exception.ApiException;
 import com.sejong.chatservice.application.postlike.dto.response.LikeCountResponse;
 import com.sejong.chatservice.application.postlike.dto.response.LikeResponse;
 import com.sejong.chatservice.application.postlike.dto.response.LikeStatusResponse;

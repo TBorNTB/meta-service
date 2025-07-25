@@ -1,9 +1,10 @@
 package com.sejong.chatservice.application.reply.service;
 
-import com.sejong.chatservice.application.reply.command.ReplyCreateCommand;
+import com.sejong.chatservice.core.common.PageSearchCommand;
+import com.sejong.chatservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.chatservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.chatservice.application.reply.dto.response.ReplyCommentResponse;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.PageResult;
 import com.sejong.chatservice.core.reply.domain.Reply;
 import com.sejong.chatservice.core.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,10 @@ public class ReplyService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<Reply> getAllReplyComments(Long commentParentId, int size, LocalDateTime cursor) {
-        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<Reply> replies = replyRepository.findAllReplyComments(commentParentId, cursor, pageable);
-        return PageResponse.from(replies,size);
+    public PageResult<Reply> getAllReplyComments(Long commentParentId, int size, LocalDateTime cursor) {
+        PageSearchCommand pageSearchCommand = PageSearchCommand.of(size, cursor, "DESC", "createdAt");
+        List<Reply> replies = replyRepository.findAllReplyComments(commentParentId, pageSearchCommand);
+        return PageResult.from(replies,size);
     }
 
     @Transactional

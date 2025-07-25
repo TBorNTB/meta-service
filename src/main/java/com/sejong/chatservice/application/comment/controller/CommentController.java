@@ -1,12 +1,12 @@
 package com.sejong.chatservice.application.comment.controller;
 
-import com.sejong.chatservice.application.comment.command.CommentCommand;
-import com.sejong.chatservice.application.comment.command.ShowCursorCommentCommand;
+import com.sejong.chatservice.core.comment.command.CommentCommand;
+import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.application.comment.dto.request.CommentRequest;
 import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
 import com.sejong.chatservice.application.comment.service.CommentService;
 import com.sejong.chatservice.core.comment.domain.Comment;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.PageResult;
 import com.sejong.chatservice.core.enums.PostType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,15 +38,15 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PageResponse<Comment>> showComments(
+    public ResponseEntity<PageResult<Comment>> showComments(
             @PathVariable(name = "postId") Long postId,
             @RequestParam(name = "postType") PostType postType,
             @RequestParam(name = "size", defaultValue = "5") int size,
             @RequestParam(name = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor
     ) {
         ShowCursorCommentCommand command = ShowCursorCommentCommand.of(postId, postType, size, cursor);
-        PageResponse<Comment> pageResponse = commentService.getComments(command);
-        return ResponseEntity.ok(pageResponse);
+        PageResult<Comment> pageResult = commentService.getComments(command);
+        return ResponseEntity.ok(pageResult);
     }
 
     @PatchMapping("/{commentId}")
