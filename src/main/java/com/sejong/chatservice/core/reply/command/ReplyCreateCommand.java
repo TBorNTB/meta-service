@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.reply.command;
+package com.sejong.chatservice.core.reply.command;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
