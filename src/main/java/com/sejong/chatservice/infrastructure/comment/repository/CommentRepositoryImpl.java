@@ -2,10 +2,13 @@ package com.sejong.chatservice.infrastructure.comment.repository;
 
 import com.sejong.chatservice.core.comment.domain.Comment;
 import com.sejong.chatservice.core.comment.repository.CommentRepository;
+import com.sejong.chatservice.core.common.PageSearchCommand;
 import com.sejong.chatservice.core.enums.PostType;
 import com.sejong.chatservice.infrastructure.comment.entity.CommentEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -25,8 +28,13 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findAllComments(Long postId, PostType postType, LocalDateTime cursor, Pageable pageable) {
-        List<CommentEntity> commentEntities = commentJpaRepository.findAllComments(postId, postType, cursor, pageable);
+    public List<Comment> findAllComments(Long postId, PostType postType, PageSearchCommand command) {
+        Pageable pageable = PageRequest.of(
+                0,
+                command.getSize(),
+                Sort.by(Sort.Direction.fromString(command.getDirection()), command.getSort())
+        );
+        List<CommentEntity> commentEntities = commentJpaRepository.findAllComments(postId, postType, command.getCursor(), pageable);
 
         return commentEntities.stream()
                 .map(CommentEntity::toDomain)

@@ -1,8 +1,8 @@
 package com.sejong.chatservice.infrastructure.postlike.repository;
 
-import com.sejong.chatservice.application.error.code.ErrorCode;
-import com.sejong.chatservice.application.error.exception.ApiException;
 import com.sejong.chatservice.core.enums.PostType;
+import com.sejong.chatservice.core.error.code.ErrorCode;
+import com.sejong.chatservice.core.error.exception.ApiException;
 import com.sejong.chatservice.core.postlike.domain.PostLike;
 import com.sejong.chatservice.core.postlike.domain.PostLikeCount;
 import com.sejong.chatservice.core.postlike.repository.LikeRepository;

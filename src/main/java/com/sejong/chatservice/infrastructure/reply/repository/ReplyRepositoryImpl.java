@@ -1,13 +1,15 @@
 package com.sejong.chatservice.infrastructure.reply.repository;
 
-import com.sejong.chatservice.core.comment.repository.CommentRepository;
+import com.sejong.chatservice.core.common.PageSearchCommand;
 import com.sejong.chatservice.core.reply.domain.Reply;
 import com.sejong.chatservice.core.reply.repository.ReplyRepository;
 import com.sejong.chatservice.infrastructure.comment.entity.CommentEntity;
 import com.sejong.chatservice.infrastructure.comment.repository.CommentJpaRepository;
 import com.sejong.chatservice.infrastructure.reply.entity.ReplyEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -33,8 +35,14 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     }
 
     @Override
-    public List<Reply> findAllReplyComments(Long commentParentId, LocalDateTime cursor, Pageable pageable) {
-        List<ReplyEntity> replyEntities = replyJpaRepository.findAllReplyComments(commentParentId, cursor, pageable);
+    public List<Reply> findAllReplyComments(Long commentParentId, PageSearchCommand command) {
+        Pageable pageable = PageRequest.of(
+                0,
+                command.getSize(),
+                Sort.by(Sort.Direction.fromString(command.getDirection()), command.getSort())
+        );
+
+        List<ReplyEntity> replyEntities = replyJpaRepository.findAllReplyComments(commentParentId, command.getCursor(), pageable);
 
         return replyEntities.stream()
                 .map(ReplyEntity::toDomain)

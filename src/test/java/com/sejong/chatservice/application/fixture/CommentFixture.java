@@ -1,10 +1,9 @@
 package com.sejong.chatservice.application.fixture;
 
-import com.sejong.chatservice.application.comment.command.CommentCommand;
-import com.sejong.chatservice.application.comment.command.ShowCursorCommentCommand;
-import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
+import com.sejong.chatservice.core.comment.command.CommentCommand;
+import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.core.comment.domain.Comment;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.PageResult;
 import com.sejong.chatservice.core.enums.PostType;
 
 import java.time.LocalDateTime;
@@ -27,12 +26,12 @@ public class CommentFixture {
 
 
 
-    public static PageResponse<Comment> getPageResponse() {
+    public static PageResult<Comment> getPageResponse() {
         Comment comment1 = getComment(1L);
         Comment comment2 = getComment(2L);
 
         List<Comment> comments = List.of(comment1, comment2);
-        return PageResponse.from(comments, 5);
+        return PageResult.from(comments, 5);
     }
 
     public static CommentCommand getCommentCommand() {

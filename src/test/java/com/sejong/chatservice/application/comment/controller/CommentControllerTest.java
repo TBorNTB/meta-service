@@ -1,16 +1,15 @@
 package com.sejong.chatservice.application.comment.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sejong.chatservice.application.comment.command.CommentCommand;
-import com.sejong.chatservice.application.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.application.comment.dto.request.CommentRequest;
 import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
 import com.sejong.chatservice.application.comment.service.CommentService;
 import com.sejong.chatservice.application.config.MockBeansConfig;
 import com.sejong.chatservice.application.fixture.CommentFixture;
+import com.sejong.chatservice.core.comment.command.CommentCommand;
+import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.core.comment.domain.Comment;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.PageResult;
 import com.sejong.chatservice.core.enums.PostType;
 import jakarta.validation.Valid;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -75,7 +71,7 @@ class CommentControllerTest {
         int size = 5;
         LocalDateTime cursor = LocalDateTime.now();
         ShowCursorCommentCommand mockCommand = ShowCursorCommentCommand.of(postId, postType, size, cursor);
-        PageResponse<Comment> response = CommentFixture.getPageResponse();
+        PageResult<Comment> response = CommentFixture.getPageResponse();
         when(commentService.getComments(mockCommand)).thenReturn(response);
 
         //when && then

@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 public class PageSearchCommand {
     private int size;
     private LocalDateTime cursor;
-    private String sort;
     private String direction;
+    private String sort;
 
-    public static PageSearchCommand of(int size, LocalDateTime cursor , String sort, String direction) {
+    public static PageSearchCommand of(int size, LocalDateTime cursor , String direction, String sort) {
         return PageSearchCommand.builder()
                 .size(size)
                 .cursor(cursor)
