@@ -1,15 +1,14 @@
 package com.sejong.chatservice.core.comment.domain;
 
-import com.sejong.chatservice.application.comment.command.CommentCommand;
-import com.sejong.chatservice.application.error.code.ErrorCode;
-import com.sejong.chatservice.application.error.exception.ApiException;
+import com.sejong.chatservice.core.comment.command.CommentCommand;
+import com.sejong.chatservice.core.error.code.ErrorCode;
+import com.sejong.chatservice.core.error.exception.ApiException;
 import com.sejong.chatservice.core.common.HasCreatedAt;
 import com.sejong.chatservice.core.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 

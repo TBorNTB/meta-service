@@ -3,9 +3,7 @@ package com.sejong.chatservice.core.postlike.repository;
 import com.sejong.chatservice.core.enums.PostType;
 import com.sejong.chatservice.core.postlike.domain.PostLike;
 import com.sejong.chatservice.core.postlike.domain.PostLikeCount;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface LikeRepository {
     PostLike save(PostLike postLike);
 
