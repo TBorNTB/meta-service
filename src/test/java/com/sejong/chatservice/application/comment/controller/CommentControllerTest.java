@@ -9,13 +9,14 @@ import com.sejong.chatservice.application.fixture.CommentFixture;
 import com.sejong.chatservice.core.comment.command.CommentCommand;
 import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.core.comment.domain.Comment;
-import com.sejong.chatservice.core.common.PageResult;
+import com.sejong.chatservice.core.common.pagination.CursorPageResponse;
 import com.sejong.chatservice.core.enums.PostType;
 import jakarta.validation.Valid;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ class CommentControllerTest {
         int size = 5;
         LocalDateTime cursor = LocalDateTime.now();
         ShowCursorCommentCommand mockCommand = ShowCursorCommentCommand.of(postId, postType, size, cursor);
-        PageResult<Comment> response = CommentFixture.getPageResponse();
+        CursorPageResponse<Comment> response = CommentFixture.getPageResponse();
         when(commentService.getComments(mockCommand)).thenReturn(response);
 
         //when && then

@@ -6,12 +6,12 @@ import com.sejong.chatservice.application.comment.dto.request.CommentRequest;
 import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
 import com.sejong.chatservice.core.comment.domain.Comment;
 import com.sejong.chatservice.core.comment.repository.CommentRepository;
-import com.sejong.chatservice.core.common.PageResult;
-import com.sejong.chatservice.core.common.PageSearchCommand;
+import com.sejong.chatservice.core.common.pagination.Cursor;
+import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
+import com.sejong.chatservice.core.common.pagination.CursorPageResponse;
+import com.sejong.chatservice.core.common.pagination.PageSearchCommand;
+import com.sejong.chatservice.core.enums.PostType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +36,14 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public PageResult<Comment> getComments(ShowCursorCommentCommand command) {
-        PageSearchCommand pageSearchCommand = PageSearchCommand.of(command.getSize(), command.getCursor(), "DESC","createdAt");
-        List<Comment> comments = commentRepository.findAllComments(
-                command.getPostId(),
-                command.getPostType(),
-                pageSearchCommand);
+    public CursorPageResponse<List<Comment>> getComments(CursorPageRequest cursorPageRequest, Long postId, PostType postType) {
 
-        return PageResult.from(comments,command.getSize());
+        List<Comment> comments = commentRepository.findAllComments(
+                postId,
+                postType,
+                cursorPageRequest);
+
+        return CursorPageResponse.from(comments,cursorPageRequest.getSize(), comment -> Cursor.of(comment.getId()) );
 
     }
 

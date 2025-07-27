@@ -1,21 +1,22 @@
 package com.sejong.chatservice.application.comment.controller;
 
+import com.sejong.chatservice.application.pagination.CursorPageReqDto;
 import com.sejong.chatservice.core.comment.command.CommentCommand;
-import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.application.comment.dto.request.CommentRequest;
 import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
 import com.sejong.chatservice.application.comment.service.CommentService;
 import com.sejong.chatservice.core.comment.domain.Comment;
-import com.sejong.chatservice.core.common.PageResult;
+import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
+import com.sejong.chatservice.core.common.pagination.CursorPageResponse;
 import com.sejong.chatservice.core.enums.PostType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,15 +39,14 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PageResult<Comment>> showComments(
+    public ResponseEntity<CursorPageResponse<List<Comment>>> showComments(
             @PathVariable(name = "postId") Long postId,
             @RequestParam(name = "postType") PostType postType,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor
+            @ParameterObject @Valid CursorPageReqDto cursorPageReqDto
     ) {
-        ShowCursorCommentCommand command = ShowCursorCommentCommand.of(postId, postType, size, cursor);
-        PageResult<Comment> pageResult = commentService.getComments(command);
-        return ResponseEntity.ok(pageResult);
+        CursorPageRequest cursorRequest = cursorPageReqDto.toPageRequest();
+        CursorPageResponse<List<Comment>> comments = commentService.getComments(cursorRequest, postId, postType);
+        return ResponseEntity.ok(comments);
     }
 
     @PatchMapping("/{commentId}")
