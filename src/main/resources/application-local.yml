@@ -1,15 +1,12 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
   application:
     name: chat-service
 
-  profiles:
-    active: default
-
   datasource:
-    url: jdbc:mysql://localhost:3306/chat_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -20,7 +17,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     defer-datasource-initialization: true
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -36,15 +33,15 @@ spring:
   thymeleaf:
     enabled: false
 
-  eureka:
-    instance:
-      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-      prefer-ip-address: true
-    client:
-      register-with-eureka: true
-      fetch-registry: true
-      service-url:
-        defaultZone: ${EUREKA_DEFAULTZONE}
+#  eureka:
+#    instance:
+#      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#      prefer-ip-address: true
+#    client:
+#      register-with-eureka: true
+#      fetch-registry: true
+#      service-url:
+#        defaultZone: ${EUREKA_DEFAULTZONE}
 
 springdoc:
   api-docs:
