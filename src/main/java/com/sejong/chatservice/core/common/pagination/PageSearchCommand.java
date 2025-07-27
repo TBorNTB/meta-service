@@ -1,4 +1,4 @@
-package com.sejong.chatservice.core.common;
+package com.sejong.chatservice.core.common.pagination;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
