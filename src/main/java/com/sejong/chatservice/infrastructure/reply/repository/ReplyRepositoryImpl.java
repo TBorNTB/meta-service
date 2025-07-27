@@ -1,6 +1,9 @@
 package com.sejong.chatservice.infrastructure.reply.repository;
 
-import com.sejong.chatservice.core.common.PageSearchCommand;
+import com.sejong.chatservice.core.common.pagination.Cursor;
+import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
+import com.sejong.chatservice.core.common.pagination.PageSearchCommand;
+import com.sejong.chatservice.core.common.pagination.enums.SortDirection;
 import com.sejong.chatservice.core.reply.domain.Reply;
 import com.sejong.chatservice.core.reply.repository.ReplyRepository;
 import com.sejong.chatservice.infrastructure.comment.entity.CommentEntity;
@@ -12,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,14 +38,22 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     }
 
     @Override
-    public List<Reply> findAllReplyComments(Long commentParentId, PageSearchCommand command) {
+    public List<Reply> findAllReplyComments(Long commentParentId, CursorPageRequest cursorRequest) {
+        Long cursorId = Optional.ofNullable(cursorRequest.getCursor())
+                .map(Cursor::getCommentId)
+                .orElse(null);
+
+        Sort.Direction sortDirection = cursorRequest.getDirection() == SortDirection.ASC
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
         Pageable pageable = PageRequest.of(
                 0,
-                command.getSize(),
-                Sort.by(Sort.Direction.fromString(command.getDirection()), command.getSort())
+                cursorRequest.getSize() + 1,
+                Sort.by(sortDirection, cursorRequest.getSortBy())
         );
 
-        List<ReplyEntity> replyEntities = replyJpaRepository.findAllReplyComments(commentParentId, command.getCursor(), pageable);
+        List<ReplyEntity> replyEntities = replyJpaRepository.findAllReplyComments(commentParentId,cursorId ,pageable);
 
         return replyEntities.stream()
                 .map(ReplyEntity::toDomain)
