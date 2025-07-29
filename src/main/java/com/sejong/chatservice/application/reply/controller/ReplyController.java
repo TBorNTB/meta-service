@@ -1,19 +1,24 @@
 package com.sejong.chatservice.application.reply.controller;
 
-import com.sejong.chatservice.application.reply.command.ReplyCreateCommand;
+import com.sejong.chatservice.application.pagination.CursorPageReqDto;
+import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
+import com.sejong.chatservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.chatservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.chatservice.application.reply.dto.response.ReplyCommentResponse;
 import com.sejong.chatservice.application.reply.service.ReplyService;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.pagination.CursorPageResponse;
 import com.sejong.chatservice.core.reply.domain.Reply;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,12 +39,12 @@ public class ReplyController {
     }
 
     @GetMapping("/{commentParentId}")
-    public ResponseEntity<PageResponse<Reply>> showReplyComments(
+    public ResponseEntity<CursorPageResponse<List<Reply>>> showReplyComments(
             @PathVariable(name="commentParentId") Long commentParentId,
-            @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor
-    ){
-        PageResponse<Reply> response = replyService.getAllReplyComments(commentParentId, size, cursor);
+            @ParameterObject @Valid CursorPageReqDto cursorPageReqDto
+            ){
+        CursorPageRequest pageRequest = cursorPageReqDto.toPageRequest();
+        CursorPageResponse<List<Reply>> response = replyService.getAllReplyComments(commentParentId, pageRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

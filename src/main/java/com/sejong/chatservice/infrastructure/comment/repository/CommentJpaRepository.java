@@ -17,14 +17,17 @@ import java.util.Optional;
 
 public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long> {
 
-    @Query("SELECT c FROM CommentEntity c where c.postId = :postId AND c.postType = :postType "+
-    "AND (:cursor IS NULL OR c.createdAt < :cursor) "+
-    "ORDER BY c.createdAt DESC")
-    List<CommentEntity> findAllComments( @Param("postId") Long postId,
-                                         @Param("postType") PostType postType,
-                                         @Param("cursor") LocalDateTime cursor,
-                                         Pageable pageable);
-
-
+    @Query("""
+    SELECT c FROM CommentEntity c
+    WHERE c.postId = :postId
+      AND c.postType = :postType
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id < :cursorId)
+    """)
+    List<CommentEntity> findAllComments(
+            @Param("postId") Long postId,
+            @Param("postType") PostType postType,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
 
 }

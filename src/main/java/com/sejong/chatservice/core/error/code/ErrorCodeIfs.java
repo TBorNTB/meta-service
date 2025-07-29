@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.error.code;
+package com.sejong.chatservice.core.error.code;
 
 public interface ErrorCodeIfs {
     Integer getHttpStatusCode();

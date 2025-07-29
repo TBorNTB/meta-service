@@ -1,10 +1,8 @@
 package com.sejong.chatservice.core.reply.domain;
 
-import com.sejong.chatservice.application.error.code.ErrorCode;
-import com.sejong.chatservice.application.error.exception.ApiException;
-import com.sejong.chatservice.application.reply.command.ReplyCreateCommand;
-import com.sejong.chatservice.core.common.HasCreatedAt;
-import jakarta.validation.constraints.NotBlank;
+import com.sejong.chatservice.core.error.code.ErrorCode;
+import com.sejong.chatservice.core.error.exception.ApiException;
+import com.sejong.chatservice.core.reply.command.ReplyCreateCommand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Reply implements HasCreatedAt {
+public class Reply {
 
     private Long id;
     private String content;

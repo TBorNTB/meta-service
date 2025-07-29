@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface ReplyJpaRepository extends JpaRepository<ReplyEntity, Long> {
     @Query("SELECT r FROM ReplyEntity r WHERE r.commentEntity.id = :commentParentId AND " +
-            "(:cursor IS NULL OR r.createdAt < :cursor) ORDER BY r.createdAt DESC ")
+            "(:cursorId IS NULL OR :cursorId <= 0 OR r.id < :cursorId) ORDER BY r.createdAt DESC ")
     List<ReplyEntity> findAllReplyComments(
             @Param("commentParentId")Long commentParentId,
-            @Param("cursor")LocalDateTime cursor,
+            @Param("cursorId")Long cursorId,
             Pageable pageable);
 }

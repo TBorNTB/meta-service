@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.comment.command;
+package com.sejong.chatservice.core.comment.command;
 
 import com.sejong.chatservice.core.enums.PostType;
 import lombok.AllArgsConstructor;

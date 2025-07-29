@@ -1,16 +1,17 @@
 package com.sejong.chatservice.application.comment.service;
 
-import com.sejong.chatservice.application.comment.command.CommentCommand;
-import com.sejong.chatservice.application.comment.command.ShowCursorCommentCommand;
+import com.sejong.chatservice.core.comment.command.CommentCommand;
+import com.sejong.chatservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.chatservice.application.comment.dto.request.CommentRequest;
 import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
 import com.sejong.chatservice.core.comment.domain.Comment;
 import com.sejong.chatservice.core.comment.repository.CommentRepository;
-import com.sejong.chatservice.core.common.PageResponse;
+import com.sejong.chatservice.core.common.pagination.Cursor;
+import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
+import com.sejong.chatservice.core.common.pagination.CursorPageResponse;
+import com.sejong.chatservice.core.common.pagination.PageSearchCommand;
+import com.sejong.chatservice.core.enums.PostType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,16 +36,14 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<Comment> getComments(ShowCursorCommentCommand command) {
-        Pageable pageable = PageRequest.of(0, command.getSize(), Sort.by(Sort.Direction.DESC, "createdAt"));
+    public CursorPageResponse<List<Comment>> getComments(CursorPageRequest cursorPageRequest, Long postId, PostType postType) {
 
         List<Comment> comments = commentRepository.findAllComments(
-                command.getPostId(),
-                command.getPostType(),
-                command.getCursor(),
-                pageable);
+                postId,
+                postType,
+                cursorPageRequest);
 
-        return PageResponse.from(comments,command.getSize());
+        return CursorPageResponse.from(comments,cursorPageRequest.getSize(), comment -> Cursor.of(comment.getId()) );
 
     }
 

@@ -1,9 +1,8 @@
-package com.sejong.chatservice.application.error.exceptionHandler;
-
+package com.sejong.chatservice.application.error;
 
 import com.sejong.chatservice.application.error.api.ErrorResponse;
-import com.sejong.chatservice.application.error.code.ErrorCodeIfs;
-import com.sejong.chatservice.application.error.exception.ApiException;
+import com.sejong.chatservice.core.error.code.ErrorCodeIfs;
+import com.sejong.chatservice.core.error.exception.ApiException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
