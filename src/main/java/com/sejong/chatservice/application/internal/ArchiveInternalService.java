@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.external;
+package com.sejong.chatservice.application.internal;
 
 import com.sejong.chatservice.core.error.code.ErrorCode;
 import com.sejong.chatservice.core.error.exception.ApiException;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ArchiveExternalService {
+public class ArchiveInternalService {
 
     private final ArchiveClient archiveClient;
 

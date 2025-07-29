@@ -1,7 +1,5 @@
-package com.sejong.chatservice.application.external;
+package com.sejong.chatservice.application.internal;
 
-import com.sejong.chatservice.application.comment.dto.response.CommentResponse;
-import com.sejong.chatservice.core.comment.command.CommentCommand;
 import com.sejong.chatservice.core.error.code.ErrorCode;
 import com.sejong.chatservice.core.error.exception.ApiException;
 import com.sejong.chatservice.infrastructure.feign.UserClient;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class UserExternalService {
+public class UserInternalService {
     private final UserClient userClient;;
 
     @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateExistsFallback")
