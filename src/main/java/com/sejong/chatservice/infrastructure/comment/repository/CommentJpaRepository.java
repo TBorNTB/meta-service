@@ -23,7 +23,20 @@ public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long>
       AND c.postType = :postType
       AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id < :cursorId)
     """)
-    List<CommentEntity> findAllComments(
+    List<CommentEntity> findAllCommentsDesc(
+            @Param("postId") Long postId,
+            @Param("postType") PostType postType,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT c FROM CommentEntity c
+    WHERE c.postId = :postId
+      AND c.postType = :postType
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id > :cursorId)
+    """)
+    List<CommentEntity> findAllCommentsAsc(
             @Param("postId") Long postId,
             @Param("postType") PostType postType,
             @Param("cursorId") Long cursorId,

@@ -72,7 +72,11 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public PostLikeCount findLikeCount(Long postId, PostType postType) {
         PostLikeCountEntity entity = likeCountJpaRepository.findByPostIdAndPostType(postId, postType)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, "없잖아여"));
+                .orElseGet(() -> {
+                    PostLikeCountEntity newEntity = PostLikeCountEntity.of(postId, postType, 0L);
+                    return likeCountJpaRepository.save(newEntity);
+                });
+
         return entity.toDomain();
     }
 }

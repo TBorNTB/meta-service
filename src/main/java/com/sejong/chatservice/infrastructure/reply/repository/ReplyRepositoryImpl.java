@@ -49,11 +49,17 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
         Pageable pageable = PageRequest.of(
                 0,
-                cursorRequest.getSize() + 1,
+                cursorRequest.getSize() + 1, // 다음 페이지 여부 판단용으로 1개 더
                 Sort.by(sortDirection, cursorRequest.getSortBy())
         );
 
-        List<ReplyEntity> replyEntities = replyJpaRepository.findAllReplyComments(commentParentId,cursorId ,pageable);
+        List<ReplyEntity> replyEntities;
+
+        if (sortDirection == Sort.Direction.ASC) {
+            replyEntities = replyJpaRepository.findAllReplyCommentsAsc(commentParentId, cursorId, pageable);
+        } else {
+            replyEntities = replyJpaRepository.findAllReplyCommentsDesc(commentParentId, cursorId, pageable);
+        }
 
         return replyEntities.stream()
                 .map(ReplyEntity::toDomain)

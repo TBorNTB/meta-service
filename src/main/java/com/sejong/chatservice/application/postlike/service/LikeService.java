@@ -1,5 +1,6 @@
 package com.sejong.chatservice.application.postlike.service;
 
+import com.sejong.chatservice.application.internal.PostInternalFacade;
 import com.sejong.chatservice.core.error.code.ErrorCode;
 import com.sejong.chatservice.core.error.exception.ApiException;
 import com.sejong.chatservice.application.postlike.dto.response.LikeCountResponse;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
+    private final PostInternalFacade postInternalFacade;
 
     @Retryable(
             value = ObjectOptimisticLockingFailureException.class,
@@ -31,8 +33,7 @@ public class LikeService {
     )
     @Transactional
     public LikeResponse createLike(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
+        postInternalFacade.checkPost(postId,postType);
         likeRepository.validateExists(Long.valueOf(userId), postId, postType);
 
         PostLike postLike = PostLike.from(Long.valueOf(userId), postId, postType, LocalDateTime.now());
@@ -49,8 +50,7 @@ public class LikeService {
     )
     @Transactional
     public LikeResponse deleteLike(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
+        postInternalFacade.checkPost(postId,postType);
         PostLike postLike = likeRepository.findOne(Long.valueOf(userId), postId, postType);
         Long deletedId = likeRepository.deleteById(postLike.getId());
 
@@ -64,15 +64,16 @@ public class LikeService {
         throw new ApiException(ErrorCode.BAD_REQUEST, "좋아요 요청이 너무 몰렸습니다. 잠시 후 다시 시도해주세요.");
     }
 
-
+    @Transactional(readOnly = true)
     public LikeStatusResponse getLikeStatus(String userId, Long postId, PostType postType) {
         boolean isLiked = likeRepository.isExists(Long.valueOf(userId),postId,postType);
         return LikeStatusResponse.of(isLiked);
     }
 
-    public LikeCountResponse getLikeCount(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
+    @Transactional
+    public LikeCountResponse getLikeCount(Long postId, PostType postType) {
+
+        postInternalFacade.checkPost(postId,postType);
         PostLikeCount postLikeCount = likeRepository.findLikeCount(postId, postType);
         return LikeCountResponse.of(postLikeCount.getCount());
 

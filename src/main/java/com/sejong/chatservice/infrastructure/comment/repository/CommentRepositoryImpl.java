@@ -37,21 +37,21 @@ public class CommentRepositoryImpl implements CommentRepository {
                 .orElse(null);
 
         Sort.Direction sortDirection = cursorRequest.getDirection() == SortDirection.ASC
-            ? Sort.Direction.ASC 
-            : Sort.Direction.DESC;
-            
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
         Pageable pageable = PageRequest.of(
                 0,
-                cursorRequest.getSize() + 1,
+                cursorRequest.getSize() + 1, // next 페이지 판단용으로 1개 더 조회
                 Sort.by(sortDirection, cursorRequest.getSortBy())
         );
 
-        List<CommentEntity> commentEntities = commentJpaRepository.findAllComments(
-                postId,
-                postType,
-                cursorId,
-                pageable
-        );
+        List<CommentEntity> commentEntities;
+        if (sortDirection == Sort.Direction.ASC) {
+            commentEntities = commentJpaRepository.findAllCommentsAsc(postId, postType, cursorId, pageable);
+        } else {
+            commentEntities = commentJpaRepository.findAllCommentsDesc(postId, postType, cursorId, pageable);
+        }
 
         return commentEntities.stream()
                 .map(CommentEntity::toDomain)

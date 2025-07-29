@@ -51,11 +51,10 @@ public class LikeController {
 
     @GetMapping("/{postId}/count")
     public ResponseEntity<LikeCountResponse> getLikeCount(
-            @RequestHeader("x-user") String userId,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeCountResponse response = likeService.getLikeCount(userId, postId, postType);
+        LikeCountResponse response = likeService.getLikeCount(postId, postType);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
