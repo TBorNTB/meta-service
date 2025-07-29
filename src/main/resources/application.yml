@@ -33,6 +33,14 @@ spring:
   thymeleaf:
     enabled: false
 
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 2000
+            readTimeout: 3000
+            loggerLevel: basic
 springdoc:
   api-docs:
     version: openapi_3_0
@@ -74,3 +82,18 @@ logging:
   level:
     org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor: DEBUG
     com.sejong.newsletterservice.infrastructure.email: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myFeignClient:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
+  timelimiter:
+    instances:
+      myFeignClient:
+        timeoutDuration: 3s
