@@ -30,6 +30,18 @@ spring:
         order_inserts: true
         order_updates: true
 
+  data:
+    redis:
+      host: ${EC2_HOST}
+      port: ${REDIS_PORT}
+      timeout: 6000
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+
   thymeleaf:
     enabled: false
 
