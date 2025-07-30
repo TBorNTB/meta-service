@@ -11,23 +11,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LikeResponse {
-    private Long likedId;
-    private String message;
     private Long likedCount;
+    private Boolean isLiked;
 
-    public static LikeResponse from(PostLike postLike, Long likedCount) {
+    public static LikeResponse from( Long likedCount) {
         return LikeResponse.builder()
-                .likedId(postLike.getId())
                 .likedCount(likedCount)
-                .message("좋아요가 성공적으로 저장되었습니다.")
+                .isLiked(Boolean.TRUE)
                 .build();
     }
 
-    public static LikeResponse deleteFrom(Long deletedId, Long likedCount) {
+    public static LikeResponse deleteFrom(Long likedCount) {
         return LikeResponse.builder()
-                .likedId(deletedId)
                 .likedCount(likedCount)
-                .message("좋아요가 취소되었습니다.")
+                .isLiked(Boolean.FALSE)
                 .build();
     }
 }
