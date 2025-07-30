@@ -11,6 +11,9 @@ import com.sejong.chatservice.infrastructure.postlike.entity.PostLikeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class LikeRepositoryImpl implements LikeRepository {
@@ -52,10 +55,9 @@ public class LikeRepositoryImpl implements LikeRepository {
     }
 
     @Override
-    public PostLike findOne(Long aLong, Long postId, PostType postType) {
-        PostLikeEntity postLikeEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(aLong, postId, postType)
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, "없어요!"));
-        return postLikeEntity.toDomain();
+    public Optional<PostLike> findOne(Long userId, Long postId, PostType postType) {
+        return likeJpaRepository.findByUserIdAndPostIdAndPostType(userId, postId, postType)
+                .map(PostLikeEntity::toDomain);
     }
 
     @Override
@@ -78,5 +80,12 @@ public class LikeRepositoryImpl implements LikeRepository {
                 });
 
         return entity.toDomain();
+    }
+
+    @Override
+    public List<PostLike> findAll() {
+        return likeJpaRepository.findAll().stream()
+                .map(PostLikeEntity::toDomain)
+                .toList();
     }
 }
