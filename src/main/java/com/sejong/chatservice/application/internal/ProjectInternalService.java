@@ -17,6 +17,7 @@ public class ProjectInternalService {
 
     @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateExistsFallback")
     public void validateExists(Long postId) {
+        log.info("시작...");
         ResponseEntity<Boolean> response = projectClient.checkProject(postId);
         if (Boolean.FALSE.equals(response.getBody())) {
             log.info("Project 검증 실패");

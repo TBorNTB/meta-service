@@ -41,7 +41,7 @@ class LikeControllerTest {
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.createLike(userId, postId, postType);
+        LikeResponse response = likeService.createLike(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
