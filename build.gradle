@@ -52,6 +52,12 @@ dependencies {
     // Resilience4j Core 모듈
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
 
+    //Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.apache.commons:commons-pool2' // 커넥션 풀 관리
+
+    //spring-batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
 
     //  Spring AOP (Retry는 AOP 기반이므로 필요)
     implementation 'org.springframework.boot:spring-boot-starter-aop'
