@@ -29,7 +29,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(CommentCommand command) {
-        postInternalFacade.checkPost(command.getPostId(),command.getPostType());
+        postInternalFacade.checkPost(command.getPostId(), command.getPostType());
 
         Comment comment = Comment.of(command, LocalDateTime.now());
         return CommentResponse.from(commentRepository.save(comment));
@@ -38,21 +38,18 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CursorPageResponse<List<Comment>> getComments(CursorPageRequest cursorPageRequest, Long postId, PostType postType) {
 
-        postInternalFacade.checkPost(postId,postType);
+        postInternalFacade.checkPost(postId, postType);
 
         List<Comment> comments = commentRepository.findAllComments(
                 postId,
                 postType,
                 cursorPageRequest);
 
-        return CursorPageResponse.from(comments,cursorPageRequest.getSize(), comment -> Cursor.of(comment.getId()) );
+        return CursorPageResponse.from(comments, cursorPageRequest.getSize(), comment -> Cursor.of(comment.getId()));
     }
 
     @Transactional
-    public CommentResponse updateComment(String userId, Long commentId,  CommentRequest request ) {
-        //todo 여기서 고민인게 헤더에서 뽑은 유저 정보는 반드시 무조건 나의 정보라는걸 확신할 수 있을까?
-        //todo 확신할 수 있다면 따로 본인 검증 로직이 필요 없다.
-        //todo 그러나 확신할 수 없다면 따로 본인 검증 로직이 필요한데 이 부분은 어떻게 해야 될까?
+    public CommentResponse updateComment(String userId, Long commentId, CommentRequest request) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
         comment.validateUserId(Long.valueOf(userId));
@@ -63,9 +60,6 @@ public class CommentService {
 
     @Transactional
     public CommentResponse deleteComment(String userId, Long commentId) {
-        //todo 여기서 고민인게 헤더에서 뽑은 유저 정보는 반드시 무조건 나의 정보라는걸 확신할 수 있을까?
-        //todo 확신할 수 있다면 따로 본인 검증 로직이 필요 없다.
-        //todo 그러나 확신할 수 없다면 따로 본인 검증 로직이 필요한데 이 부분은 어떻게 해야 될까?
 
         Comment comment = commentRepository.findByCommentId(commentId);
         comment.validateUserId(Long.valueOf(userId));

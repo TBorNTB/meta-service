@@ -2,7 +2,7 @@ package com.sejong.chatservice.application.internal;
 
 import com.sejong.chatservice.core.error.code.ErrorCode;
 import com.sejong.chatservice.core.error.exception.ApiException;
-import com.sejong.chatservice.infrastructure.feign.ProjectClient;
+import com.sejong.chatservice.infrastructure.client.ProjectClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +26,10 @@ public class ProjectInternalService {
     }
 
     private void validateExistsFallback(Long postId, Throwable t) {
-        String message = t.getMessage().startsWith("해당") ? t.getMessage() : "Project Server 에러";
-        throw new ApiException(ErrorCode.External_Server_Error, message);
+        if (t instanceof ApiException) {
+            throw (ApiException) t;
+        }
+        throw new ApiException(ErrorCode.External_Server_Error, "잠시 서비스 이용이 불가합니다.");
     }
 
 }

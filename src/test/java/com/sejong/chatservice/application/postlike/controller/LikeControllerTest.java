@@ -49,7 +49,7 @@ class LikeControllerTest {
     @Test
     void 좋아요_생성이_정상적으로_작동한다() {
         //given
-        String
+
 
         //when && then
     }
