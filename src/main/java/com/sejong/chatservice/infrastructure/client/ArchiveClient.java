@@ -1,4 +1,4 @@
-package com.sejong.chatservice.infrastructure.feign;
+package com.sejong.chatservice.infrastructure.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
