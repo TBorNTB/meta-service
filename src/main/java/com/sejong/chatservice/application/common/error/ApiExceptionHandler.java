@@ -1,6 +1,6 @@
-package com.sejong.chatservice.application.error;
+package com.sejong.chatservice.application.common.error;
 
-import com.sejong.chatservice.application.error.api.ErrorResponse;
+import com.sejong.chatservice.application.common.error.api.ErrorResponse;
 import com.sejong.chatservice.core.error.code.ErrorCodeIfs;
 import com.sejong.chatservice.core.error.exception.ApiException;
 import io.swagger.v3.oas.annotations.Hidden;
