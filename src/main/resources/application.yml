@@ -30,9 +30,29 @@ spring:
         order_inserts: true
         order_updates: true
 
+  data:
+    redis:
+      host: ${EC2_HOST}
+      port: ${REDIS_PORT}
+      timeout: 6000
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+
   thymeleaf:
     enabled: false
 
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 2000
+            readTimeout: 3000
+            loggerLevel: basic
 springdoc:
   api-docs:
     version: openapi_3_0
@@ -74,3 +94,18 @@ logging:
   level:
     org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor: DEBUG
     com.sejong.newsletterservice.infrastructure.email: DEBUG
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myFeignClient:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
+  timelimiter:
+    instances:
+      myFeignClient:
+        timeoutDuration: 3s

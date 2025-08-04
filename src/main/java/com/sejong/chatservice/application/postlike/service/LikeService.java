@@ -1,19 +1,15 @@
 package com.sejong.chatservice.application.postlike.service;
 
-import com.sejong.chatservice.core.error.code.ErrorCode;
-import com.sejong.chatservice.core.error.exception.ApiException;
+import com.sejong.chatservice.application.internal.PostInternalFacade;
 import com.sejong.chatservice.application.postlike.dto.response.LikeCountResponse;
 import com.sejong.chatservice.application.postlike.dto.response.LikeResponse;
 import com.sejong.chatservice.application.postlike.dto.response.LikeStatusResponse;
 import com.sejong.chatservice.core.enums.PostType;
 import com.sejong.chatservice.core.postlike.domain.PostLike;
-import com.sejong.chatservice.core.postlike.domain.PostLikeCount;
 import com.sejong.chatservice.core.postlike.repository.LikeRepository;
+import com.sejong.chatservice.infrastructure.redis.RedisKeyUtil;
+import com.sejong.chatservice.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,58 +19,62 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
+    private final PostInternalFacade postInternalFacade;
+    private final RedisService redisService;
 
-    @Retryable(
-            value = ObjectOptimisticLockingFailureException.class,
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 50) // 50ms 간격 재시도
-    )
     @Transactional
-    public LikeResponse createLike(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
-        likeRepository.validateExists(Long.valueOf(userId), postId, postType);
+    public LikeResponse createLike(Long userId, Long postId, PostType postType) {
+        postInternalFacade.checkPost(postId, postType);
 
-        PostLike postLike = PostLike.from(Long.valueOf(userId), postId, postType, LocalDateTime.now());
-        PostLike savedPostLike = likeRepository.save(postLike);
+        String redisKey = RedisKeyUtil.likeKey(postType, postId);
 
-        PostLikeCount postLikeCount = likeRepository.increaseLikeCount(postId, postType);
-        return LikeResponse.from(savedPostLike, postLikeCount.getCount());
+        if (redisService.isUserInLikeSet(redisKey, userId)) {
+            return alreadyLikedResponse(redisKey);
+        }
+
+        redisService.addUserToLikeSet(redisKey, userId);
+
+        likeRepository.findOne(userId, postId, postType)
+                .orElseGet(() -> likeRepository.save(
+                        PostLike.from(userId, postId, postType, LocalDateTime.now())
+                ));
+
+        Long likeCount = redisService.getLikeCount(redisKey);
+        return LikeResponse.from(likeCount);
     }
 
-    @Retryable(
-            value = ObjectOptimisticLockingFailureException.class,
-            maxAttempts = 3,
-            backoff = @Backoff(delay = 50) // 50ms 간격 재시도
-    )
     @Transactional
-    public LikeResponse deleteLike(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
-        PostLike postLike = likeRepository.findOne(Long.valueOf(userId), postId, postType);
-        Long deletedId = likeRepository.deleteById(postLike.getId());
+    public LikeResponse deleteLike(Long userId, Long postId, PostType postType) {
+        postInternalFacade.checkPost(postId, postType);
 
-        PostLikeCount postLikeCount = likeRepository.decreaseLikeCount(postId, postType);
-        return LikeResponse.deleteFrom(deletedId, postLikeCount.getCount());
+        String redisKey = RedisKeyUtil.likeKey(postType, postId);
+
+        redisService.removeUserFromLikeSet(redisKey, userId);
+
+        likeRepository.findOne(userId, postId, postType)
+                .ifPresent(postLike -> likeRepository.deleteById(postLike.getId()));
+
+        Long likeCount = redisService.getLikeCount(redisKey);
+        return LikeResponse.deleteFrom(likeCount);
     }
 
-
-    @Recover
-    public LikeResponse recover(ObjectOptimisticLockingFailureException e, String userId, Long postId, PostType postType) {
-        throw new ApiException(ErrorCode.BAD_REQUEST, "좋아요 요청이 너무 몰렸습니다. 잠시 후 다시 시도해주세요.");
-    }
-
-
-    public LikeStatusResponse getLikeStatus(String userId, Long postId, PostType postType) {
-        boolean isLiked = likeRepository.isExists(Long.valueOf(userId),postId,postType);
+    @Transactional(readOnly = true)
+    public LikeStatusResponse getLikeStatus(Long userId, Long postId, PostType postType) {
+        String redisKey = RedisKeyUtil.likeKey(postType, postId);
+        boolean isLiked = redisService.isUserInLikeSet(redisKey, userId);
         return LikeStatusResponse.of(isLiked);
     }
 
-    public LikeCountResponse getLikeCount(String userId, Long postId, PostType postType) {
-        //todo userId가 실제 있는지 점검해야 됩니다!!
-        //todo postId가 실제 있는지 점검해야 됩니다.!!
-        PostLikeCount postLikeCount = likeRepository.findLikeCount(postId, postType);
-        return LikeCountResponse.of(postLikeCount.getCount());
+    @Transactional(readOnly = true)
+    public LikeCountResponse getLikeCount(Long postId, PostType postType) {
+        postInternalFacade.checkPost(postId, postType);
+        String redisKey = RedisKeyUtil.likeKey(postType, postId);
+        long likeCount = redisService.getLikeCount(redisKey);
+        return LikeCountResponse.of(likeCount);
+    }
 
+    private LikeResponse alreadyLikedResponse(String redisKey) {
+        Long likeCount = redisService.getLikeCount(redisKey);
+        return LikeResponse.from(likeCount);
     }
 }

@@ -2,7 +2,6 @@ package com.sejong.chatservice.application.reply.service;
 
 import com.sejong.chatservice.core.common.pagination.Cursor;
 import com.sejong.chatservice.core.common.pagination.CursorPageRequest;
-import com.sejong.chatservice.core.common.pagination.PageSearchCommand;
 import com.sejong.chatservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.chatservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.chatservice.application.reply.dto.response.ReplyCommentResponse;
@@ -21,10 +20,8 @@ import java.util.List;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
-
     @Transactional
     public ReplyCommentResponse createReplyComment(ReplyCreateCommand command) {
-        //todo userId 관련 검증해야됩니다~
         Reply reply = Reply.of(command, LocalDateTime.now());
         Reply responseReply = replyRepository.save(reply);
         return ReplyCommentResponse.from(responseReply);
@@ -39,8 +36,9 @@ public class ReplyService {
 
     @Transactional
     public ReplyCommentResponse updateReplyComment(String userId, Long replyId, ReplyCommentRequest request) {
-       Reply reply = replyRepository.findById(replyId);
-       reply.validateUserId(Long.valueOf(userId));
+
+        Reply reply = replyRepository.findById(replyId);
+        reply.validateUserId(Long.valueOf(userId));
 
         Reply updatedReply = reply.updateReply(request.getComment(), LocalDateTime.now());
         Reply responseReply = replyRepository.updateReply(updatedReply);

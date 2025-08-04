@@ -41,7 +41,7 @@ class LikeControllerTest {
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.createLike(userId, postId, postType);
+        LikeResponse response = likeService.createLike(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
@@ -49,7 +49,7 @@ class LikeControllerTest {
     @Test
     void 좋아요_생성이_정상적으로_작동한다() {
         //given
-        String
+
 
         //when && then
     }

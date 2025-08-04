@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.error.api;
+package com.sejong.chatservice.application.common.error.api;
 
 import com.sejong.chatservice.core.error.code.ErrorCodeIfs;
 import lombok.AllArgsConstructor;

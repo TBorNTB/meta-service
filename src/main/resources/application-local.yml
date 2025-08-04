@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 0
 
 spring:
   application:
@@ -10,6 +10,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+
+
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 2000
+            readTimeout: 3000
+            loggerLevel: basic
 
   sql:
     init:
@@ -29,19 +39,50 @@ spring:
           default_batch_fetch_size: 100
         order_inserts: true
         order_updates: true
-
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 6000
+      lettuce:
+        pool:
+          enabled: true
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
   thymeleaf:
     enabled: false
 
-#  eureka:
-#    instance:
-#      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-#      prefer-ip-address: true
-#    client:
-#      register-with-eureka: true
-#      fetch-registry: true
-#      service-url:
-#        defaultZone: ${EUREKA_DEFAULTZONE}
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: true
+
+  eureka:
+    instance:
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      prefer-ip-address: true
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        defaultZone: ${EUREKA_DEFAULTZONE}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myFeignClient:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
+  timelimiter:
+    instances:
+      myFeignClient:
+        timeoutDuration: 3s
 
 springdoc:
   api-docs:

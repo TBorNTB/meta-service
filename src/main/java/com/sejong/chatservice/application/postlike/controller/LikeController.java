@@ -22,7 +22,7 @@ public class LikeController {
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.createLike(userId, postId, postType);
+        LikeResponse response = likeService.createLike(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
@@ -33,7 +33,7 @@ public class LikeController {
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.deleteLike(userId, postId, postType);
+        LikeResponse response = likeService.deleteLike(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
@@ -44,18 +44,17 @@ public class LikeController {
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeStatusResponse response = likeService.getLikeStatus(userId, postId, postType);
+        LikeStatusResponse response = likeService.getLikeStatus(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping("/{postId}/count")
     public ResponseEntity<LikeCountResponse> getLikeCount(
-            @RequestHeader("x-user") String userId,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeCountResponse response = likeService.getLikeCount(userId, postId, postType);
+        LikeCountResponse response = likeService.getLikeCount(postId, postType);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
