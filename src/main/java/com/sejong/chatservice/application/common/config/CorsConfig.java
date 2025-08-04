@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.config;
+package com.sejong.chatservice.application.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

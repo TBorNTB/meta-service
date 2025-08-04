@@ -1,4 +1,4 @@
-package com.sejong.chatservice.application.config;
+package com.sejong.chatservice.application.common.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
