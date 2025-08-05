@@ -28,9 +28,14 @@ public class ViewService {
         viewRepository.upsert(view);
     }
 
-    @Transactional
-    public ViewCountResponse increaseViewCount(Long postId, PostType postType, String clientIp) {
+
+    public void checkPostExistence(Long postId, PostType postType) {
         postInternalFacade.checkPostExistance(postId, postType);
+    }
+
+
+    public ViewCountResponse increaseViewCount(Long postId, PostType postType, String clientIp) {
+        checkPostExistence(postId, postType);
         
         String ipKey = RedisKeyUtil.viewIpKey(postType, postId, clientIp);
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
@@ -54,11 +59,18 @@ public class ViewService {
         return ViewCountResponse.of(newViewCount);
     }
 
-    @Transactional(readOnly = true)
+
     public ViewCountResponse getViewCount(Long postId, PostType postType) {
-        postInternalFacade.checkPostExistance(postId, postType);
+        checkPostExistence(postId, postType);
         
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
+
+        // cache miss (mysql -> redis)
+        if (!redisService.hasViewCount(viewCountKey)) {
+            View view = viewRepository.findOne(postType, postId);
+            redisService.setViewCount(viewCountKey, view.getViewCount());
+        }
+
         Long viewCount = redisService.getViewCount(viewCountKey);
         
         return ViewCountResponse.of(viewCount);
