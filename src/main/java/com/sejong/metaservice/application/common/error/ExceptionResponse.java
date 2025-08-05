@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.common.exception;
+package com.sejong.metaservice.application.common.error;
 
 import lombok.Data;
 

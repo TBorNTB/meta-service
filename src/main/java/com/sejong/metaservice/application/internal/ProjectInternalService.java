@@ -1,7 +1,9 @@
 package com.sejong.metaservice.application.internal;
 
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.EXTERNAL_SERVER_ERROR;
+
+import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.infrastructure.client.ProjectClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +23,15 @@ public class ProjectInternalService {
         ResponseEntity<Boolean> response = projectClient.checkProject(postId);
         if (Boolean.FALSE.equals(response.getBody())) {
             log.info("Project 검증 실패");
-            throw new ApiException(ErrorCode.BAD_REQUEST,"해당 Project Id가 없습니다.");
+            throw new BaseException(BAD_REQUEST);
         }
     }
 
     private void validateExistsFallback(Long postId, Throwable t) {
-        if (t instanceof ApiException) {
-            throw (ApiException) t;
+        if (t instanceof BaseException) {
+            throw (BaseException) t;
         }
-        throw new ApiException(ErrorCode.External_Server_Error, "잠시 서비스 이용이 불가합니다.");
+        throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
 
 }

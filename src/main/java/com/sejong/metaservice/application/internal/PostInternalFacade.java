@@ -1,8 +1,9 @@
 package com.sejong.metaservice.application.internal;
 
+import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+
 import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import com.sejong.metaservice.core.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ public class PostInternalFacade {
         switch (postType) {
             case ARCHIVE -> archiveInternalService.validateExists(postId);
             case PROJECT -> projectInternalService.validateExists(postId);
-            default -> throw new ApiException(ErrorCode.BAD_REQUEST,"지원하지 않는 PostType입니다: " + postType);
+            default -> throw new BaseException(BAD_REQUEST);
         }
     }
 }

@@ -2,8 +2,8 @@ package com.sejong.metaservice.core.comment.domain;
 
 import com.sejong.metaservice.core.comment.command.CommentCommand;
 import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import com.sejong.metaservice.core.common.exception.BaseException;
+import com.sejong.metaservice.core.common.exception.ExceptionType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,7 +46,7 @@ public class Comment {
 
     public void validateUserId(Long userId) {
         if (!this.userId.equals(userId)) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "Invalid user id");
+            throw new BaseException(ExceptionType.BAD_REQUEST);
         }
     }
 }

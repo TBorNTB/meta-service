@@ -1,7 +1,9 @@
 package com.sejong.metaservice.application.internal;
 
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.EXTERNAL_SERVER_ERROR;
+
+import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.infrastructure.client.UserClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +22,14 @@ public class UserInternalService {
         ResponseEntity<Boolean> response = userClient.getUser(userId);
         if (Boolean.FALSE.equals(response.getBody())) {
             log.info("User 검증 성공");
-            throw new ApiException(ErrorCode.BAD_REQUEST,"User Id가 데이터베이스에 존재하지 않습니다.");
+            throw new BaseException(BAD_REQUEST);
         }
     }
 
     private void validateExistsFallback(Long userId, Throwable t) {
-        if (t instanceof ApiException) {
-            throw (ApiException) t;
+        if (t instanceof BaseException) {
+            throw (BaseException) t;
         }
-        throw new ApiException(ErrorCode.External_Server_Error, "잠시 서비스 이용이 불가합니다.");
+        throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
 }

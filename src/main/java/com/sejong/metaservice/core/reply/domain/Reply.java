@@ -1,7 +1,8 @@
 package com.sejong.metaservice.core.reply.domain;
 
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+
+import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class Reply {
 
     public void validateUserId(Long userId) {
         if(!this.userId.equals(userId)) {
-            throw new ApiException(ErrorCode.BAD_REQUEST,"유저 정보 틀려요");
+            throw new BaseException(BAD_REQUEST);
         }
     }
 

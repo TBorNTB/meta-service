@@ -1,7 +1,8 @@
 package com.sejong.metaservice.core.common.pagination.enums;
 
-import com.sejong.metaservice.core.common.error.code.ErrorCode;
-import com.sejong.metaservice.core.common.error.exception.ApiException;
+import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_SORT_REQUEST;
+
+import com.sejong.metaservice.core.common.exception.BaseException;
 import java.util.Arrays;
 
 public enum SortDirection {
@@ -11,6 +12,6 @@ public enum SortDirection {
         return Arrays.stream(SortDirection.values())
                 .filter(s -> s.name().equals(name))
                 .findFirst()
-                .orElseThrow(() -> new ApiException(ErrorCode.BAD_SORT_REQUEST));
+                .orElseThrow(() -> new BaseException(BAD_SORT_REQUEST));
     }
 }
