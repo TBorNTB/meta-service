@@ -1,6 +1,6 @@
 package com.sejong.metaservice.application.common.error.api;
 
-import com.sejong.metaservice.core.error.code.ErrorCodeIfs;
+import com.sejong.metaservice.core.common.error.code.ErrorCodeIfs;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

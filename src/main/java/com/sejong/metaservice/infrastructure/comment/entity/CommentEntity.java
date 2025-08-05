@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.comment.entity;
 
 import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.enums.PostType;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

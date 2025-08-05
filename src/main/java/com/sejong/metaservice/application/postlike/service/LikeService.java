@@ -4,7 +4,7 @@ import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.application.postlike.dto.response.LikeCountResponse;
 import com.sejong.metaservice.application.postlike.dto.response.LikeResponse;
 import com.sejong.metaservice.application.postlike.dto.response.LikeStatusResponse;
-import com.sejong.metaservice.core.enums.PostType;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.postlike.repository.LikeRepository;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;

@@ -4,7 +4,7 @@ import com.sejong.metaservice.application.postlike.dto.response.LikeCountRespons
 import com.sejong.metaservice.application.postlike.dto.response.LikeResponse;
 import com.sejong.metaservice.application.postlike.dto.response.LikeStatusResponse;
 import com.sejong.metaservice.application.postlike.service.LikeService;
-import com.sejong.metaservice.core.enums.PostType;
+import com.sejong.metaservice.core.common.enums.PostType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

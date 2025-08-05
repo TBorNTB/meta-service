@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.error.code;
+package com.sejong.metaservice.core.common.error.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

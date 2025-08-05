@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.pagination;
+package com.sejong.metaservice.application.common.pagination;
 
 import com.sejong.metaservice.core.common.pagination.Cursor;
 import com.sejong.metaservice.core.common.pagination.CursorPageRequest;

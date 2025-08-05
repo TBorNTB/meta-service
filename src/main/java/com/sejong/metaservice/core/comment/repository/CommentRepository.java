@@ -1,8 +1,8 @@
 package com.sejong.metaservice.core.comment.repository;
 
 import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
-import com.sejong.metaservice.core.enums.PostType;
 import java.util.List;
 
 public interface CommentRepository {

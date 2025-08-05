@@ -1,7 +1,7 @@
 package com.sejong.metaservice.core.reply.domain;
 
-import com.sejong.metaservice.core.error.code.ErrorCode;
-import com.sejong.metaservice.core.error.exception.ApiException;
+import com.sejong.metaservice.core.common.error.code.ErrorCode;
+import com.sejong.metaservice.core.common.error.exception.ApiException;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

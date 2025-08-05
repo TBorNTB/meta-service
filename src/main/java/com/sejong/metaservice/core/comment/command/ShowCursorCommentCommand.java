@@ -1,6 +1,6 @@
 package com.sejong.metaservice.core.comment.command;
 
-import com.sejong.metaservice.core.enums.PostType;
+import com.sejong.metaservice.core.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.sejong.metaservice.application.internal;
 
-import com.sejong.metaservice.core.error.code.ErrorCode;
-import com.sejong.metaservice.core.error.exception.ApiException;
+import com.sejong.metaservice.core.common.error.code.ErrorCode;
+import com.sejong.metaservice.core.common.error.exception.ApiException;
 import com.sejong.metaservice.infrastructure.client.ProjectClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.sejong.metaservice.application.internal;
 
-import com.sejong.metaservice.core.enums.PostType;
-import com.sejong.metaservice.core.error.code.ErrorCode;
-import com.sejong.metaservice.core.error.exception.ApiException;
+import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.core.common.error.code.ErrorCode;
+import com.sejong.metaservice.core.common.error.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

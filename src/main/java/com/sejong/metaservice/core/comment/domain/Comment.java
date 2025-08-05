@@ -1,9 +1,9 @@
 package com.sejong.metaservice.core.comment.domain;
 
 import com.sejong.metaservice.core.comment.command.CommentCommand;
-import com.sejong.metaservice.core.enums.PostType;
-import com.sejong.metaservice.core.error.code.ErrorCode;
-import com.sejong.metaservice.core.error.exception.ApiException;
+import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.core.common.error.code.ErrorCode;
+import com.sejong.metaservice.core.common.error.exception.ApiException;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

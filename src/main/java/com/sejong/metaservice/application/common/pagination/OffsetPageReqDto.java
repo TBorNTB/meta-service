@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.pagination;
+package com.sejong.metaservice.application.common.pagination;
 
 import com.sejong.metaservice.core.common.pagination.CustomPageRequest;
 import com.sejong.metaservice.core.common.pagination.enums.SortDirection;

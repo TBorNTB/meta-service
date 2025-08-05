@@ -1,6 +1,6 @@
 package com.sejong.metaservice.core.postlike.repository;
 
-import com.sejong.metaservice.core.enums.PostType;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
 import java.util.Optional;
 

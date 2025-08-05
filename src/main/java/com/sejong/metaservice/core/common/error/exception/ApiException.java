@@ -1,6 +1,6 @@
-package com.sejong.metaservice.core.error.exception;
+package com.sejong.metaservice.core.common.error.exception;
 
-import com.sejong.metaservice.core.error.code.ErrorCodeIfs;
+import com.sejong.metaservice.core.common.error.code.ErrorCodeIfs;
 import lombok.Getter;
 
 @Getter

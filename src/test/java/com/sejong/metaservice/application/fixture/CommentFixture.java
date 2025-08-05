@@ -3,8 +3,8 @@ package com.sejong.metaservice.application.fixture;
 import com.sejong.metaservice.core.comment.command.CommentCommand;
 import com.sejong.metaservice.core.comment.command.ShowCursorCommentCommand;
 import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.common.pagination.CursorPageResponse;
-import com.sejong.metaservice.core.enums.PostType;
 import java.time.LocalDateTime;
 import java.util.List;
 

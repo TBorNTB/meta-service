@@ -1,6 +1,6 @@
 package com.sejong.metaservice.application.reply.controller;
 
-import com.sejong.metaservice.application.pagination.CursorPageReqDto;
+import com.sejong.metaservice.application.common.pagination.CursorPageReqDto;
 import com.sejong.metaservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.metaservice.application.reply.dto.response.ReplyCommentResponse;
 import com.sejong.metaservice.application.reply.service.ReplyService;

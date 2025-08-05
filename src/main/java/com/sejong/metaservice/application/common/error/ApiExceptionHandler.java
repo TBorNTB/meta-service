@@ -1,8 +1,8 @@
 package com.sejong.metaservice.application.common.error;
 
 import com.sejong.metaservice.application.common.error.api.ErrorResponse;
-import com.sejong.metaservice.core.error.code.ErrorCodeIfs;
-import com.sejong.metaservice.core.error.exception.ApiException;
+import com.sejong.metaservice.core.common.error.code.ErrorCodeIfs;
+import com.sejong.metaservice.core.common.error.exception.ApiException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;

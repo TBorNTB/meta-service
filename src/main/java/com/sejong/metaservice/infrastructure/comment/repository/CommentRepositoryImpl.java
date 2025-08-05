@@ -2,10 +2,10 @@ package com.sejong.metaservice.infrastructure.comment.repository;
 
 import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.comment.repository.CommentRepository;
+import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.common.pagination.Cursor;
 import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.core.common.pagination.enums.SortDirection;
-import com.sejong.metaservice.core.enums.PostType;
 import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
 import java.util.List;
 import java.util.Optional;
