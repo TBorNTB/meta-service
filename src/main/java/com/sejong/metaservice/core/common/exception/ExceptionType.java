@@ -1,0 +1,30 @@
+package com.sejong.metaservice.core.common.exception;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public enum ExceptionType implements ExceptionTypeIfs {
+
+    OK(200,"성공"),
+    BAD_REQUEST(400,"잘못된 요청"),
+    SERVER_ERROR(500,"서버 에러"),
+
+    NULL_POINT(500,"Null Pointer"),
+    MULTI_REQUEST(405,"하루 한번만 요청 가능합니다"),
+    BAD_SORT_REQUEST(400,"정렬 방향은 ASC/DESC 만 가능합니다."),
+    External_Server_Error(500,"서킷 브레이커가 작동했습니다.")
+    ;
+
+    private final Integer httpStatus;
+    private final String description;
+
+    @Override
+    public Integer httpStatus() {
+        return httpStatus;
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+}
