@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 public class PostInternalFacade {
 
     private final ProjectInternalService projectInternalService;
-    private final ArchiveInternalService archiveInternalService;
+    private final NewsInternalService newsInternalService;
+    private final ArticleInternalService articleInternalService;
 
     public void checkPostExistance(Long postId, PostType postType) {
         switch (postType) {
-            case ARCHIVE -> archiveInternalService.validateExists(postId);
+            case NEWS -> newsInternalService.validateExists(postId);
             case PROJECT -> projectInternalService.validateExists(postId);
+            case ARTICLE -> articleInternalService.validateExists(postId);
             default -> throw new BaseException(BAD_REQUEST);
         }
     }
