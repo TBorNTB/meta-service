@@ -9,8 +9,10 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class ArticleInternalService {
 
@@ -21,7 +23,7 @@ public class ArticleInternalService {
         ResponseEntity<Boolean> response = articleClient.checkArchive(archiveId);
         log.info("response: {}",response.getBody());
         if (Boolean.FALSE.equals(response.getBody())) {
-            log.info("Archive 검증 실패");
+            log.info("Article 검증 실패");
             throw new BaseException(BAD_REQUEST);
         }
     }

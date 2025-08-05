@@ -26,7 +26,7 @@ public class RedisService {
 
     public Long getLikeCount(String key) {
         String count = redisTemplate.opsForValue().get(key);
-        return count == null ? 0L : Long.parseLong(count);
+        return Long.parseLong(count);
     }
 
     public void setLikeCount(String key, Long count) {
@@ -34,10 +34,18 @@ public class RedisService {
     }
 
     public void clearAllLikeKeys() {
-        Set<String> keys = redisTemplate.keys("post:*:count");
+        Set<String> keys = redisTemplate.keys("post:*:like:count");
         if (!keys.isEmpty()) {
             redisTemplate.delete(keys);
         }
+    }
+
+    public boolean hasViewCount(String viewCountKey) {
+        return redisTemplate.hasKey(viewCountKey);
+    }
+
+    public void setViewCount(String viewCountKey, Long count) {
+        redisTemplate.opsForValue().set(viewCountKey, String.valueOf(count));
     }
 
 

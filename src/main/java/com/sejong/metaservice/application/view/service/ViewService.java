@@ -3,6 +3,8 @@ package com.sejong.metaservice.application.view.service;
 import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.application.view.dto.response.ViewCountResponse;
 import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.core.view.domain.View;
+import com.sejong.metaservice.core.view.repository.ViewRepository;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import java.time.Duration;
@@ -18,6 +20,13 @@ public class ViewService {
     
     private final PostInternalFacade postInternalFacade;
     private final RedisService redisService;
+    private final ViewRepository viewRepository;
+
+    @Transactional
+    public void upsertViewCount(Long postId, PostType postType, Long viewCount) {
+        View view = View.of(postType, postId, viewCount);
+        viewRepository.upsert(view);
+    }
 
     @Transactional
     public ViewCountResponse increaseViewCount(Long postId, PostType postType, String clientIp) {
@@ -25,12 +34,20 @@ public class ViewService {
         
         String ipKey = RedisKeyUtil.viewIpKey(postType, postId, clientIp);
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
-        
+
+        // cache miss (mysql -> redis)
+        if (!redisService.hasViewCount(viewCountKey)) {
+            View view = viewRepository.findOne(postType, postId);
+            redisService.setViewCount(viewCountKey, view.getViewCount());
+        }
+
+        // ip already viewed
         if (redisService.hasViewedWithinTtl(ipKey)) {
             long currentViewCount = redisService.getViewCount(viewCountKey);
             return ViewCountResponse.of(currentViewCount);
         }
-        
+
+        // register this ip
         redisService.markAsViewed(ipKey, VIEW_TTL);
         Long newViewCount = redisService.incrementViewCount(viewCountKey);
         
