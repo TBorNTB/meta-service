@@ -2,10 +2,11 @@ package com.sejong.metaservice.application.view.service;
 
 import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,27 +24,36 @@ public class ViewScheduler {
         try {
             log.info("Redis 조회수 MySQL 동기화 배치 작업 시작");
             
-            Set<String> viewCountKeys = redisTemplate.keys("post:*:view:count");
-            
-            if (viewCountKeys.isEmpty()) {
-                log.info("동기화할 조회수 데이터가 없습니다.");
-                return;
-            }
-            
-            for (String key : viewCountKeys) {
-                try {
-                    syncSingleViewCount(key);
-                } catch (Exception e) {
-                    log.error("조회수 동기화 실패: key={}", key, e);
-                }
-            }
-            
-            log.info("Redis 조회수 MySQL 동기화 배치 작업 완료: {} 건 처리", viewCountKeys.size());
-            
+            scanAndSyncViewCounts();
+
+            log.info("Redis 조회수 MySQL 동기화 배치 작업 완료");
+
         } catch (Exception e) {
             log.error("Redis 조회수 배치 작업 실패", e);
             throw new RuntimeException("Redis 조회수 배치 작업 실패", e);
         }
+    }
+
+    private void scanAndSyncViewCounts() {
+        int totalProcessed = 0;
+
+        try (Cursor<String> scanResult = redisTemplate.scan(
+                ScanOptions.scanOptions().match("post:*:view:count").count(100).build())) {
+
+            while (scanResult.hasNext()) {
+                String key = scanResult.next();
+                try {
+                    syncSingleViewCount(key);
+                    totalProcessed++;
+                } catch (Exception e) {
+                    log.error("조회수 동기화 실패: key={}", key, e);
+                }
+            }
+        } catch (Exception e) {
+            log.error("SCAN 작업 중 오류 발생", e);
+        }
+
+        log.info("동기화 완료: {} 건 처리", totalProcessed);
     }
     
     private void syncSingleViewCount(String redisKey) {
