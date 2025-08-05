@@ -1,6 +1,9 @@
 package com.sejong.metaservice.infrastructure.view.repository;
 
+import static com.sejong.metaservice.core.common.exception.ExceptionType.NOT_FOUND_POST_TYPE_POST_ID;
+
 import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.core.view.domain.View;
 import com.sejong.metaservice.core.view.repository.ViewRepository;
 import com.sejong.metaservice.infrastructure.view.entity.ViewEntity;
@@ -26,6 +29,6 @@ public class ViewRepositoryImpl implements ViewRepository {
     public View findOne(PostType postType, Long postId) {
         return viewJPARepository.findByPostTypeAndPostId(postType, postId)
                 .map(ViewEntity::toDomain)
-                .orElse(null);
+                .orElseThrow(() -> new BaseException(NOT_FOUND_POST_TYPE_POST_ID));
     }
 }
