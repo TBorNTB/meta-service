@@ -40,7 +40,27 @@ public class RedisService {
         }
     }
 
-    public void setExpire(String key, Duration ttl) {
-        redisTemplate.expire(key, ttl);
+
+    public boolean hasViewedWithinTtl(String ipKey) {
+        return redisTemplate.hasKey(ipKey);
+    }
+
+    public void markAsViewed(String ipKey, Duration ttl) {
+        redisTemplate.opsForValue().set(ipKey, "viewed", ttl);
+    }
+
+    public Long incrementViewCount(String viewCountKey) {
+        if (!redisTemplate.hasKey(viewCountKey)) {
+            redisTemplate.opsForValue().set(viewCountKey, "0");
+        }
+        return redisTemplate.opsForValue().increment(viewCountKey);
+    }
+
+    public Long getViewCount(String viewCountKey) {
+        if (!redisTemplate.hasKey(viewCountKey)) {
+            redisTemplate.opsForValue().set(viewCountKey, "0");
+        }
+        String count = redisTemplate.opsForValue().get(viewCountKey);
+        return count == null ? 0L : Long.parseLong(count);
     }
 }
