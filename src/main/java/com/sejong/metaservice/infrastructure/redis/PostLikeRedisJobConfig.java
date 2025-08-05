@@ -1,9 +1,10 @@
-package com.sejong.chatservice.infrastructure.redis;
+package com.sejong.metaservice.infrastructure.redis;
 
-import com.sejong.chatservice.core.postlike.domain.PostLike;
-import com.sejong.chatservice.core.postlike.repository.LikeRepository;
-import com.sejong.chatservice.infrastructure.postlike.entity.PostLikeEntity;
+import com.sejong.metaservice.core.postlike.domain.PostLike;
+import com.sejong.metaservice.infrastructure.postlike.entity.PostLikeEntity;
 import jakarta.persistence.EntityManagerFactory;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -13,7 +14,6 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -22,10 +22,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class PostLikeRedisJobConfig {
 
+    private static final int CHUNK_SIZE = 1000;
     private final RedisService redisService;
     private final EntityManagerFactory entityManagerFactory;
-
-    private static final int CHUNK_SIZE = 1000;
 
     @Bean
     public Job postLikeRedisSyncJob(JobRepository jobRepository, Step postLikeRedisSyncStep) {
@@ -63,9 +62,16 @@ public class PostLikeRedisJobConfig {
     @Bean
     public ItemWriter<PostLike> postLikeWriter() {
         return postLikes -> {
+            Map<String, Long> likeCountMap = new HashMap<>();
             for (PostLike postLike : postLikes) {
-                String redisKey = RedisKeyUtil.likeKey(postLike.getPostType(), postLike.getPostId());
-                redisService.addUserToLikeSet(redisKey, postLike.getUserId());
+                String redisKey = RedisKeyUtil.likeCountKey(postLike.getPostType(), postLike.getPostId());
+                likeCountMap.merge(redisKey, 1L, Long::sum);
+            }
+
+            // TODO: 통계쿼리로는 안되나?
+
+            for (Map.Entry<String, Long> entry : likeCountMap.entrySet()) {
+                redisService.setLikeCount(entry.getKey(), entry.getValue());
             }
         };
     }

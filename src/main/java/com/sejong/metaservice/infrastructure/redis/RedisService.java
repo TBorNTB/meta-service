@@ -1,11 +1,10 @@
-package com.sejong.chatservice.infrastructure.redis;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+package com.sejong.metaservice.infrastructure.redis;
 
 import java.time.Duration;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +25,8 @@ public class RedisService {
     }
 
     public Long getLikeCount(String key) {
-        Long size = redisTemplate.opsForSet().size(key);
-        return size != null ? size : 0L;
+        String count = redisTemplate.opsForValue().get(key);
+        return count == null ? 0L : Long.parseLong(count);
     }
 
     public void setLikeCount(String key, Long count) {
@@ -35,7 +34,7 @@ public class RedisService {
     }
 
     public void clearAllLikeKeys() {
-        Set<String> keys = redisTemplate.keys("post:*:liked_users");
+        Set<String> keys = redisTemplate.keys("post:*:count");
         if (!keys.isEmpty()) {
             redisTemplate.delete(keys);
         }
@@ -44,6 +43,4 @@ public class RedisService {
     public void setExpire(String key, Duration ttl) {
         redisTemplate.expire(key, ttl);
     }
-
-
 }
