@@ -1,9 +1,6 @@
-package com.sejong.chatservice.application.postlike.service;
+package com.sejong.metaservice.application.postlike.service;
 
-import com.sejong.chatservice.core.postlike.domain.PostLike;
-import com.sejong.chatservice.core.postlike.repository.LikeRepository;
-import com.sejong.chatservice.infrastructure.redis.RedisKeyUtil;
-import com.sejong.chatservice.infrastructure.redis.RedisService;
+import com.sejong.metaservice.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -19,7 +16,7 @@ public class LikeScheduler {
     private final Job postLikeRedisSyncJob;
     private final RedisService redisService;
 
-    @Scheduled(cron = "0 0 7 * * *") // 매일 오전 7시
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul") // 매일 오전 3시
     public void runRedisLikeSyncJob() {
         try {
             redisService.clearAllLikeKeys();
