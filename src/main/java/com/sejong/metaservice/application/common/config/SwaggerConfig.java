@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         servers = {
-                @Server(url = "/chat-service"),
+                @Server(url = "/meta-service"),
                 @Server(url = "/")
         },
         info = @Info(
-                title = "Chatting API",
+                title = "Meta Info API",
                 version = "v1",
-                description = "Chatting API 문서입니다."
+                description = "댓글, 좋아요, 조회수 등 메타정보를 관리하는 API 문서입니다."
         )
 )
 @Configuration
