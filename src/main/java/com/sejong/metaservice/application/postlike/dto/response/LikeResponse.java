@@ -1,5 +1,6 @@
 package com.sejong.metaservice.application.postlike.dto.response;
 
+import com.sejong.metaservice.infrastructure.postlike.entity.LikeStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,19 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LikeResponse {
     private Long likedCount;
-    private Boolean isLiked;
+    private LikeStatus result;
 
-    public static LikeResponse from( Long likedCount) {
+    public static LikeResponse of(LikeStatus result, Long likedCount) {
         return LikeResponse.builder()
                 .likedCount(likedCount)
-                .isLiked(Boolean.TRUE)
-                .build();
-    }
-
-    public static LikeResponse deleteFrom(Long likedCount) {
-        return LikeResponse.builder()
-                .likedCount(likedCount)
-                .isLiked(Boolean.FALSE)
+                .result(result)
                 .build();
     }
 }

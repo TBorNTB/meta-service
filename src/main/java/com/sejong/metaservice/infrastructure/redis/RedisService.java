@@ -11,16 +11,8 @@ public class RedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public void addUserToLikeSet(String key, Long userId) {
-        redisTemplate.opsForSet().add(key, userId.toString());
-    }
-
     public void removeUserFromLikeSet(String key, Long userId) {
         redisTemplate.opsForSet().remove(key, userId.toString());
-    }
-
-    public boolean isUserInLikeSet(String key, Long userId) {
-        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, userId.toString()));
     }
 
     public Long getLikeCount(String key) {
@@ -30,6 +22,20 @@ public class RedisService {
 
     public void setLikeCount(String key, Long count) {
         redisTemplate.opsForValue().set(key, String.valueOf(count));
+    }
+
+    public Long increment(String key) {
+        if (!redisTemplate.hasKey(key)) {
+            redisTemplate.opsForValue().set(key, "0");
+        }
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    public Long decrement(String key) {
+        if (!redisTemplate.hasKey(key)) {
+            redisTemplate.opsForValue().set(key, "0");
+        }
+        return redisTemplate.opsForValue().decrement(key);
     }
 
     public void clearAllLikeKeys() {

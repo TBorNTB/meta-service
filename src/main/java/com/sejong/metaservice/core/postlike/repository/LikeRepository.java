@@ -2,10 +2,11 @@ package com.sejong.metaservice.core.postlike.repository;
 
 import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
+import com.sejong.metaservice.infrastructure.postlike.entity.LikeStatus;
 import java.util.Optional;
 
 public interface LikeRepository {
-    void toggleLike(PostLike postLike);
+    LikeStatus toggleLike(PostLike postLike);
 
     PostLike save(PostLike postLike);
 
@@ -13,7 +14,7 @@ public interface LikeRepository {
 
     Long deleteById(Long id);
 
-    boolean likedAlready(Long userId, Long postId, PostType postType);
-    
+    boolean liked(Long userId, Long postId, PostType postType);
+
     long countByPostIdAndPostType(Long postId, PostType postType);
 }
