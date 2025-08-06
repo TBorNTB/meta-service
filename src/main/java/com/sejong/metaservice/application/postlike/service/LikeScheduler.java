@@ -19,7 +19,7 @@ public class LikeScheduler {
     @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul") // 매일 오전 3시
     public void runRedisLikeSyncJob() {
         try {
-            redisService.clearAllLikeKeys();
+            redisService.clearAllLikeKeys("post:*:like:count");
 
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis()) // 매 실행 시마다 다른 값으로 중복 방지

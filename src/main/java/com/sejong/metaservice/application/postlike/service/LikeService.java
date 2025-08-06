@@ -41,7 +41,7 @@ public class LikeService {
     public LikeResponse getLikeStatus(Long userId, Long postId, PostType postType) {
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
         boolean liked = likeRepository.liked(userId, postId, postType);
-        Long likeCount = redisService.getLikeCount(redisKey);
+        Long likeCount = redisService.getCount(redisKey);
         if (liked) return LikeResponse.of(LikeStatus.LIKED, likeCount);
         else return LikeResponse.of(LikeStatus.UNLIKED, likeCount);
     }
@@ -50,7 +50,7 @@ public class LikeService {
     public LikeCountResponse getLikeCount(Long postId, PostType postType) {
         postInternalFacade.checkPostExistance(postId, postType);
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
-        long likeCount = redisService.getLikeCount(redisKey);
+        long likeCount = redisService.getCount(redisKey);
         return LikeCountResponse.of(likeCount);
     }
 }

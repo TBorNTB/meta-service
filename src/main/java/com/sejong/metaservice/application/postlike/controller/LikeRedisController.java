@@ -22,7 +22,7 @@ public class LikeRedisController {
     @GetMapping("/batch-job")
     public String batchJob() {
         try {
-            redisService.clearAllLikeKeys();
+            redisService.clearAllLikeKeys("post:*:like:count");
 
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis()) // 매 실행 시마다 다른 값으로 중복 방지

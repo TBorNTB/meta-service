@@ -71,7 +71,7 @@ public class PostLikeRedisJobConfig {
             // TODO: 통계쿼리로는 안되나?
 
             for (Map.Entry<String, Long> entry : likeCountMap.entrySet()) {
-                redisService.setLikeCount(entry.getKey(), entry.getValue());
+                redisService.setCount(entry.getKey(), entry.getValue());
             }
         };
     }

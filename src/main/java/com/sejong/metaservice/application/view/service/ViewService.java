@@ -49,20 +49,20 @@ public class ViewService {
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
 
         // cache miss (mysql -> redis)
-        if (!redisService.hasViewCount(viewCountKey)) {
+        if (!redisService.hasKey(viewCountKey)) {
             View view = viewRepository.findOne(postType, postId);
-            redisService.setViewCount(viewCountKey, view.getViewCount());
+            redisService.setCount(viewCountKey, view.getViewCount());
         }
 
         // ip already viewed
-        if (redisService.hasViewedWithinTtl(ipKey)) {
-            long currentViewCount = redisService.getViewCount(viewCountKey);
+        if (redisService.hasKey(ipKey)) {
+            long currentViewCount = redisService.getCount(viewCountKey);
             return ViewCountResponse.of(currentViewCount);
         }
 
         // register this ip
         redisService.markAsViewed(ipKey, VIEW_TTL);
-        Long newViewCount = redisService.incrementViewCount(viewCountKey);
+        Long newViewCount = redisService.increment(viewCountKey);
         
         return ViewCountResponse.of(newViewCount);
     }
@@ -74,12 +74,12 @@ public class ViewService {
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
 
         // cache miss (mysql -> redis)
-        if (!redisService.hasViewCount(viewCountKey)) {
+        if (!redisService.hasKey(viewCountKey)) {
             View view = viewRepository.findOne(postType, postId);
-            redisService.setViewCount(viewCountKey, view.getViewCount());
+            redisService.setCount(viewCountKey, view.getViewCount());
         }
 
-        Long viewCount = redisService.getViewCount(viewCountKey);
+        Long viewCount = redisService.getCount(viewCountKey);
         
         return ViewCountResponse.of(viewCount);
     }
