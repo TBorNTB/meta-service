@@ -36,7 +36,7 @@ public class LikeController {
     @GetMapping("/{postId}/me")
     @Operation(summary = "해당 포스트에 대한 유저의 좋아요 여부 및 좋아요 수")
     public ResponseEntity<LikeResponse> getLike(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){

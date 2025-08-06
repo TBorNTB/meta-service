@@ -35,7 +35,7 @@ public class CommentController {
 
     @PostMapping("/{postId}")
     public ResponseEntity<CommentResponse> createComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name = "postId") Long postId,
             @RequestParam(name = "postType") PostType postType,
             @Valid @RequestBody CommentRequest request
@@ -59,7 +59,7 @@ public class CommentController {
 
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name = "commentId") Long commentId,
             @Valid @RequestBody CommentRequest request
     ) {
@@ -71,7 +71,7 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommentResponse> deleteComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name = "commentId") Long commentId
     ) {
         CommentResponse response = commentService.deleteComment(userId, commentId);

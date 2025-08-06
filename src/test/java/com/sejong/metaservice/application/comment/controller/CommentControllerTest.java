@@ -60,7 +60,7 @@ class CommentControllerTest {
 
         // when && then
         mockMvc.perform(post("/api/comment/{postId}",postId)
-                .header("x-user",userId)
+                .header("X-User-Id",userId)
                 .param("postType",postType.name())
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
@@ -91,7 +91,7 @@ class CommentControllerTest {
 
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name = "commentId") Long commentId,
             @Valid @RequestBody CommentRequest request
     ) {
@@ -113,7 +113,7 @@ class CommentControllerTest {
 
         // when && then
         mockMvc.perform(patch("/api/comment/{commentId}",commentId)
-                .header("x-user",userId)
+                .header("X-User-Id",userId)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -130,7 +130,7 @@ class CommentControllerTest {
         //when && then
 
         mockMvc.perform(delete("/api/comment/{commentId}",commentId)
-                .header("x-user",userId))
+                .header("X-User-Id",userId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("삭제가 완료되었습니다."));
     }

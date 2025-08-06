@@ -34,7 +34,7 @@ class LikeControllerTest {
 
     @PostMapping("/{postId}")
     public ResponseEntity<LikeResponse> createLike(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){

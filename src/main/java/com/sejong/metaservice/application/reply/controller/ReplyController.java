@@ -32,7 +32,7 @@ public class ReplyController {
 
     @PostMapping("/{commentParentId}")
     public ResponseEntity<ReplyCommentResponse> createReplyComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="commentParentId") Long commentParentId,
             @Valid @RequestBody ReplyCommentRequest replyCommentRequest
     ){
@@ -55,7 +55,7 @@ public class ReplyController {
 
     @PatchMapping("/{replyId}")
     public ResponseEntity<ReplyCommentResponse> updateReplyComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="replyId") Long replyId,
             @Valid @RequestBody ReplyCommentRequest replyCommentRequest
     ){
@@ -66,7 +66,7 @@ public class ReplyController {
 
     @DeleteMapping("/{replyId}")
     public ResponseEntity<ReplyCommentResponse> deleteReplyComment(
-            @RequestHeader("x-user") String userId,
+            @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="replyId") Long replyId
     ){
         ReplyCommentResponse response = replyService.deleteReplyComment(userId, replyId);
