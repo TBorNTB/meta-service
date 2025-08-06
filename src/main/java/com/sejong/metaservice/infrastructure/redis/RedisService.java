@@ -1,7 +1,6 @@
 package com.sejong.metaservice.infrastructure.redis;
 
 import java.time.Duration;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -34,9 +33,17 @@ public class RedisService {
     }
 
     public void clearAllLikeKeys() {
-        Set<String> keys = redisTemplate.keys("post:*:like:count");
-        if (!keys.isEmpty()) {
-            redisTemplate.delete(keys);
+        try (org.springframework.data.redis.core.Cursor<String> cursor = redisTemplate.scan(
+                org.springframework.data.redis.core.ScanOptions.scanOptions()
+                    .match("post:*:like:count")
+                    .count(100)
+                    .build())) {
+                    
+            while (cursor.hasNext()) {
+                redisTemplate.delete(cursor.next());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("좋아요 키 삭제 실패", e);
         }
     }
 
@@ -70,5 +77,9 @@ public class RedisService {
         }
         String count = redisTemplate.opsForValue().get(viewCountKey);
         return count == null ? 0L : Long.parseLong(count);
+    }
+
+    public void deleteViewCount(String viewCountKey) {
+        redisTemplate.delete(viewCountKey);
     }
 }

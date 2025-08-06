@@ -23,9 +23,9 @@ public class ViewService {
     private final ViewRepository viewRepository;
 
     @Transactional
-    public void upsertViewCount(Long postId, PostType postType, Long viewCount) {
+    public void updateViewCount(Long postId, PostType postType, Long viewCount) {
         View view = View.of(postType, postId, viewCount);
-        viewRepository.upsert(view);
+        viewRepository.updateViewCount(view);
     }
 
 

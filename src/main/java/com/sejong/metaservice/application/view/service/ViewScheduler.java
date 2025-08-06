@@ -67,8 +67,9 @@ public class ViewScheduler {
         PostType postType = PostType.valueOf(keyParts[1]);
         Long postId = Long.valueOf(keyParts[2]);
         Long viewCount = redisService.getViewCount(redisKey);
-        
-        viewService.upsertViewCount(postId, postType, viewCount);
+        redisService.deleteViewCount(redisKey);
+
+        viewService.updateViewCount(postId, postType, viewCount);
         log.debug("조회수 동기화 완료: postType={}, postId={}, viewCount={}", postType, postId, viewCount);
     }
 }

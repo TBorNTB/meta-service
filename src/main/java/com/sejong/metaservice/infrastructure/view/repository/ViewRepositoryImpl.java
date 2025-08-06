@@ -17,10 +17,11 @@ public class ViewRepositoryImpl implements ViewRepository {
     private final ViewJPARepository viewJPARepository;
 
     @Override
-    public View upsert(View view) {
+    public View updateViewCount(View view) {
         ViewEntity viewEntity = ViewEntity.of(view);
         ViewEntity foundedViewEntity = viewJPARepository
-                .findByPostTypeAndPostId(view.getPostType(), view.getPostId()).orElseGet(() -> viewJPARepository.save(viewEntity));
+                .findByPostTypeAndPostId(view.getPostType(), view.getPostId())
+                .orElseThrow(() -> new BaseException(NOT_FOUND_POST_TYPE_POST_ID));
         foundedViewEntity.updateViewCount(view.getViewCount());
         return foundedViewEntity.toDomain();
     }
