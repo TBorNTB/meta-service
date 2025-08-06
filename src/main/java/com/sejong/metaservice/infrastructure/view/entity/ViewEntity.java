@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,12 +37,15 @@ public class ViewEntity {
 
     private Long viewCount;
 
+    private LocalDateTime updatedAt;
+
     public static ViewEntity of(View view) {
     return ViewEntity.builder()
             .id(view.getId())
             .postType(view.getPostType())
             .postId(view.getPostId())
             .viewCount(view.getViewCount())
+            .updatedAt(view.getUpdatedAt())
             .build();
     }
 
@@ -51,6 +55,7 @@ public class ViewEntity {
                 .postType(postType)
                 .postId(postId)
                 .viewCount(viewCount)
+                .updatedAt(updatedAt)
                 .build();
     }
 
