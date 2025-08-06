@@ -17,6 +17,13 @@ public class ViewRepositoryImpl implements ViewRepository {
     private final ViewJPARepository viewJPARepository;
 
     @Override
+    public View save(View view) {
+        ViewEntity viewEntity = ViewEntity.of(view);
+        ViewEntity savedViewEntity = viewJPARepository.save(viewEntity);
+        return savedViewEntity.toDomain();
+    }
+
+    @Override
     public View updateViewCount(View view) {
         ViewEntity viewEntity = ViewEntity.of(view);
         ViewEntity foundedViewEntity = viewJPARepository

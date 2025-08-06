@@ -23,6 +23,14 @@ public class ViewService {
     private final ViewRepository viewRepository;
 
     @Transactional
+    public ViewCountResponse createViewCount(Long postId, PostType postType) {
+        View view = View.of(postType, postId, 0L);
+        View savedView = viewRepository.save(view);
+        return ViewCountResponse.of(view.getViewCount());
+    }
+
+
+    @Transactional
     public void updateViewCount(Long postId, PostType postType, Long viewCount) {
         View view = View.of(postType, postId, viewCount);
         viewRepository.updateViewCount(view);

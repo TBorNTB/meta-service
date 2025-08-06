@@ -21,6 +21,20 @@ public class ViewController {
     
     private final ViewService viewService;
 
+    // TODO: 포스트 발행 시 초기화 (postType, postId, viewCount = 0) 필수
+    // TODO: redis 캐시 미스 시 mysql에서 viewCount를 조회해 오기 때문.
+    // TODO: redis -> mysql 동기화가 upsert(x), update(o) 임.
+
+    @PostMapping("")
+    public ResponseEntity<ViewCountResponse> initializeViewCount(
+            @PathVariable(name = "postId") Long postId,
+            @RequestParam(name = "postType") PostType postType
+    ) {
+        // 이건 saga ? 프론트쪽에서 병렬적으로 api 요청 ?
+        ViewCountResponse response = viewService.initializeViewCount(postId, postType);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @PostMapping("/{postId}")
     public ResponseEntity<ViewCountResponse> increaseViewCount(
             @PathVariable(name = "postId") Long postId,
