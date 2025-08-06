@@ -5,6 +5,7 @@ import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.postlike.repository.LikeRepository;
 import com.sejong.metaservice.infrastructure.postlike.entity.LikeStatus;
 import com.sejong.metaservice.infrastructure.postlike.entity.PostLikeEntity;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -57,5 +58,10 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public long countByPostIdAndPostType(Long postId, PostType postType) {
         return likeJpaRepository.countByPostIdAndPostType(postId, postType);
+    }
+    
+    @Override
+    public Map<String, Long> getLikeCountStatistics() {
+        return likeJpaRepository.getLikeCountStatistics();
     }
 }
