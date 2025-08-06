@@ -15,6 +15,18 @@ public class LikeRepositoryImpl implements LikeRepository {
     private final LikeJpaRepository likeJpaRepository;
 
     @Override
+    public void toggleLike(PostLike postLike) {
+        Optional<PostLikeEntity> postLikeEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
+                postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
+
+        if (postLikeEntity.isPresent()) {
+            likeJpaRepository.deleteById(postLikeEntity.get().getId());
+        } else {
+            likeJpaRepository.save(PostLikeEntity.from(postLike));
+        }
+    }
+
+    @Override
     public PostLike save(PostLike postLike) {
         PostLikeEntity entity = PostLikeEntity.from(postLike);
         PostLikeEntity postLikeEntity = likeJpaRepository.save(entity);
@@ -36,5 +48,10 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public boolean likedAlready(Long userId, Long postId, PostType postType) {
         return likeJpaRepository.existsByUserIdAndPostIdAndPostType(userId, postId, postType);
+    }
+    
+    @Override
+    public long countByPostIdAndPostType(Long postId, PostType postType) {
+        return likeJpaRepository.countByPostIdAndPostType(postId, postType);
     }
 }

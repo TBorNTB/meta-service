@@ -22,6 +22,14 @@ public class LikeService {
     private final RedisService redisService;
 
     @Transactional
+    public void toggleLike(Long userId, Long postId, PostType postType) {
+        postInternalFacade.checkPostExistance(postId, postType);
+
+        PostLike like = PostLike.from(userId, postId, postType, LocalDateTime.now());
+        likeRepository.toggleLike(like);
+    }
+
+    @Transactional
     public LikeResponse createLike(Long userId, Long postId, PostType postType) {
         postInternalFacade.checkPostExistance(postId, postType);
 

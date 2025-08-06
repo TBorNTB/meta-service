@@ -23,6 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
     private final LikeService likeService;
 
+    @PostMapping("/toggle/{postId}")
+    public ResponseEntity<Void> toggleLike(
+            @RequestHeader("X-User-Id") String userId,
+            @PathVariable(name="postId") Long postId,
+            @RequestParam(name="postType") PostType postType
+    ){
+        likeService.toggleLike(Long.valueOf(userId), postId, postType);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{postId}")
     public ResponseEntity<LikeResponse> createLike(
             @RequestHeader("X-User-Id") String userId,

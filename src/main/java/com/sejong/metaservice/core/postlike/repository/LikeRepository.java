@@ -5,6 +5,8 @@ import com.sejong.metaservice.core.postlike.domain.PostLike;
 import java.util.Optional;
 
 public interface LikeRepository {
+    void toggleLike(PostLike postLike);
+
     PostLike save(PostLike postLike);
 
     Optional<PostLike> findOne(Long aLong, Long postId, PostType postType);
@@ -12,4 +14,6 @@ public interface LikeRepository {
     Long deleteById(Long id);
 
     boolean likedAlready(Long userId, Long postId, PostType postType);
+    
+    long countByPostIdAndPostType(Long postId, PostType postType);
 }
