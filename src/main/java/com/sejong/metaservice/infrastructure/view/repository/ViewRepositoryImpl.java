@@ -33,10 +33,12 @@ public class ViewRepositoryImpl implements ViewRepository {
         return foundedViewEntity.toDomain();
     }
 
+    // findOne 은 포스트 존재 여부 검증 뒤에 수행됩니다.
     @Override
     public View findOne(PostType postType, Long postId) {
         return viewJPARepository.findByPostTypeAndPostId(postType, postId)
                 .map(ViewEntity::toDomain)
-                .orElseThrow(() -> new BaseException(NOT_FOUND_POST_TYPE_POST_ID));
+                // 이렇게 하면 포스트 생성 시 초기화 로직이 필요 없습니다.
+                .orElse(viewJPARepository.save(ViewEntity.of(View.of(postType, postId, 0L))).toDomain());
     }
 }
