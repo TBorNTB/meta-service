@@ -1,0 +1,231 @@
+@startuml MetaServiceClassDiagram
+!pragma useVerticalIf on
+skinparam monochrome true
+skinparam shadowing false
+
+title Meta Service - Core Classes & Bounded Contexts
+
+' ================================
+' CONTROLLERS (Presentation)
+' ================================
+class CommentController {
+  +createComment()
+  +showComments()
+  +updateComment()
+  +deleteComment()
+}
+
+class ReplyController {
+  +createReplyComment()
+  +showReplyComments()
+  +updateReplyComment()
+  +deleteReplyComment()
+}
+
+class LikeController {
+  +toggleLike()
+  +getLike()
+  +getLikeCount()
+}
+
+class ViewController {
+  +recordView()
+  +getViewCount()
+}
+
+' ================================
+' SERVICES (Application)
+' ================================
+class CommentService {
+  -commentRepository
+  -postInternalFacade
+  +createComment()
+  +getComments()
+  +updateComment()
+  +deleteComment()
+}
+
+class ReplyService {
+  -replyRepository
+  +createReplyComment()
+  +getAllReplyComments()
+  +updateReplyComment()
+  +deleteReplyComment()
+}
+
+class LikeService {
+  -likeRepository
+  -redisService
+  +toggleLike()
+  +getLikeStatus()
+  +getLikeCount()
+}
+
+class ViewService {
+  -viewRepository
+  -redisService
+  +recordView()
+  +getViewCount()
+  +updateViewCount()
+}
+
+class PostInternalFacade {
+  +checkPostExistance()
+}
+
+' ================================
+' DOMAIN MODELS
+' ================================
+package "Comment Bounded Context" {
+  class Comment <<AggregateRoot>> {
+    +id: Long
+    +content: String
+    +userId: Long
+    +postId: Long
+    +postType: PostType
+    +replyCount: Long
+    --
+    +updateComment()
+    +validateUserId()
+  }
+  
+  class Reply <<Entity>> {
+    +id: Long
+    +content: String
+    +parentCommentId: Long
+    +userId: Long
+    --
+    +updateReply()
+    +validateUserId()
+  }
+}
+
+package "PostLike Bounded Context" {
+  class PostLike <<AggregateRoot>> {
+    +id: Long
+    +userId: Long
+    +postId: Long
+    +postType: PostType
+  }
+}
+
+package "View Bounded Context" {
+  class View <<AggregateRoot>> {
+    +id: Long
+    +postType: PostType
+    +postId: Long
+    +viewCount: Long
+  }
+}
+
+enum PostType {
+  NEWS
+  PROJECT
+  ARTICLE
+}
+
+' ================================
+' REPOSITORY INTERFACES
+' ================================
+interface CommentRepository {
+  +save()
+  +findAllComments()
+  +updateComment()
+  +deleteComment()
+}
+
+interface ReplyRepository {
+  +save()
+  +findAllReplyComments()
+  +updateReply()
+  +deleteById()
+}
+
+interface LikeRepository {
+  +toggleLike()
+  +save()
+  +findOne()
+  +countByPostIdAndPostType()
+}
+
+interface ViewRepository {
+  +save()
+  +updateViewCount()
+  +findOne()
+}
+
+' ================================
+' INFRASTRUCTURE
+' ================================
+class CommentEntity {
+  +from()
+  +toDomain()
+}
+
+class ReplyEntity {
+  +from()
+  +toDomain()
+}
+
+class PostLikeEntity {
+  +from()
+  +toDomain()
+}
+
+class ViewEntity {
+  +from()
+  +toDomain()
+}
+
+class RedisService {
+  +increment()
+  +decrement()
+  +getCount()
+}
+
+' ================================
+' RELATIONSHIPS
+' ================================
+
+' Presentation -> Application
+CommentController --> CommentService
+ReplyController --> ReplyService
+LikeController --> LikeService
+ViewController --> ViewService
+
+' Application -> Domain
+CommentService --> CommentRepository
+CommentService --> PostInternalFacade
+ReplyService --> ReplyRepository
+LikeService --> LikeRepository
+ViewService --> ViewRepository
+
+' Application -> Infrastructure
+LikeService --> RedisService
+ViewService --> RedisService
+
+' Domain Models
+Comment --> PostType
+Reply --> PostType
+PostLike --> PostType
+View --> PostType
+
+' Bounded Context Relationships
+Reply --> Comment : "belongs to"
+
+' Entity Relationships
+CommentEntity ||--o{ ReplyEntity
+
+' Domain <-> Infrastructure
+Comment <--> CommentEntity
+Reply <--> ReplyEntity
+PostLike <--> PostLikeEntity
+View <--> ViewEntity
+
+note top of "Comment Bounded Context" : "Core Domain\nComment + Reply Aggregate"
+
+note top of "PostLike Bounded Context" : "Supporting Domain\nLike Management"
+
+note top of "View Bounded Context" : "Supporting Domain\nView Count Tracking"
+
+@enduml
