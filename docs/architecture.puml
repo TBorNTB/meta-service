@@ -1,0 +1,64 @@
+@startuml MetaServiceArchitecture
+!pragma useVerticalIf on
+skinparam monochrome true
+skinparam shadowing false
+
+title Meta Service - DDD + Clean Architecture
+
+' Clean Architecture Layers
+rectangle "Presentation" as presentation {
+  [Controllers]
+}
+
+rectangle "Application" as application {
+  [Services]
+  [Schedulers]
+  [PostInternalFacade]
+}
+
+rectangle "Domain" as domain {
+  package "Comment BC" {
+    [Comment]
+    [Reply]
+  }
+  
+  package "PostLike BC" {
+    [PostLike]
+  }
+  
+  package "View BC" {
+    [View]
+  }
+  
+  package "Shared" {
+    [PostType]
+  }
+}
+
+rectangle "Infrastructure" as infrastructure {
+  [JPA Entities]
+  [Repository Impls]
+  [RedisService]
+}
+
+database MySQL
+database Redis
+
+' Dependencies
+presentation --> application
+application --> domain
+infrastructure --> domain
+infrastructure --> MySQL
+infrastructure --> Redis
+
+' Domain relationships
+[Comment BC] --> [Shared]
+[PostLike BC] --> [Shared]
+[View BC] --> [Shared]
+[Reply] --> [Comment] : "part of"
+
+note right of domain : "Domain Layer\n- Business Logic\n- Domain Models\n- Repository Interfaces"
+
+note right of application : "Application Layer\n- Use Cases\n- Orchestration\n- External Integration"
+
+@enduml

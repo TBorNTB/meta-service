@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: chat-service
+    name: meta-service
 
   datasource:
     url: jdbc:mysql://localhost:3306/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8

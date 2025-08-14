@@ -1,0 +1,135 @@
+@startuml MetaServiceERD
+!pragma useVerticalIf on
+!define ALLOW_MIXING
+skinparam monochrome true
+skinparam shadowing false
+
+title Meta Service - Database Schema
+
+class comment {
+  + id : BIGINT
+  --
+  + content : TEXT
+  + user_id : BIGINT
+  + post_id : BIGINT
+  + post_type : VARCHAR(50)
+  + created_at : DATETIME
+  + updated_at : DATETIME
+  --
+  INDEX(post_id, post_type)
+  INDEX(user_id)
+}
+
+class reply {
+  + id : BIGINT
+  --
+  + content : TEXT
+  + comment_id : BIGINT
+  + user_id : BIGINT
+  + created_at : DATETIME
+  + updated_at : DATETIME
+  --
+  INDEX(comment_id)
+  INDEX(user_id)
+}
+
+class postlike {
+  + id : BIGINT
+  --
+  + user_id : BIGINT
+  + post_id : BIGINT
+  + post_type : VARCHAR(50)
+  + created_at : DATETIME
+  --
+  UNIQUE(user_id, post_id, post_type)
+  INDEX(post_id, post_type)
+}
+
+class view {
+  + id : BIGINT
+  --
+  + post_type : VARCHAR(50)
+  + post_id : BIGINT
+  + view_count : BIGINT
+  + updated_at : DATETIME
+  --
+  UNIQUE(post_type, post_id)
+}
+
+package "External Services" {
+  class UserService
+  class NewsService
+  class ProjectService
+  class ArticleService
+}
+
+package "Redis Cache" {
+  class ViewCounters
+  class LikeCounters
+  class IPTracking
+}
+
+comment ||--o{ reply
+
+comment ..> UserService
+comment ..> NewsService
+comment ..> ProjectService
+comment ..> ArticleService
+
+reply ..> UserService
+
+postlike ..> UserService
+postlike ..> NewsService
+postlike ..> ProjectService
+postlike ..> ArticleService
+
+view ..> NewsService
+view ..> ProjectService
+view ..> ArticleService
+
+postlike --> LikeCounters
+view --> ViewCounters
+view --> IPTracking
+
+note top of comment
+Comment Aggregate
+- Aggregate Root
+- Contains replies
+- User ownership validation
+end note
+
+note top of reply
+Reply Entity
+- Part of Comment Aggregate
+- Cannot exist without parent
+end note
+
+note top of postlike
+PostLike Entity
+- Independent Aggregate
+- Toggle behavior (like/unlike)
+- One per user per post
+end note
+
+note top of view
+View Entity
+- Independent Aggregate
+- IP-based duplicate prevention
+- Real-time counting via Redis
+end note
+
+note bottom
+Caching Strategy
+..
+Redis Keys:
+• post:{TYPE}:{ID}:view:count
+• like:{TYPE}:{ID}:count
+• view:{TYPE}:{ID}:ip:{HASH}
+
+Sync Strategy:
+• Daily batch sync (3 AM)
+• Redis → MySQL
+• Eventual consistency
+end note
+
+@enduml
