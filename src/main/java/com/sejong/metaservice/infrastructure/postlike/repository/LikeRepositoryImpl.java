@@ -8,6 +8,7 @@ import com.sejong.metaservice.infrastructure.postlike.entity.PostLikeEntity;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,16 +19,25 @@ public class LikeRepositoryImpl implements LikeRepository {
 
     @Override
     public LikeStatus toggleLike(PostLike postLike) {
-        Optional<PostLikeEntity> postLikeEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
-                postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
+        try {
+            Optional<PostLikeEntity> postLikeEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
+                    postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
 
-        if (postLikeEntity.isPresent()) {
-            likeJpaRepository.deleteById(postLikeEntity.get().getId());
+            if (postLikeEntity.isPresent()) {
+                likeJpaRepository.deleteById(postLikeEntity.get().getId());
+                return LikeStatus.UNLIKED;
+
+            } else {
+
+                likeJpaRepository.save(PostLikeEntity.from(postLike));
+                return LikeStatus.LIKED;
+            }
+        } catch (DataIntegrityViolationException e) {
+            // Unique 제약 조건 위반 시 - 이미 다른 요청이 저장했다는 의미 -> 다시 조회해서 삭제 처리
+            Optional<PostLikeEntity> existingEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
+                    postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
+            existingEntity.ifPresent(postLikeEntity -> likeJpaRepository.deleteById(postLikeEntity.getId()));
             return LikeStatus.UNLIKED;
-
-        } else {
-            likeJpaRepository.save(PostLikeEntity.from(postLike));
-            return LikeStatus.LIKED;
         }
     }
 
