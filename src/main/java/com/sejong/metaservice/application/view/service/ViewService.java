@@ -8,6 +8,8 @@ import com.sejong.metaservice.core.view.repository.ViewRepository;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import java.time.Duration;
+
+import com.sejong.metaservice.infrastructure.view.kafka.ViewEventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class ViewService {
     private final PostInternalFacade postInternalFacade;
     private final RedisService redisService;
     private final ViewRepository viewRepository;
+    private final ViewEventPublisher viewEventPublisher;
 
     @Transactional
     public ViewCountResponse initializeViewCount(Long postId, PostType postType) {
@@ -63,7 +66,7 @@ public class ViewService {
         // register this ip
         redisService.markAsViewed(ipKey, VIEW_TTL);
         Long newViewCount = redisService.increment(viewCountKey);
-        
+        viewEventPublisher.publish(postType, postId ,newViewCount);
         return ViewCountResponse.of(newViewCount);
     }
 
