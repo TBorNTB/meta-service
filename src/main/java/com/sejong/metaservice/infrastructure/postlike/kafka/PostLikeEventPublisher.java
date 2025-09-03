@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class PostLikeEventPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
-    private final String topic = "like-events";
+    private final String topic = "aws.post.cdc.likes.0";
 
     public void publish(PostLike postLike, Long postCount){
         log.info("발행 시작 좋아요 postLike :{}, postCount : {}", postLike, postCount);
