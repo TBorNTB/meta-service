@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class ViewEventPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
-    private final String topic = "aws.post.cdc.views.0";
+    private final String topic = "view";
 
     public void publish(PostType postType, Long postId,  Long viewCount){
         log.info("발행 시작 좋아요 postId :{}, viewCount : {}", postId, viewCount);
