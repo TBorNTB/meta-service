@@ -61,6 +61,12 @@ dependencies {
 
     //  Spring AOP (Retry는 AOP 기반이므로 필요)
     implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
 }
 
 dependencyManagement {
