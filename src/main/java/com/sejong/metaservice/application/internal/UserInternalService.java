@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class UserInternalService {
-    private final UserClient userClient;;
+    private final UserClient userClient;
 
     @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateExistsFallback")
     public void validateExists(Long userId) {

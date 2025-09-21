@@ -6,7 +6,7 @@ spring:
     name: meta-service
 
   datasource:
-    url: jdbc:mysql://mysql:3306/meta_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://mysql2:3306/meta_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
