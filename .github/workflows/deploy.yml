@@ -54,7 +54,7 @@ jobs:
       - name: 🔑 SSH로 EC2에 접속 및 배포
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST_INFRA }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
@@ -76,7 +76,8 @@ jobs:
               -v /home/ubuntu/credentials.json:/app/credentials.json \
               -e GOOGLE_APPLICATION_CREDENTIALS="/app/credentials.json" \
               -e S3_SECRET_KEY="${{ secrets.S3_SECRET_KEY }}" \
-              -e EC2_HOST="${{ secrets.EC2_HOST }}" \
+              -e EC2_HOST_APP="${{secrets.EC2_HOST_APP}}" \
+              -e EC2_HOST_INFRA="${{secrets.EC2_HOST_INFRA}}" \
               -e S3_BUCKET="${{ secrets.S3_BUCKET }}" \
               -e S3_ACCESS_KEY="${{ secrets.S3_ACCESS_KEY }}" \
               -e DB_URL="${{ secrets.DB_URL }}" \
