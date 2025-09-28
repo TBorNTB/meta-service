@@ -33,11 +33,12 @@ public class ReplyService {
         return CursorPageResponse.from(replies,cursorPageRequest.getSize(),reply -> Cursor.of(reply.getId()));
     }
 
+
     @Transactional
-    public ReplyCommentResponse updateReplyComment(String userId, Long replyId, ReplyCommentRequest request) {
+    public ReplyCommentResponse updateReplyComment(String username, Long replyId, ReplyCommentRequest request) {
 
         Reply reply = replyRepository.findById(replyId);
-        reply.validateUserId(Long.valueOf(userId));
+        reply.validateUserId(username);
 
         Reply updatedReply = reply.updateReply(request.getComment(), LocalDateTime.now());
         Reply responseReply = replyRepository.updateReply(updatedReply);
@@ -45,9 +46,9 @@ public class ReplyService {
     }
 
     @Transactional
-    public ReplyCommentResponse deleteReplyComment(String userId, Long replyId) {
+    public ReplyCommentResponse deleteReplyComment(String username, Long replyId) {
         Reply reply = replyRepository.findById(replyId);
-        reply.validateUserId(Long.valueOf(userId));
+        reply.validateUserId(username);
 
         Long deletedId = replyRepository.deleteById(replyId);
         return ReplyCommentResponse.deleteFrom(deletedId);

@@ -18,7 +18,7 @@ public class Reply {
 
     private Long id;
     private String content;
-    private Long userId;
+    private String username;
     private Long parentCommentId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -27,15 +27,15 @@ public class Reply {
         return Reply.builder()
                 .id(null)
                 .content(command.getContent())
-                .userId(command.getUserId())
+                .username(command.getUsername())
                 .parentCommentId(command.getCommentParentId())
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
     }
 
-    public void validateUserId(Long userId) {
-        if(!this.userId.equals(userId)) {
+    public void validateUserId(String username) {
+        if(!this.username.equals(username)) {
             throw new BaseException(BAD_REQUEST);
         }
     }

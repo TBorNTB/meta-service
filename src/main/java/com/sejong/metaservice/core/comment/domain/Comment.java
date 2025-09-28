@@ -18,7 +18,7 @@ public class Comment {
 
     private Long id;
     private String content;
-    private Long userId;
+    private String username;
     private Long postId;
     private PostType postType;
     private LocalDateTime createdAt;
@@ -29,7 +29,7 @@ public class Comment {
         return Comment.builder()
                 .id(null)
                 .content(command.getContent())
-                .userId(command.getUserId())
+                .username(command.getUsername())
                 .postId(command.getPostId())
                 .replyCount(0L)
                 .postType(command.getPostType())
@@ -44,8 +44,8 @@ public class Comment {
         return this;
     }
 
-    public void validateUserId(Long userId) {
-        if (!this.userId.equals(userId)) {
+    public void validateUserId(String username) {
+        if (!this.username.equals(username)) {
             throw new BaseException(ExceptionType.BAD_REQUEST);
         }
     }

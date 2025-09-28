@@ -34,7 +34,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private Long userId;
+    private String username;
     private Long postId;
 
     @Enumerated(EnumType.STRING)
@@ -51,7 +51,7 @@ public class CommentEntity {
         return CommentEntity.builder()
                 .id(null)
                 .content(comment.getContent())
-                .userId(comment.getUserId())
+                .username(comment.getUsername())
                 .postId(comment.getPostId())
                 .postType(comment.getPostType())
                 .replyEntities(new ArrayList<>())
@@ -64,7 +64,7 @@ public class CommentEntity {
         return Comment.builder()
                 .id(this.id)
                 .content(this.content)
-                .userId(this.userId)
+                .username(this.username)
                 .postId(this.postId)
                 .postType(this.postType)
                 .createdAt(this.createdAt)

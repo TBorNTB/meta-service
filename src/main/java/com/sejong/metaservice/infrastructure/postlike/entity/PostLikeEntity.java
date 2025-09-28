@@ -33,7 +33,7 @@ public class PostLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long userId;
+    private String username;
     private Long postId;
 
     @Enumerated(EnumType.STRING)
@@ -44,7 +44,7 @@ public class PostLikeEntity {
     public static PostLikeEntity from(PostLike postLike) {
         return PostLikeEntity.builder()
                 .id(null)
-                .userId(postLike.getUserId())
+                .username(postLike.getUsername())
                 .postId(postLike.getPostId())
                 .postType(postLike.getPostType())
                 .createdAt(postLike.getCreatedAt())
@@ -54,7 +54,7 @@ public class PostLikeEntity {
     public PostLike toDomain() {
         return PostLike.builder()
                 .id(getId())
-                .userId(getUserId())
+                .username(getUsername())
                 .postId(getPostId())
                 .postType(getPostType())
                 .createdAt(getCreatedAt())

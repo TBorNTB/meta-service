@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CommentCommand {
-    private  Long userId;
+    private  String username;
     private  Long postId;
     private  PostType postType;
     private  String content;
 
-    public static CommentCommand of(String userId, Long postId, PostType postType, String content) {
-        return new CommentCommand(Long.valueOf(userId), postId, postType, content);
+    public static CommentCommand of(String username, Long postId, PostType postType, String content) {
+        return new CommentCommand(username, postId, postType, content);
     }
 }

@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 public class PostLike {
 
     private Long id;
-    private Long userId;
+    private String username;
     private Long postId;
     private PostType postType;
     private LocalDateTime createdAt;
 
-    public static PostLike from(Long userId, Long postId, PostType postType, LocalDateTime createdAt ) {
+    public static PostLike from(String username, Long postId, PostType postType, LocalDateTime createdAt ) {
         return PostLike.builder()
                 .id(null)
-                .userId(userId)
+                .username(username)
                 .postId(postId)
                 .postType(postType)
                 .createdAt(createdAt)

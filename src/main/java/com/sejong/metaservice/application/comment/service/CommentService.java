@@ -48,20 +48,20 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse updateComment(String userId, Long commentId, CommentRequest request) {
+    public CommentResponse updateComment(String username, Long commentId, CommentRequest request) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
-        comment.validateUserId(Long.valueOf(userId));
+        comment.validateUserId(username);
         Comment updatedComment = comment.updateComment(request.getContent(), LocalDateTime.now());
         Comment commentResponse = commentRepository.updateComment(updatedComment);
         return CommentResponse.updateFrom(commentResponse);
     }
 
     @Transactional
-    public CommentResponse deleteComment(String userId, Long commentId) {
+    public CommentResponse deleteComment(String username, Long commentId) {
 
         Comment comment = commentRepository.findByCommentId(commentId);
-        comment.validateUserId(Long.valueOf(userId));
+        comment.validateUserId(username);
 
         Long deletedId = commentRepository.deleteComment(commentId);
         return CommentResponse.deleteFrom(deletedId);

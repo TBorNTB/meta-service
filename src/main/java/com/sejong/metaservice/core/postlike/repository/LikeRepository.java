@@ -11,11 +11,11 @@ public interface LikeRepository {
 
     PostLike save(PostLike postLike);
 
-    Optional<PostLike> findOne(Long aLong, Long postId, PostType postType);
+    Optional<PostLike> findOne(String username, Long postId, PostType postType);
 
     Long deleteById(Long id);
 
-    boolean liked(Long userId, Long postId, PostType postType);
+    boolean liked(String username, Long postId, PostType postType);
 
     long countByPostIdAndPostType(Long postId, PostType postType);
     

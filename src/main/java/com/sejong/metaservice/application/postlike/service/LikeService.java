@@ -24,10 +24,10 @@ public class LikeService {
     private final PostLikeEventPublisher postlikeEventPublisher;
 
     @Transactional
-    public LikeResponse toggleLike(Long userId, Long postId, PostType postType) {
+    public LikeResponse toggleLike(String username, Long postId, PostType postType) {
         postInternalFacade.checkPostExistance(postId, postType);
 
-        PostLike like = PostLike.from(userId, postId, postType, LocalDateTime.now());
+        PostLike like = PostLike.from(username, postId, postType, LocalDateTime.now());
         LikeStatus toggleResult = likeRepository.toggleLike(like);
 
         if (toggleResult.equals(LikeStatus.LIKED)) {
@@ -42,9 +42,9 @@ public class LikeService {
     }
 
     @Transactional(readOnly = true)
-    public LikeResponse getLikeStatus(Long userId, Long postId, PostType postType) {
+    public LikeResponse getLikeStatus(String username, Long postId, PostType postType) {
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
-        boolean liked = likeRepository.liked(userId, postId, postType);
+        boolean liked = likeRepository.liked(username, postId, postType);
         Long likeCount = redisService.getCount(redisKey);
         if (liked) return LikeResponse.of(LikeStatus.LIKED, likeCount);
         else return LikeResponse.of(LikeStatus.UNLIKED, likeCount);

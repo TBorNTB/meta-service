@@ -32,11 +32,11 @@ public class ReplyController {
 
     @PostMapping("/{commentParentId}")
     public ResponseEntity<ReplyCommentResponse> createReplyComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name="commentParentId") Long commentParentId,
             @Valid @RequestBody ReplyCommentRequest replyCommentRequest
     ){
-        ReplyCreateCommand command = ReplyCreateCommand.of(replyCommentRequest.getComment(), Long.valueOf(userId), commentParentId);
+        ReplyCreateCommand command = ReplyCreateCommand.of(replyCommentRequest.getComment(),username, commentParentId);
         ReplyCommentResponse response = replyService.createReplyComment(command);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
@@ -55,21 +55,21 @@ public class ReplyController {
 
     @PatchMapping("/{replyId}")
     public ResponseEntity<ReplyCommentResponse> updateReplyComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name="replyId") Long replyId,
             @Valid @RequestBody ReplyCommentRequest replyCommentRequest
     ){
-        ReplyCommentResponse response = replyService.updateReplyComment(userId, replyId, replyCommentRequest);
+        ReplyCommentResponse response = replyService.updateReplyComment(username, replyId, replyCommentRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
     @DeleteMapping("/{replyId}")
     public ResponseEntity<ReplyCommentResponse> deleteReplyComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name="replyId") Long replyId
     ){
-        ReplyCommentResponse response = replyService.deleteReplyComment(userId, replyId);
+        ReplyCommentResponse response = replyService.deleteReplyComment(username, replyId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

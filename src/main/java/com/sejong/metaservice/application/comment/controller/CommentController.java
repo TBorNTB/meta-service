@@ -35,12 +35,12 @@ public class CommentController {
 
     @PostMapping("/{postId}")
     public ResponseEntity<CommentResponse> createComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name = "postId") Long postId,
             @RequestParam(name = "postType") PostType postType,
             @Valid @RequestBody CommentRequest request
     ) {
-        CommentCommand command = CommentCommand.of(userId, postId, postType, request.getContent());
+        CommentCommand command = CommentCommand.of(username, postId, postType, request.getContent());
         CommentResponse response = commentService.createComment(command);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
@@ -59,22 +59,22 @@ public class CommentController {
 
     @PatchMapping("/{commentId}")
     public ResponseEntity<CommentResponse> updateComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name = "commentId") Long commentId,
             @Valid @RequestBody CommentRequest request
     ) {
 
-        CommentResponse response = commentService.updateComment(userId, commentId, request);
+        CommentResponse response = commentService.updateComment(username, commentId, request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommentResponse> deleteComment(
-            @RequestHeader("X-User-Id") String userId,
+            @RequestHeader("X-User-Id") String username,
             @PathVariable(name = "commentId") Long commentId
     ) {
-        CommentResponse response = commentService.deleteComment(userId, commentId);
+        CommentResponse response = commentService.deleteComment(username, commentId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

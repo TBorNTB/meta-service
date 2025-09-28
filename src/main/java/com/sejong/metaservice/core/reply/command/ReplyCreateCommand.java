@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ReplyCreateCommand {
     private String content;
-    private Long userId;
+    private String username;
     private Long commentParentId;
 
-    public static ReplyCreateCommand of(String content, Long userId, Long commentParentId) {
-        return new ReplyCreateCommand(content, userId, commentParentId);
+    public static ReplyCreateCommand of(String content, String username, Long commentParentId) {
+        return new ReplyCreateCommand(content, username, commentParentId);
     }
 
 }

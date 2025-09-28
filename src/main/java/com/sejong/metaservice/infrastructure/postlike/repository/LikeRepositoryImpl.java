@@ -20,8 +20,8 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public LikeStatus toggleLike(PostLike postLike) {
         try {
-            Optional<PostLikeEntity> postLikeEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
-                    postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
+            Optional<PostLikeEntity> postLikeEntity = likeJpaRepository.findByUsernameAndPostIdAndPostType(
+                    postLike.getUsername(), postLike.getPostId(), postLike.getPostType());
 
             if (postLikeEntity.isPresent()) {
                 likeJpaRepository.deleteById(postLikeEntity.get().getId());
@@ -34,8 +34,8 @@ public class LikeRepositoryImpl implements LikeRepository {
             }
         } catch (DataIntegrityViolationException e) {
             // Unique 제약 조건 위반 시 - 이미 다른 요청이 저장했다는 의미 -> 다시 조회해서 삭제 처리
-            Optional<PostLikeEntity> existingEntity = likeJpaRepository.findByUserIdAndPostIdAndPostType(
-                    postLike.getUserId(), postLike.getPostId(), postLike.getPostType());
+            Optional<PostLikeEntity> existingEntity = likeJpaRepository.findByUsernameAndPostIdAndPostType(
+                    postLike.getUsername(), postLike.getPostId(), postLike.getPostType());
             existingEntity.ifPresent(postLikeEntity -> likeJpaRepository.deleteById(postLikeEntity.getId()));
             return LikeStatus.UNLIKED;
         }
@@ -49,8 +49,8 @@ public class LikeRepositoryImpl implements LikeRepository {
     }
 
     @Override
-    public Optional<PostLike> findOne(Long userId, Long postId, PostType postType) {
-        return likeJpaRepository.findByUserIdAndPostIdAndPostType(userId, postId, postType)
+    public Optional<PostLike> findOne(String username, Long postId, PostType postType) {
+        return likeJpaRepository.findByUsernameAndPostIdAndPostType(username, postId, postType)
                 .map(PostLikeEntity::toDomain);
     }
 
@@ -61,8 +61,8 @@ public class LikeRepositoryImpl implements LikeRepository {
     }
 
     @Override
-    public boolean liked(Long userId, Long postId, PostType postType) {
-        return likeJpaRepository.existsByUserIdAndPostIdAndPostType(userId, postId, postType);
+    public boolean liked(String username, Long postId, PostType postType) {
+        return likeJpaRepository.existsByUsernameAndPostIdAndPostType(username, postId, postType);
     }
     
     @Override

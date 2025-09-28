@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import com.sejong.metaservice.application.comment.dto.request.CommentRequest;
 import com.sejong.metaservice.application.comment.dto.response.CommentResponse;
 import com.sejong.metaservice.application.fixture.CommentFixture;
+import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.core.comment.command.CommentCommand;
 import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.comment.repository.CommentRepository;
@@ -26,10 +27,12 @@ class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
+    @Mock
+    private PostInternalFacade postInternalFacade;
 
     @BeforeEach
     void setUp() {
-        commentService = new CommentService(commentRepository);
+        commentService = new CommentService(commentRepository,postInternalFacade);
     }
 
     @Test
@@ -81,10 +84,10 @@ class CommentServiceTest {
     }
 
     @Transactional
-    public CommentResponse deleteComment(String userId, Long commentId) {
+    public CommentResponse deleteComment(String username, Long commentId) {
         //todo userId를 통해 실제로 해당 유저가 있는지 조회하는 코드 작성 만약 일치하지 않으면 오류반환
         Comment comment = commentRepository.findByCommentId(commentId);
-        comment.validateUserId(Long.valueOf(userId));
+        comment.validateUserId(username);
 
         Long deletedId = commentRepository.deleteComment(commentId);
         return CommentResponse.deleteFrom(deletedId);
@@ -93,7 +96,7 @@ class CommentServiceTest {
     @Test
     void 댓글을_삭제한다() {
         // given
-        String userId = "1";
+        String username = "1";
         Long commentId = 1L;
         Comment realComment = CommentFixture.getComment(1L);
         Comment comment = spy(realComment);
@@ -102,12 +105,12 @@ class CommentServiceTest {
         when(commentRepository.deleteComment(commentId)).thenReturn(deleteId);
 
         // when
-        CommentResponse response = commentService.deleteComment(userId, commentId);
+        CommentResponse response = commentService.deleteComment(username, commentId);
 
         // then
         assertThat(response.getMessage()).isEqualTo("삭제가 완료되었습니다.");
         assertThat(response.getCommentId()).isEqualTo(deleteId);
-        verify(comment).validateUserId(Long.valueOf(userId));
+        verify(comment).validateUserId(username);
 
     }
 

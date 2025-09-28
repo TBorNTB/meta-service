@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface LikeJpaRepository extends JpaRepository<PostLikeEntity, Long> {
-    Optional<PostLikeEntity> findByUserIdAndPostIdAndPostType(Long userId, Long postId, PostType postType);
+    Optional<PostLikeEntity> findByUsernameAndPostIdAndPostType(String username, Long postId, PostType postType);
 
-    boolean existsByUserIdAndPostIdAndPostType(Long userId, Long postId, PostType postType);
+    boolean existsByUsernameAndPostIdAndPostType(String username, Long postId, PostType postType);
 
     long countByPostIdAndPostType(Long postId, PostType postType);
     

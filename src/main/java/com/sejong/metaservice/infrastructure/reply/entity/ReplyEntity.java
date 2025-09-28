@@ -33,7 +33,7 @@ public class ReplyEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private CommentEntity commentEntity;
-    private Long userId;
+    private String username;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -43,7 +43,7 @@ public class ReplyEntity {
                 .id(null)
                 .content(reply.getContent())
                 .commentEntity(null)
-                .userId(reply.getUserId())
+                .username(reply.getUsername())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt())
                 .build();
@@ -62,7 +62,7 @@ public class ReplyEntity {
                 .id(id)
                 .parentCommentId(commentEntity.getId())
                 .content(content)
-                .userId(userId)
+                .username(username)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
