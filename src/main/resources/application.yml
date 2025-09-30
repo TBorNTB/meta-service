@@ -6,7 +6,7 @@ spring:
     name: meta-service
 
   datasource:
-    url: jdbc:mysql://${EC2_HOST_INFRA}:3307/meta_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://${EC2_HOST_INFRA_PRIVATE}:3307/meta_schema?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -30,7 +30,7 @@ spring:
         order_inserts: true
         order_updates: true
   kafka:
-    bootstrap-servers: ${EC2_HOST_INFRA}:9092
+    bootstrap-servers: ${EC2_HOST_INFRA_PRIVATE}:9092
     properties:
       acks: all
       enable.idempotence: true
@@ -47,7 +47,7 @@ spring:
 
   data:
     redis:
-      host: ${EC2_HOST_INFRA}
+      host: ${EC2_HOST_INFRA_PRIVATE}
       port: ${REDIS_PORT}
       timeout: 6000
       lettuce:
