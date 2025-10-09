@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "postlike",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_user_post_type", columnNames = {"userId", "postId", "postType"})
+                @UniqueConstraint(name = "uk_user_post_type", columnNames = {"username", "postId", "postType"})
         }
 )
 @Getter
