@@ -27,8 +27,8 @@ public class ViewController {
 
     @PostMapping("")
     public ResponseEntity<ViewCountResponse> initializeViewCount(
-            @PathVariable(name = "postId") Long postId,
-            @RequestParam(name = "postType") PostType postType
+        @RequestParam(name = "postId") Long postId,
+        @RequestParam(name = "postType") PostType postType
     ) {
         // 이건 saga ? 프론트쪽에서 병렬적으로 api 요청 ?
         ViewCountResponse response = viewService.initializeViewCount(postId, postType);
