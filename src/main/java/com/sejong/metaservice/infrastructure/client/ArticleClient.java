@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name="article-service", path="/internal/article")
+@FeignClient(name="archive-service", path="/internal/archive")
 public interface ArticleClient {
 
-    @GetMapping("/check/{articleId}")
-    ResponseEntity<Boolean> checkArchive(@PathVariable("articleId") Long articleId);
+    @GetMapping("/check/{csKnowledgeId}")
+    ResponseEntity<Boolean> checkArchive(@PathVariable("csKnowledgeId") Long csKnowledgeId);
 }
