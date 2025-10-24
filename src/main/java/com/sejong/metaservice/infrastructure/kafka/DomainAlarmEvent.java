@@ -1,7 +1,9 @@
-package com.sejong.metaservice.infrastructure.postlike.kafka;
+package com.sejong.metaservice.infrastructure.kafka;
 
+import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
+import com.sejong.metaservice.core.reply.domain.Reply;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,12 +25,7 @@ public class DomainAlarmEvent {
     private LocalDateTime createdAt;
 
     public static DomainAlarmEvent from(PostLike postLike, AlarmType alarmType, String ownerUsername) {
-        DomainType makeDomainType = switch (postLike.getPostType()) {
-            case NEWS -> DomainType.NEWS;
-            case PROJECT -> DomainType.PROJECT;
-            case ARTICLE -> DomainType.ARCHIVE;
-            default -> DomainType.GLOBAL;
-        };
+        DomainType makeDomainType = getDomainType(postLike.getPostType());
 
         return DomainAlarmEvent.builder()
                 .domainId(postLike.getPostId())
@@ -38,5 +35,46 @@ public class DomainAlarmEvent {
                 .ownerUsername(ownerUsername)
                 .createdAt(postLike.getCreatedAt())
                 .build();
+    }
+
+
+    public static DomainAlarmEvent from(Comment comment, AlarmType alarmType, String ownerUsername) {
+        DomainType makeDomainType = getDomainType(comment.getPostType());
+
+        return DomainAlarmEvent.builder()
+                .domainId(comment.getPostId())
+                .alarmType(alarmType)
+                .domainType(makeDomainType)
+                .actorUsername(comment.getUsername())
+                .ownerUsername(ownerUsername)
+                .createdAt(comment.getCreatedAt())
+                .build();
+    }
+
+    /*
+    이 친구는 따로 도메인 타입 포스트에 종류에 따라 구분할 필요가 없어서 바로 DomainType.COMMENT 넣었습니다.
+       그 이유는  이동호님이 댓글에 응답을 남겼습니다. 와 같이 포스트 종류가 필요 없어집니다.
+    */
+    public static DomainAlarmEvent from(Comment parentComment, Reply reply, AlarmType alarmType) {
+        DomainType makeDomainType = getDomainType(parentComment.getPostType());
+
+        return DomainAlarmEvent.builder()
+                .domainId(parentComment.getPostId())
+                .alarmType(alarmType)
+                .domainType(makeDomainType)
+                .actorUsername(reply.getUsername())
+                .ownerUsername(parentComment.getUsername())
+                .createdAt(reply.getCreatedAt())
+                .build();
+    }
+
+    private static DomainType getDomainType(PostType postType) {
+        DomainType makeDomainType = switch (postType) {
+            case NEWS -> DomainType.NEWS;
+            case PROJECT -> DomainType.PROJECT;
+            case ARTICLE -> DomainType.ARCHIVE;
+            default -> DomainType.GLOBAL;
+        };
+        return makeDomainType;
     }
 }

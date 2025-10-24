@@ -1,4 +1,4 @@
-package com.sejong.userservice.infrastructure.alarm.kafka.publisher;
+package com.sejong.metaservice.infrastructure.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

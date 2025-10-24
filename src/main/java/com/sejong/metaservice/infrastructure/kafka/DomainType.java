@@ -1,4 +1,4 @@
-package com.sejong.metaservice.infrastructure.postlike.kafka;
+package com.sejong.metaservice.infrastructure.kafka;
 
 public enum DomainType {
     PROJECT,
