@@ -17,12 +17,20 @@ public class PostInternalFacade {
     private final NewsInternalService newsInternalService;
     private final CSKnowledgeInternalService CSKnowledgeInternalService;
 
-    public void checkPostExistance(Long postId, PostType postType) {
+    public String checkPostExistanceAndOwner(Long postId, PostType postType) {
         switch (postType) {
             case NEWS -> newsInternalService.validateExists(postId);
+            case PROJECT -> {
+                return projectInternalService.validateExists123(postId);
+            }
+
+            case ARTICLE -> articleInternalService.validateExists(postId);
             case PROJECT -> projectInternalService.validateExists(postId);
             case ARTICLE -> CSKnowledgeInternalService.validateExists(postId);
             default -> throw new BaseException(BAD_REQUEST);
+
         }
+
+        return "";
     }
 }

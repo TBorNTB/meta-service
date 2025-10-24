@@ -12,10 +12,12 @@ import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
@@ -25,7 +27,8 @@ public class LikeService {
 
     @Transactional
     public LikeResponse toggleLike(String username, Long postId, PostType postType) {
-        postInternalFacade.checkPostExistance(postId, postType);
+        String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(postId, postType);
+        log.info("유저이름 : {}",ownerUsername);
 
         PostLike like = PostLike.from(username, postId, postType, LocalDateTime.now());
         LikeStatus toggleResult = likeRepository.toggleLike(like);
@@ -33,6 +36,7 @@ public class LikeService {
         if (toggleResult.equals(LikeStatus.LIKED)) {
             Long count = redisService.increment(RedisKeyUtil.likeCountKey(postType, postId));
             postlikeEventPublisher.publish(like,count);
+            postlikeEventPublisher.publishAlarm(like,ownerUsername);
             return LikeResponse.of(LikeStatus.LIKED, count);
         } else {
             Long count = redisService.decrement(RedisKeyUtil.likeCountKey(postType, postId));
@@ -52,7 +56,7 @@ public class LikeService {
 
     @Transactional(readOnly = true)
     public LikeCountResponse getLikeCount(Long postId, PostType postType) {
-        postInternalFacade.checkPostExistance(postId, postType);
+        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
         long likeCount = redisService.getCount(redisKey);
         return LikeCountResponse.of(likeCount);

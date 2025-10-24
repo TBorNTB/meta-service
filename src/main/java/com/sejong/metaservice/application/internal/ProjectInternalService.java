@@ -3,6 +3,7 @@ package com.sejong.metaservice.application.internal;
 import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
 import static com.sejong.metaservice.core.common.exception.ExceptionType.EXTERNAL_SERVER_ERROR;
 
+import com.sejong.metaservice.application.internal.response.PostLikeCheckResponse;
 import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.infrastructure.client.ProjectClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -18,20 +19,24 @@ public class ProjectInternalService {
     private final ProjectClient projectClient;
 
     @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateExistsFallback")
-    public void validateExists(Long postId) {
+    public String validateExists123(Long postId) {
         log.info("시작...");
-        ResponseEntity<Boolean> response = projectClient.checkProject(postId);
-        if (Boolean.FALSE.equals(response.getBody())) {
+        ResponseEntity<PostLikeCheckResponse> response = projectClient.checkProject(postId);
+        if (!response.getBody().isStored()) {
             log.info("Project 검증 실패");
             throw new BaseException(BAD_REQUEST);
         }
+        return response.getBody().getOwnerUsername();
     }
 
-    private void validateExistsFallback(Long postId, Throwable t) {
+    private String validateExistsFallback(Long postId, Throwable t) {
         if (t instanceof BaseException) {
             throw (BaseException) t;
         }
         throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
+
+
+
 
 }

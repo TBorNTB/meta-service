@@ -28,7 +28,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(CommentCommand command) {
-        postInternalFacade.checkPostExistance(command.getPostId(), command.getPostType());
+        postInternalFacade.checkPostExistanceAndOwner(command.getPostId(), command.getPostType());
 
         Comment comment = Comment.of(command, LocalDateTime.now());
         return CommentResponse.from(commentRepository.save(comment));
@@ -37,7 +37,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CursorPageResponse<List<Comment>> getComments(CursorPageRequest cursorPageRequest, Long postId, PostType postType) {
 
-        postInternalFacade.checkPostExistance(postId, postType);
+        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
 
         List<Comment> comments = commentRepository.findAllComments(
                 postId,

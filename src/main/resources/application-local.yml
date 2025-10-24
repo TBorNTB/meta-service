@@ -13,6 +13,12 @@ spring:
 
 
   cloud:
+    discovery:
+      enabled: true
+    loadbalancer:
+      ribbon:
+        enabled: false
+
     openfeign:
       client:
         config:
@@ -27,7 +33,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     defer-datasource-initialization: true
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -75,15 +81,12 @@ spring:
     job:
       enabled: true
 
-  eureka:
-    instance:
-      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-      prefer-ip-address: true
-    client:
-      register-with-eureka: true
-      fetch-registry: true
-      service-url:
-        defaultZone: ${EUREKA_DEFAULTZONE}
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULTZONE}
+    register-with-eureka: true
+    fetch-registry: true
 
 resilience4j:
   circuitbreaker:
