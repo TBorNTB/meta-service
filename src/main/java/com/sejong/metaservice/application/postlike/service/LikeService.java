@@ -7,7 +7,7 @@ import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.postlike.repository.LikeRepository;
 import com.sejong.metaservice.infrastructure.postlike.entity.LikeStatus;
-import com.sejong.metaservice.infrastructure.postlike.kafka.PostLikeEventPublisher;
+import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostInternalFacade postInternalFacade;
     private final RedisService redisService;
-    private final PostLikeEventPublisher postlikeEventPublisher;
+    private final EventPublisher postlikeEventPublisher;
 
     @Transactional
     public LikeResponse toggleLike(String username, Long postId, PostType postType) {
@@ -35,12 +35,12 @@ public class LikeService {
 
         if (toggleResult.equals(LikeStatus.LIKED)) {
             Long count = redisService.increment(RedisKeyUtil.likeCountKey(postType, postId));
-            postlikeEventPublisher.publish(like,count);
-            postlikeEventPublisher.publishAlarm(like,ownerUsername);
+            postlikeEventPublisher.publishLike(like,count);
+            postlikeEventPublisher.publishLikedAlarm(like,ownerUsername);
             return LikeResponse.of(LikeStatus.LIKED, count);
         } else {
             Long count = redisService.decrement(RedisKeyUtil.likeCountKey(postType, postId));
-            postlikeEventPublisher.publish(like,count);
+            postlikeEventPublisher.publishLike(like,count);
             return LikeResponse.of(LikeStatus.UNLIKED, count);
         }
     }

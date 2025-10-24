@@ -10,8 +10,11 @@ import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.common.pagination.Cursor;
 import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.core.common.pagination.CursorPageResponse;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,14 +27,15 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostInternalFacade postInternalFacade;
-
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public CommentResponse createComment(CommentCommand command) {
-        postInternalFacade.checkPostExistanceAndOwner(command.getPostId(), command.getPostType());
-
+        String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(command.getPostId(), command.getPostType());
         Comment comment = Comment.of(command, LocalDateTime.now());
-        return CommentResponse.from(commentRepository.save(comment));
+        Comment savedComment = commentRepository.save(comment);
+        eventPublisher.publishCommentAlarm(savedComment, ownerUsername);
+        return CommentResponse.from(savedComment);
     }
 
     @Transactional(readOnly = true)
