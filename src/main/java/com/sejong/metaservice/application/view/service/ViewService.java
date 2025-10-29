@@ -41,7 +41,7 @@ public class ViewService {
 
 
     public void checkPostExistence(Long postId, PostType postType) {
-        postInternalFacade.checkPostExistance(postId, postType);
+        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
     }
 
 

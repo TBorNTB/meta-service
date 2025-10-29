@@ -2,6 +2,8 @@ package com.sejong.metaservice.application.reply.service;
 
 import com.sejong.metaservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.metaservice.application.reply.dto.response.ReplyCommentResponse;
+import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.core.comment.repository.CommentRepository;
 import com.sejong.metaservice.core.common.pagination.Cursor;
 import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.core.common.pagination.CursorPageResponse;
@@ -10,6 +12,8 @@ import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final EventPublisher eventPublisher;
+    private final CommentRepository commentRepository;
+
     @Transactional
     public ReplyCommentResponse createReplyComment(ReplyCreateCommand command) {
         Reply reply = Reply.of(command, LocalDateTime.now());
         Reply responseReply = replyRepository.save(reply);
+        Comment parentComment = commentRepository.findByCommentId(responseReply.getParentCommentId());
+        eventPublisher.publishReplyAlarm(parentComment , responseReply);
         return ReplyCommentResponse.from(responseReply);
     }
 

@@ -1,7 +1,6 @@
-package com.sejong.metaservice.infrastructure.postlike.kafka;
+package com.sejong.metaservice.infrastructure.kafka;
 
 import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.postlike.domain.PostLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
