@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+    // Logback과의 통합을 위한 라이브러리
+    implementation 'io.github.dibog:cloudwatch-logback-appender:2.0.0'
 }
 
 dependencyManagement {
