@@ -14,4 +14,10 @@ public interface ArchiveClient {
 
     @GetMapping("/check/cs/{csKnowledgeId}")
     ResponseEntity<PostLikeCheckResponse> checkCSKnowledge(@PathVariable("csKnowledgeId") Long csKnowledgeId);
+
+    @GetMapping("/news/count")
+    ResponseEntity<Long> getNewsCount();
+
+    @GetMapping("/cs/count")
+    ResponseEntity<Long> getCsCount();
 }

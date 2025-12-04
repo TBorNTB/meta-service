@@ -10,4 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ProjectClient {
     @GetMapping("/check/{postId}")
     ResponseEntity<PostLikeCheckResponse> checkProject(@PathVariable("postId") Long postId);
+
+    @GetMapping("/count")
+    ResponseEntity<Long> getProjectCount();
 }

@@ -36,7 +36,14 @@ public class ProjectInternalService {
         throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
 
+    @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateCountFallback")
+    public Long getProjectCount() {
+        ResponseEntity<Long> response = projectClient.getProjectCount();
+        return response.getBody();
+    }
 
-
-
+    private Long getUserCountFallback(Throwable t) {
+        // 예외 대신 기본값 0 반환
+        return 0L;
+    }
 }

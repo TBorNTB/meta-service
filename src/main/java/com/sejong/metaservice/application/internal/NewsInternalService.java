@@ -36,4 +36,15 @@ public class NewsInternalService {
         }
         throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
+
+    @CircuitBreaker(name = "myFeignClient", fallbackMethod = "getNewsCountFallback")
+    public Long getNewsCount() {
+        ResponseEntity<Long> response = archiveClient.getNewsCount();
+        return response.getBody();
+    }
+
+    private Long getNewsCountFallback(Throwable t) {
+        // 예외 대신 기본값 0 반환
+        return 0L;
+    }
 }

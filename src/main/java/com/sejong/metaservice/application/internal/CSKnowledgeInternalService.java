@@ -36,4 +36,15 @@ public class CSKnowledgeInternalService {
         }
         throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
+
+    @CircuitBreaker(name = "myFeignClient", fallbackMethod = "getCsCountFallback")
+    public Long getCsCount() {
+        ResponseEntity<Long> response = archiveClient.getCsCount();
+        return response.getBody();
+    }
+
+    private Long getCsCountFallback(Throwable t) {
+        // 예외 대신 기본값 0 반환
+        return 0L;
+    }
 }

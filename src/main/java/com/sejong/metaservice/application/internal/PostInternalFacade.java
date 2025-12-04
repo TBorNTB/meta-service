@@ -2,6 +2,7 @@ package com.sejong.metaservice.application.internal;
 
 import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
 
+import com.sejong.metaservice.application.meta.MetaPostCountDto;
 import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,12 @@ public class PostInternalFacade {
             default -> throw new BaseException(BAD_REQUEST);
 
         }
+    }
+
+    public MetaPostCountDto getPostCount() {
+        Long projectCount = projectInternalService.getProjectCount();
+        Long newsCount = newsInternalService.getNewsCount();
+        Long csCount = CSKnowledgeInternalService.getCsCount();
+        return MetaPostCountDto.of(projectCount, newsCount, csCount);
     }
 }

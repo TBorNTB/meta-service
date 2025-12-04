@@ -31,8 +31,8 @@ public class ViewController {
     @Operation(summary = "조회수 초기화", description = "새 게시물 생성 시 조회수를 0으로 초기화합니다")
     @PostMapping("")
     public ResponseEntity<ViewCountResponse> initializeViewCount(
-        @RequestParam(name = "postId") Long postId,
-        @RequestParam(name = "postType") PostType postType
+            @RequestParam(name = "postId") Long postId,
+            @RequestParam(name = "postType") PostType postType
     ) {
         // 이건 saga ? 프론트쪽에서 병렬적으로 api 요청 ? 둘중 하나로 수행해야 한다.
         ViewCountResponse response = viewService.initializeViewCount(postId, postType);
@@ -66,12 +66,12 @@ public class ViewController {
         if (xForwardedFor != null && !xForwardedFor.isEmpty() && !"unknown".equalsIgnoreCase(xForwardedFor)) {
             return xForwardedFor.split(",")[0].trim();
         }
-        
+
         String xRealIp = request.getHeader("X-Real-IP");
         if (xRealIp != null && !xRealIp.isEmpty() && !"unknown".equalsIgnoreCase(xRealIp)) {
             return xRealIp;
         }
-        
+
         return request.getRemoteAddr();
     }
 }

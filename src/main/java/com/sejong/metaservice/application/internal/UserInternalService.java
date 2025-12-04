@@ -32,4 +32,14 @@ public class UserInternalService {
         }
         throw new BaseException(EXTERNAL_SERVER_ERROR);
     }
+
+    @CircuitBreaker(name = "myFeignClient", fallbackMethod = "getUserCountFallback")
+    public Long getUserCount() {
+        ResponseEntity<Long> response = userClient.getUserCount();
+        return response.getBody();
+    }
+
+    private Long getUserCountFallback(Throwable t) {
+        return 0L;
+    }
 }
