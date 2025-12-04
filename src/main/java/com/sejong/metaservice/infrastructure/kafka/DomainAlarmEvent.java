@@ -4,12 +4,11 @@ import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -69,12 +68,13 @@ public class DomainAlarmEvent {
     }
 
     private static DomainType getDomainType(PostType postType) {
-        DomainType makeDomainType = switch (postType) {
+        DomainType domainType = switch (postType) {
             case NEWS -> DomainType.NEWS;
             case PROJECT -> DomainType.PROJECT;
-            case ARTICLE -> DomainType.ARCHIVE;
+            case DOCUMENT -> DomainType.DOCUMENT;
+            case ARTICLE -> DomainType.ARTICLE;
             default -> DomainType.GLOBAL;
         };
-        return makeDomainType;
+        return domainType;
     }
 }
