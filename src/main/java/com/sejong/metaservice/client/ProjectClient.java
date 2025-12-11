@@ -1,4 +1,4 @@
-package com.sejong.metaservice.infrastructure.client;
+package com.sejong.metaservice.client;
 
 import com.sejong.metaservice.application.internal.response.PostLikeCheckResponse;
 import org.springframework.cloud.openfeign.FeignClient;

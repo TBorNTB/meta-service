@@ -1,4 +1,4 @@
-package com.sejong.metaservice.infrastructure.client;
+package com.sejong.metaservice.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
