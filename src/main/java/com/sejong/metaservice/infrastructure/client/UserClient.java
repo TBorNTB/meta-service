@@ -3,13 +3,10 @@ package com.sejong.metaservice.infrastructure.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "user-service", path = "/internal/users")
+@FeignClient(name = "user-service", path = "/internal")
 public interface UserClient {
-    @GetMapping("/check/{userId}")
-    ResponseEntity<Boolean> getUser(@PathVariable("userId") Long userId);
 
-    @GetMapping("/meta/count")
+    @GetMapping("/users/meta/count")
     ResponseEntity<Long> getUserCount();
 }
