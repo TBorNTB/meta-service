@@ -3,7 +3,7 @@ package com.sejong.metaservice.application.postlike.controller;
 import com.sejong.metaservice.application.postlike.dto.response.LikeCountResponse;
 import com.sejong.metaservice.application.postlike.dto.response.LikeResponse;
 import com.sejong.metaservice.application.postlike.service.LikeService;
-import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.support.common.enums.PostType;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

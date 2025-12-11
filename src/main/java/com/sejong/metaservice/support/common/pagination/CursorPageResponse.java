@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.common.pagination;
+package com.sejong.metaservice.support.common.pagination;
 
 import java.util.List;
 import java.util.function.Function;

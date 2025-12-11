@@ -1,6 +1,6 @@
 package com.sejong.metaservice.core.view.domain;
 
-import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

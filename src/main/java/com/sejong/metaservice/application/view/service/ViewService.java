@@ -2,14 +2,13 @@ package com.sejong.metaservice.application.view.service;
 
 import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.application.view.dto.response.ViewCountResponse;
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.view.domain.View;
 import com.sejong.metaservice.core.view.repository.ViewRepository;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
-import java.time.Duration;
-
 import com.sejong.metaservice.infrastructure.view.kafka.ViewEventPublisher;
+import com.sejong.metaservice.support.common.enums.PostType;
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

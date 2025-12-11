@@ -1,7 +1,7 @@
 package com.sejong.metaservice.core.reply.repository;
 
-import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import java.util.List;
 
 public interface ReplyRepository {

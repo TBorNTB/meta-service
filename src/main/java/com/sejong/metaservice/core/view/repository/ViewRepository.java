@@ -1,7 +1,7 @@
 package com.sejong.metaservice.core.view.repository;
 
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.view.domain.View;
+import com.sejong.metaservice.support.common.enums.PostType;
 
 public interface ViewRepository {
     View save(View view);

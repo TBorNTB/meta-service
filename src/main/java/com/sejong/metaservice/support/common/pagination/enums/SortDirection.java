@@ -1,8 +1,8 @@
-package com.sejong.metaservice.core.common.pagination.enums;
+package com.sejong.metaservice.support.common.pagination.enums;
 
-import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_SORT_REQUEST;
+import static com.sejong.metaservice.support.common.exception.ExceptionType.BAD_SORT_REQUEST;
 
-import com.sejong.metaservice.core.common.exception.BaseException;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import java.util.Arrays;
 
 public enum SortDirection {

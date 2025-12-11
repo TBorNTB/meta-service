@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.postlike.repository;
 
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.infrastructure.postlike.entity.PostLikeEntity;
+import com.sejong.metaservice.support.common.enums.PostType;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

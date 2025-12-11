@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.common.config;
+package com.sejong.metaservice.support.config;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.context.annotation.Configuration;

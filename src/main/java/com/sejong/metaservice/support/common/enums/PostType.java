@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.common.enums;
+package com.sejong.metaservice.support.common.enums;
 
 public enum PostType {
     NEWS,

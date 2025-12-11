@@ -1,12 +1,12 @@
 package com.sejong.metaservice.infrastructure.view.repository;
 
-import static com.sejong.metaservice.core.common.exception.ExceptionType.NOT_FOUND_POST_TYPE_POST_ID;
+import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_POST_TYPE_POST_ID;
 
-import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.core.view.domain.View;
 import com.sejong.metaservice.core.view.repository.ViewRepository;
 import com.sejong.metaservice.infrastructure.view.entity.ViewEntity;
+import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.view.kafka;
 
 
-import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.support.common.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

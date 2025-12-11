@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.common.config;
+package com.sejong.metaservice.support.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

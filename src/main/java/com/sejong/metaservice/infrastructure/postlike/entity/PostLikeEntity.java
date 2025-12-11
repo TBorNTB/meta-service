@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.postlike.entity;
 
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
+import com.sejong.metaservice.support.common.enums.PostType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

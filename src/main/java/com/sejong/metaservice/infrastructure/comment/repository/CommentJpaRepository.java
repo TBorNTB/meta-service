@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.comment.repository;
 
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
+import com.sejong.metaservice.support.common.enums.PostType;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

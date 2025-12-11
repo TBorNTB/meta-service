@@ -1,13 +1,13 @@
 package com.sejong.metaservice.infrastructure.reply.repository;
 
-import com.sejong.metaservice.core.common.pagination.Cursor;
-import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
-import com.sejong.metaservice.core.common.pagination.enums.SortDirection;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
 import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
 import com.sejong.metaservice.infrastructure.comment.repository.CommentJpaRepository;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
+import com.sejong.metaservice.support.common.pagination.Cursor;
+import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
+import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

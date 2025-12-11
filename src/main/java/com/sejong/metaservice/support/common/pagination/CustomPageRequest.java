@@ -1,6 +1,6 @@
-package com.sejong.metaservice.core.common.pagination;
+package com.sejong.metaservice.support.common.pagination;
 
-import com.sejong.metaservice.core.common.pagination.enums.SortDirection;
+import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import lombok.Getter;
 
 @Getter

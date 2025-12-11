@@ -1,7 +1,7 @@
 package com.sejong.metaservice.application.view.service;
 
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
+import com.sejong.metaservice.support.common.enums.PostType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.Cursor;

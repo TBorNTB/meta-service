@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.common.exception;
+package com.sejong.metaservice.support.common.exception;
 
 import lombok.RequiredArgsConstructor;
 

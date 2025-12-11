@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.common.config;
+package com.sejong.metaservice.support.config;
 
 
 import org.springframework.cloud.openfeign.EnableFeignClients;

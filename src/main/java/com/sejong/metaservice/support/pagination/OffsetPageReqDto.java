@@ -1,7 +1,7 @@
-package com.sejong.metaservice.application.common.pagination;
+package com.sejong.metaservice.support.pagination;
 
-import com.sejong.metaservice.core.common.pagination.CustomPageRequest;
-import com.sejong.metaservice.core.common.pagination.enums.SortDirection;
+import com.sejong.metaservice.support.common.pagination.CustomPageRequest;
+import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;

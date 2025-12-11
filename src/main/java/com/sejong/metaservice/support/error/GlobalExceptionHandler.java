@@ -1,7 +1,7 @@
-package com.sejong.metaservice.application.common.error;
+package com.sejong.metaservice.support.error;
 
-import com.sejong.metaservice.core.common.exception.BaseException;
-import com.sejong.metaservice.core.common.exception.ExceptionType;
+import com.sejong.metaservice.support.common.exception.BaseException;
+import com.sejong.metaservice.support.common.exception.ExceptionType;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

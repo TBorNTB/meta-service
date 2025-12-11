@@ -1,13 +1,13 @@
 package com.sejong.metaservice.application.reply.controller;
 
-import com.sejong.metaservice.application.common.pagination.CursorPageReqDto;
 import com.sejong.metaservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.metaservice.application.reply.dto.response.ReplyCommentResponse;
 import com.sejong.metaservice.application.reply.service.ReplyService;
-import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
-import com.sejong.metaservice.core.common.pagination.CursorPageResponse;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
+import com.sejong.metaservice.support.common.pagination.CursorPageResponse;
+import com.sejong.metaservice.support.pagination.CursorPageReqDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

@@ -1,9 +1,9 @@
 package com.sejong.metaservice.infrastructure.kafka;
 
 import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.common.enums.PostType;
 import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

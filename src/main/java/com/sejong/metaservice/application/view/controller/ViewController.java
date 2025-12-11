@@ -2,7 +2,7 @@ package com.sejong.metaservice.application.view.controller;
 
 import com.sejong.metaservice.application.view.dto.response.ViewCountResponse;
 import com.sejong.metaservice.application.view.service.ViewService;
-import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.support.common.enums.PostType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
