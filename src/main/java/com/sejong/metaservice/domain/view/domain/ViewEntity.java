@@ -1,6 +1,5 @@
-package com.sejong.metaservice.infrastructure.view.entity;
+package com.sejong.metaservice.domain.view.domain;
 
-import com.sejong.metaservice.core.view.domain.View;
 import com.sejong.metaservice.support.common.enums.PostType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class ViewEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -39,23 +38,12 @@ public class ViewEntity {
 
     private LocalDateTime updatedAt;
 
-    public static ViewEntity of(View view) {
-    return ViewEntity.builder()
-            .id(view.getId())
-            .postType(view.getPostType())
-            .postId(view.getPostId())
-            .viewCount(view.getViewCount())
-            .updatedAt(view.getUpdatedAt())
-            .build();
-    }
-
-    public View toDomain() {
-        return View.builder()
-                .id(id)
+    public static ViewEntity of(PostType postType, Long postId, Long viewCount) {
+        return ViewEntity.builder()
                 .postType(postType)
                 .postId(postId)
                 .viewCount(viewCount)
-                .updatedAt(updatedAt)
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 

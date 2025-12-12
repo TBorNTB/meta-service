@@ -1,13 +1,16 @@
-package com.sejong.metaservice.application.view.service;
+package com.sejong.metaservice.domain.view.service;
+
+import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_POST_TYPE_POST_ID;
 
 import com.sejong.metaservice.application.internal.PostInternalFacade;
-import com.sejong.metaservice.application.view.dto.response.ViewCountResponse;
-import com.sejong.metaservice.core.view.domain.View;
-import com.sejong.metaservice.core.view.repository.ViewRepository;
+import com.sejong.metaservice.domain.view.domain.ViewEntity;
+import com.sejong.metaservice.domain.view.kafka.ViewEventPublisher;
+import com.sejong.metaservice.domain.view.repository.ViewJPARepository;
+import com.sejong.metaservice.domain.view.response.ViewCountResponse;
 import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
-import com.sejong.metaservice.infrastructure.view.kafka.ViewEventPublisher;
 import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,28 +24,20 @@ public class ViewService {
     
     private final PostInternalFacade postInternalFacade;
     private final RedisService redisService;
-    private final ViewRepository viewRepository;
+    private final ViewJPARepository viewJPARepository;
     private final ViewEventPublisher viewEventPublisher;
 
     @Transactional
-    public ViewCountResponse initializeViewCount(Long postId, PostType postType) {
-        View view = View.of(postType, postId, 0L);
-        View savedView = viewRepository.save(view);
-        return ViewCountResponse.of(savedView.getViewCount());
-    }
-
-
-    @Transactional
     public void updateViewCount(Long postId, PostType postType, Long viewCount) {
-        View view = View.of(postType, postId, viewCount);
-        viewRepository.updateViewCount(view);
+        ViewEntity view = viewJPARepository
+                .findByPostTypeAndPostId(postType, postId)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_POST_TYPE_POST_ID));
+        view.updateViewCount(viewCount);
     }
-
 
     public void checkPostExistence(Long postId, PostType postType) {
         postInternalFacade.checkPostExistanceAndOwner(postId, postType);
     }
-
 
     public ViewCountResponse increaseViewCount(Long postId, PostType postType, String clientIp) {
         checkPostExistence(postId, postType);
@@ -52,7 +47,9 @@ public class ViewService {
 
         // cache miss (mysql -> redis)
         if (!redisService.hasKey(viewCountKey)) {
-            View view = viewRepository.findOne(postType, postId);
+            ViewEntity view = viewJPARepository.findByPostTypeAndPostId(postType, postId)
+                    // 이렇게 하면 포스트 생성 시 초기화 로직이 필요 없음
+                    .orElse(viewJPARepository.save(ViewEntity.of(postType, postId, 0L)));
             redisService.setCount(viewCountKey, view.getViewCount());
         }
 
@@ -77,7 +74,9 @@ public class ViewService {
 
         // cache miss (mysql -> redis)
         if (!redisService.hasKey(viewCountKey)) {
-            View view = viewRepository.findOne(postType, postId);
+            ViewEntity view = viewJPARepository.findByPostTypeAndPostId(postType, postId)
+                    // 이렇게 하면 포스트 생성 시 초기화 로직이 필요 없음
+                    .orElse(viewJPARepository.save(ViewEntity.of(postType, postId, 0L)));
             redisService.setCount(viewCountKey, view.getViewCount());
         }
 

@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.view.service;
+package com.sejong.metaservice.domain.view.service;
 
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import com.sejong.metaservice.support.common.enums.PostType;
@@ -19,7 +19,8 @@ public class ViewScheduler {
     private final RedisTemplate<String, String> redisTemplate;
     private final ViewService viewService;
 
-    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul") // 매일 오전 3시
+    // 매일 오전 3시 Redis에 누적된 조회수 영속화
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
     public void syncViewCount() {
         try {
             log.info("Redis 조회수 MySQL 동기화 배치 작업 시작");

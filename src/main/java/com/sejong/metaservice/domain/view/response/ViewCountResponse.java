@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.view.dto.response;
+package com.sejong.metaservice.domain.view.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

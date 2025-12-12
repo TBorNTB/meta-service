@@ -1,4 +1,4 @@
-package com.sejong.metaservice.infrastructure.view.kafka;
+package com.sejong.metaservice.domain.view.kafka;
 
 
 import com.sejong.metaservice.support.common.enums.PostType;

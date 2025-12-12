@@ -1,7 +1,7 @@
-package com.sejong.metaservice.application.view.controller;
+package com.sejong.metaservice.domain.view.controller;
 
-import com.sejong.metaservice.application.view.dto.response.ViewCountResponse;
-import com.sejong.metaservice.application.view.service.ViewService;
+import com.sejong.metaservice.domain.view.response.ViewCountResponse;
+import com.sejong.metaservice.domain.view.service.ViewService;
 import com.sejong.metaservice.support.common.enums.PostType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,16 +28,16 @@ public class ViewController {
     // TODO: redis 캐시 미스 시 mysql에서 viewCount를 조회해 오기 때문.
     // TODO: redis -> mysql 동기화가 upsert(x), update(o) 임.
 
-    @Operation(summary = "조회수 초기화", description = "새 게시물 생성 시 조회수를 0으로 초기화합니다")
-    @PostMapping("")
-    public ResponseEntity<ViewCountResponse> initializeViewCount(
-            @RequestParam(name = "postId") Long postId,
-            @RequestParam(name = "postType") PostType postType
-    ) {
-        // 이건 saga ? 프론트쪽에서 병렬적으로 api 요청 ? 둘중 하나로 수행해야 한다.
-        ViewCountResponse response = viewService.initializeViewCount(postId, postType);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @Operation(summary = "조회수 초기화", description = "새 게시물 생성 시 조회수를 0으로 초기화합니다")
+//    @PostMapping("")
+//    public ResponseEntity<ViewCountResponse> initializeViewCount(
+//            @RequestParam(name = "postId") Long postId,
+//            @RequestParam(name = "postType") PostType postType
+//    ) {
+//        // 이건 saga ? 프론트쪽에서 병렬적으로 api 요청 ? 둘중 하나로 수행해야 한다.
+//        ViewCountResponse response = viewService.initializeViewCount(postId, postType);
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
     @Operation(summary = "조회수 증가", description = "게시물 조회 시 조회수를 1 증가시킵니다 (중복 조회 방지 적용)")
     @PostMapping("/{postId}")
