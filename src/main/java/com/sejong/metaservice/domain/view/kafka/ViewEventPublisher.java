@@ -17,7 +17,7 @@ public class ViewEventPublisher {
     private final String topic = "view";
 
     public void publish(PostType postType, Long postId,  Long viewCount){
-        log.info("발행 시작 좋아요 postId :{}, viewCount : {}", postId, viewCount);
+        log.info("발행 시작 조회수 postId :{}, viewCount : {}", postId, viewCount);
         ViewEvent event = ViewEvent.of(postType,postId, viewCount);
         String key = "post:" + postId;
         kafkaTemplate.send(topic,key, toJsonString(event));

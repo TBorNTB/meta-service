@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class ViewEntity {
+public class View {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -38,8 +38,8 @@ public class ViewEntity {
 
     private LocalDateTime updatedAt;
 
-    public static ViewEntity of(PostType postType, Long postId, Long viewCount) {
-        return ViewEntity.builder()
+    public static View of(PostType postType, Long postId, Long viewCount) {
+        return View.builder()
                 .postType(postType)
                 .postId(postId)
                 .viewCount(viewCount)
@@ -49,5 +49,6 @@ public class ViewEntity {
 
     public void updateViewCount(Long viewCount) {
         this.viewCount = viewCount;
+        this.updatedAt = LocalDateTime.now();
     }
 }
