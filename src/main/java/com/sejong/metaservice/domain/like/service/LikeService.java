@@ -30,7 +30,7 @@ public class LikeService {
 
     @Transactional
     public LikeRes toggleLike(String username, Long postId, PostType postType) {
-        String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(postId, postType);
+        String ownerUsername = postInternalFacade.checkPostExistenceAndOwner(postId, postType);
         log.info("유저이름 : {}", ownerUsername);
 
         Like like = Like.of(username, postId, postType, LocalDateTime.now());

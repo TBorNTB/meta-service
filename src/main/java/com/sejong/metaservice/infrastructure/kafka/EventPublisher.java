@@ -2,8 +2,8 @@ package com.sejong.metaservice.infrastructure.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.like.domain.Like;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ public class EventPublisher {
     private final String topic = "postlike";
     private final String alarmTopic = "alarm";
 
+    // listener: elastic-service
     public void publishLike(Like like, Long postCount){
         log.info("발행 시작 좋아요 postLike :{}, postCount : {}", like, postCount);
         PostLikeEvent event = PostLikeEvent.of(like.getPostType(), like.getPostId(), postCount);

@@ -18,7 +18,7 @@ public class PostInternalFacade {
     private final NewsInternalService newsInternalService;
     private final CSKnowledgeInternalService CSKnowledgeInternalService;
 
-    public String checkPostExistanceAndOwner(Long postId, PostType postType) {
+    public String checkPostExistenceAndOwner(Long postId, PostType postType) {
         switch (postType) {
             case NEWS -> {
                 return newsInternalService.validateExists(postId);

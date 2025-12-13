@@ -35,7 +35,7 @@ public class ViewService {
     }
 
     public void checkPostExistence(Long postId, PostType postType) {
-        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
+        postInternalFacade.checkPostExistenceAndOwner(postId, postType);
     }
 
     public ViewCountResponse increaseViewCount(Long postId, PostType postType, String clientIp) {
@@ -64,7 +64,6 @@ public class ViewService {
 
 
     public ViewCountResponse getViewCount(Long postId, PostType postType) {
-        checkPostExistence(postId, postType);
         String viewCountKey = RedisKeyUtil.viewCountKey(postType, postId);
 
         // cache miss (mysql -> redis)
