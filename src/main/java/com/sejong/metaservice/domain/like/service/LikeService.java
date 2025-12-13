@@ -31,24 +31,24 @@ public class LikeService {
     @Transactional
     public LikeRes toggleLike(String username, Long postId, PostType postType) {
         String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(postId, postType);
-        log.info("유저이름 : {}",ownerUsername);
+        log.info("유저이름 : {}", ownerUsername);
 
         Like like = Like.of(username, postId, postType, LocalDateTime.now());
-        LikeStatus toggleResult = toggleLike(like);
+        LikeStatus toggleResult = doToggleLike(like);
 
         if (toggleResult.equals(LikeStatus.LIKED)) {
             Long count = redisService.increment(RedisKeyUtil.likeCountKey(postType, postId));
-            postlikeEventPublisher.publishLike(like,count);
-            postlikeEventPublisher.publishLikedAlarm(like,ownerUsername);
+            postlikeEventPublisher.publishLike(like, count);
+            postlikeEventPublisher.publishLikedAlarm(like, ownerUsername);
             return LikeRes.of(LikeStatus.LIKED, count);
         } else {
             Long count = redisService.decrement(RedisKeyUtil.likeCountKey(postType, postId));
-            postlikeEventPublisher.publishLike(like,count);
+            postlikeEventPublisher.publishLike(like, count);
             return LikeRes.of(LikeStatus.UNLIKED, count);
         }
     }
 
-    private LikeStatus toggleLike(Like like) {
+    private LikeStatus doToggleLike(Like like) {
         try {
             Optional<Like> postLikeEntity = likeRepository.findByUsernameAndPostIdAndPostType(
                     like.getUsername(), like.getPostId(), like.getPostType());
@@ -75,14 +75,17 @@ public class LikeService {
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
         boolean liked = likeRepository.existsByUsernameAndPostIdAndPostType(username, postId, postType);
         Long likeCount = redisService.getCount(redisKey);
-        if (liked) return LikeRes.of(LikeStatus.LIKED, likeCount);
-        else return LikeRes.of(LikeStatus.UNLIKED, likeCount);
+        if (liked) {
+            return LikeRes.of(LikeStatus.LIKED, likeCount);
+        } else {
+            return LikeRes.of(LikeStatus.UNLIKED, likeCount);
+        }
     }
 
     @Transactional(readOnly = true)
     public LikeCountRes getLikeCount(Long postId, PostType postType) {
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
         long likeCount = redisService.getCount(redisKey);
-        return LikeCountRes.of(likeCount);
+        return new LikeCountRes(likeCount);
     }
 }
