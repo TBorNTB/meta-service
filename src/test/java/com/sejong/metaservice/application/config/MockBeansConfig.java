@@ -3,7 +3,7 @@ package com.sejong.metaservice.application.config;
 import static org.mockito.Mockito.mock;
 
 import com.sejong.metaservice.application.comment.service.CommentService;
-import com.sejong.metaservice.application.postlike.service.LikeService;
+import com.sejong.metaservice.domain.like.service.LikeService;
 import org.springframework.context.annotation.Bean;
 
 public class MockBeansConfig {

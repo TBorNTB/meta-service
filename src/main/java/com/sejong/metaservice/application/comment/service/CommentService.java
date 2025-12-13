@@ -6,15 +6,13 @@ import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.core.comment.command.CommentCommand;
 import com.sejong.metaservice.core.comment.domain.Comment;
 import com.sejong.metaservice.core.comment.repository.CommentRepository;
-import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.common.pagination.Cursor;
-import com.sejong.metaservice.core.common.pagination.CursorPageRequest;
-import com.sejong.metaservice.core.common.pagination.CursorPageResponse;
-
+import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
+import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.pagination.Cursor;
+import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
+import com.sejong.metaservice.support.common.pagination.CursorPageResponse;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

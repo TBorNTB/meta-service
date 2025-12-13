@@ -1,10 +1,10 @@
 package com.sejong.metaservice.application.internal;
 
-import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+import static com.sejong.metaservice.support.common.exception.ExceptionType.BAD_REQUEST;
 
 import com.sejong.metaservice.application.meta.MetaPostCountDto;
-import com.sejong.metaservice.core.common.enums.PostType;
-import com.sejong.metaservice.core.common.exception.BaseException;
+import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,9 @@
 package com.sejong.metaservice.core.reply.domain;
 
-import static com.sejong.metaservice.core.common.exception.ExceptionType.BAD_REQUEST;
+import static com.sejong.metaservice.support.common.exception.ExceptionType.BAD_REQUEST;
 
-import com.sejong.metaservice.core.common.exception.BaseException;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

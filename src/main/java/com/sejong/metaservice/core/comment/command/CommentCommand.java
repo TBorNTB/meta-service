@@ -1,6 +1,6 @@
 package com.sejong.metaservice.core.comment.command;
 
-import com.sejong.metaservice.core.common.enums.PostType;
+import com.sejong.metaservice.support.common.enums.PostType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

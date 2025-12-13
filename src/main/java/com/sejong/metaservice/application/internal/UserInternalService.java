@@ -1,6 +1,6 @@
 package com.sejong.metaservice.application.internal;
 
-import com.sejong.metaservice.infrastructure.client.UserClient;
+import com.sejong.metaservice.client.UserClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
