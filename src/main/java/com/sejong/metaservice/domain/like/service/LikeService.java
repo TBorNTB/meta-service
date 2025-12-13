@@ -81,7 +81,6 @@ public class LikeService {
 
     @Transactional(readOnly = true)
     public LikeCountRes getLikeCount(Long postId, PostType postType) {
-        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
         String redisKey = RedisKeyUtil.likeCountKey(postType, postId);
         long likeCount = redisService.getCount(redisKey);
         return LikeCountRes.of(likeCount);
