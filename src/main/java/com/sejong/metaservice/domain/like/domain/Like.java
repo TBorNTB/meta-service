@@ -41,4 +41,13 @@ public class Like {
 
     private LocalDateTime createdAt;
 
+    public static Like of(String username, Long postId, PostType postType, LocalDateTime createdAt) {
+        return Like.builder()
+                .id(null)
+                .postType(postType)
+                .postId(postId)
+                .username(username)
+                .createdAt(createdAt)
+                .build();
+    }
 }

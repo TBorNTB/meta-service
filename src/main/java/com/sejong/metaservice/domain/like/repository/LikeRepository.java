@@ -14,7 +14,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     long countByPostIdAndPostType(Long postId, PostType postType);
     
-    @Query("SELECT CONCAT('post:', p.postType, ':', p.postId, ':like:count'), COUNT(p) " +
-           "FROM Like p GROUP BY p.postType, p.postId")
+    @Query("SELECT CONCAT('post:', l.postType, ':', l.postId, ':like:count'), COUNT(l) " +
+           "FROM Like l GROUP BY l.postType, l.postId")
     Map<String, Long> getLikeCountStatistics();
 }

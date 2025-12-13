@@ -3,7 +3,6 @@ package com.sejong.metaservice.domain.like.service;
 import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.domain.like.domain.Like;
 import com.sejong.metaservice.domain.like.domain.LikeStatus;
-import com.sejong.metaservice.domain.like.dto.request.LikeReq;
 import com.sejong.metaservice.domain.like.dto.response.LikeCountRes;
 import com.sejong.metaservice.domain.like.dto.response.LikeRes;
 import com.sejong.metaservice.domain.like.repository.LikeRepository;
@@ -34,7 +33,7 @@ public class LikeService {
         String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(postId, postType);
         log.info("유저이름 : {}",ownerUsername);
 
-        Like like = LikeReq.from(username, postId, postType, LocalDateTime.now());
+        Like like = Like.of(username, postId, postType, LocalDateTime.now());
         LikeStatus toggleResult = toggleLike(like);
 
         if (toggleResult.equals(LikeStatus.LIKED)) {
