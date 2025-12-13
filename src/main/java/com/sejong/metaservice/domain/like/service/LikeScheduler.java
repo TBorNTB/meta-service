@@ -21,9 +21,6 @@ public class LikeScheduler {
         try {
             log.info("Redis 좋아요 동기화 작업 시작 - 통계 쿼리 방식");
             
-            // 기존 Redis 캐시 클리어
-            redisService.clearAllLikeKeys("post:*:like:count");
-            
             // 통계 쿼리로 좋아요 수 조회
             Map<String, Long> likeCountStatistics = likeRepository.getLikeCountStatistics();
             
