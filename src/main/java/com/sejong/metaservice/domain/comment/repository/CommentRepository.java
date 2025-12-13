@@ -1,13 +1,11 @@
-package com.sejong.metaservice.core.comment.repository;
+package com.sejong.metaservice.domain.comment.repository;
 
-import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import java.util.List;
 
 public interface CommentRepository {
-    Comment save(Comment comment);
-
     List<Comment> findAllComments(Long postId, PostType postType, CursorPageRequest cursorPageRequest);
 
     Comment updateComment(Comment comment);

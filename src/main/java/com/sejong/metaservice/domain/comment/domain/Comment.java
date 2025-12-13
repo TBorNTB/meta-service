@@ -1,6 +1,6 @@
-package com.sejong.metaservice.core.comment.domain;
+package com.sejong.metaservice.domain.comment.domain;
 
-import com.sejong.metaservice.core.comment.command.CommentCommand;
+import com.sejong.metaservice.domain.comment.command.CommentCommand;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.exception.ExceptionType;

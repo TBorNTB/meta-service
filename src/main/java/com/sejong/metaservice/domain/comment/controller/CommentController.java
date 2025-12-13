@@ -1,10 +1,10 @@
-package com.sejong.metaservice.application.comment.controller;
+package com.sejong.metaservice.domain.comment.controller;
 
-import com.sejong.metaservice.application.comment.dto.request.CommentRequest;
-import com.sejong.metaservice.application.comment.dto.response.CommentResponse;
-import com.sejong.metaservice.application.comment.service.CommentService;
-import com.sejong.metaservice.core.comment.command.CommentCommand;
-import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.command.CommentCommand;
+import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.dto.request.CommentRequest;
+import com.sejong.metaservice.domain.comment.dto.response.CommentResponse;
+import com.sejong.metaservice.domain.comment.service.CommentService;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageResponse;

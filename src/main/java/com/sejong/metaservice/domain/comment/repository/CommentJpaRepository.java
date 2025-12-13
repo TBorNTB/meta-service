@@ -1,6 +1,6 @@
-package com.sejong.metaservice.infrastructure.comment.repository;
+package com.sejong.metaservice.domain.comment.repository;
 
-import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.util.List;
 import org.springframework.data.domain.Pageable;

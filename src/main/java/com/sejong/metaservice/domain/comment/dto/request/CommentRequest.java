@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.comment.dto.request;
+package com.sejong.metaservice.domain.comment.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -1,13 +1,18 @@
-package com.sejong.metaservice.application.comment.service;
+package com.sejong.metaservice.domain.comment.service;
 
-import com.sejong.metaservice.application.comment.dto.request.CommentRequest;
-import com.sejong.metaservice.application.comment.dto.response.CommentResponse;
+import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_COMMENT;
+
 import com.sejong.metaservice.application.internal.PostInternalFacade;
-import com.sejong.metaservice.core.comment.command.CommentCommand;
-import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.comment.repository.CommentRepository;
+import com.sejong.metaservice.domain.comment.command.CommentCommand;
+import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.dto.request.CommentRequest;
+import com.sejong.metaservice.domain.comment.dto.response.CommentResponse;
+import com.sejong.metaservice.domain.comment.repository.CommentJpaRepository;
+import com.sejong.metaservice.domain.comment.repository.CommentRepository;
 import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageResponse;
@@ -24,23 +29,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final CommentJpaRepository commentJpaRepository;
     private final PostInternalFacade postInternalFacade;
     private final EventPublisher eventPublisher;
 
     @Transactional
     public CommentResponse createComment(CommentCommand command) {
-        String ownerUsername = postInternalFacade.checkPostExistanceAndOwner(command.getPostId(), command.getPostType());
+        String ownerUsername = postInternalFacade.checkPostExistenceAndOwner(command.getPostId(), command.getPostType());
         Comment comment = Comment.of(command, LocalDateTime.now());
-        Comment savedComment = commentRepository.save(comment);
+        CommentEntity commentEntity = CommentEntity.from(comment);
+        Comment savedComment = commentJpaRepository.save(commentEntity).toDomain();
         eventPublisher.publishCommentAlarm(savedComment, ownerUsername);
         return CommentResponse.from(savedComment);
     }
 
     @Transactional(readOnly = true)
     public CursorPageResponse<List<Comment>> getComments(CursorPageRequest cursorPageRequest, Long postId, PostType postType) {
-
-        postInternalFacade.checkPostExistanceAndOwner(postId, postType);
-
         List<Comment> comments = commentRepository.findAllComments(
                 postId,
                 postType,
@@ -51,8 +55,8 @@ public class CommentService {
 
     @Transactional
     public CommentResponse updateComment(String username, Long commentId, CommentRequest request) {
-
-        Comment comment = commentRepository.findByCommentId(commentId);
+        Comment comment = commentJpaRepository.findById(commentId)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT)).toDomain();
         comment.validateUserId(username);
         Comment updatedComment = comment.updateComment(request.getContent(), LocalDateTime.now());
         Comment commentResponse = commentRepository.updateComment(updatedComment);
@@ -61,8 +65,8 @@ public class CommentService {
 
     @Transactional
     public CommentResponse deleteComment(String username, Long commentId) {
-
-        Comment comment = commentRepository.findByCommentId(commentId);
+        Comment comment = commentJpaRepository.findById(commentId)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT)).toDomain();
         comment.validateUserId(username);
 
         Long deletedId = commentRepository.deleteComment(commentId);

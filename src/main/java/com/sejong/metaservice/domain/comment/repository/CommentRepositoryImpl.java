@@ -1,8 +1,7 @@
-package com.sejong.metaservice.infrastructure.comment.repository;
+package com.sejong.metaservice.domain.comment.repository;
 
-import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.comment.repository.CommentRepository;
-import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
@@ -20,13 +19,6 @@ import org.springframework.stereotype.Repository;
 public class CommentRepositoryImpl implements CommentRepository {
 
     private final CommentJpaRepository commentJpaRepository;
-
-    @Override
-    public Comment save(Comment comment) {
-        CommentEntity commentEntity = CommentEntity.from(comment);
-        CommentEntity responseEntity = commentJpaRepository.save(commentEntity);
-        return responseEntity.toDomain();
-    }
 
     @Override
     public List<Comment> findAllComments(Long postId, PostType postType, CursorPageRequest cursorRequest) {

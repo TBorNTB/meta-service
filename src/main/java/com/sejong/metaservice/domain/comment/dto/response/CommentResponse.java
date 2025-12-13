@@ -1,6 +1,6 @@
-package com.sejong.metaservice.application.comment.dto.response;
+package com.sejong.metaservice.domain.comment.dto.response;
 
-import com.sejong.metaservice.core.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

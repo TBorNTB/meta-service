@@ -1,13 +1,16 @@
 package com.sejong.metaservice.application.reply.service;
 
+import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_COMMENT;
+
 import com.sejong.metaservice.application.reply.dto.request.ReplyCommentRequest;
 import com.sejong.metaservice.application.reply.dto.response.ReplyCommentResponse;
-import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.comment.repository.CommentRepository;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
+import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.repository.CommentJpaRepository;
 import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
+import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageResponse;
@@ -23,13 +26,14 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
     private final EventPublisher eventPublisher;
-    private final CommentRepository commentRepository;
+    private final CommentJpaRepository commentRepository;
 
     @Transactional
     public ReplyCommentResponse createReplyComment(ReplyCreateCommand command) {
         Reply reply = Reply.of(command, LocalDateTime.now());
         Reply responseReply = replyRepository.save(reply);
-        Comment parentComment = commentRepository.findByCommentId(responseReply.getParentCommentId());
+        Comment parentComment = commentRepository.findById(responseReply.getParentCommentId())
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT)).toDomain();
         eventPublisher.publishReplyAlarm(parentComment , responseReply);
         return ReplyCommentResponse.from(responseReply);
     }

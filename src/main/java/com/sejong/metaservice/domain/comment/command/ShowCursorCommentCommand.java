@@ -1,4 +1,4 @@
-package com.sejong.metaservice.core.comment.command;
+package com.sejong.metaservice.domain.comment.command;
 
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.reply.entity;
 
 import com.sejong.metaservice.core.reply.domain.Reply;
-import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -14,7 +14,9 @@ public enum ExceptionType implements ExceptionTypeIfs {
     BAD_SORT_REQUEST(400,"정렬 방향은 ASC/DESC 만 가능합니다."),
     EXTERNAL_SERVER_ERROR(500,"잠시 서비스 이용이 불가합니다."),
 
-    NOT_FOUND_POST_TYPE_POST_ID(400, "존재하지 않는 포스트 타입, 포스트 id")
+    NOT_FOUND_POST_TYPE_POST_ID(400, "존재하지 않는 포스트 타입, 포스트 id"),
+
+    NOT_FOUND_COMMENT(400, "존재하지 않는 코멘트 id")
     ;
 
     private final Integer httpStatus;

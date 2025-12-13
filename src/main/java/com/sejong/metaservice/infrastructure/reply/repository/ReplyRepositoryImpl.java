@@ -2,8 +2,8 @@ package com.sejong.metaservice.infrastructure.reply.repository;
 
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
-import com.sejong.metaservice.infrastructure.comment.entity.CommentEntity;
-import com.sejong.metaservice.infrastructure.comment.repository.CommentJpaRepository;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.repository.CommentJpaRepository;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
 import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
