@@ -2,8 +2,9 @@ package com.sejong.metaservice.application.postlike.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sejong.metaservice.application.config.MockBeansConfig;
-import com.sejong.metaservice.application.postlike.dto.response.LikeResponse;
-import com.sejong.metaservice.application.postlike.service.LikeService;
+import com.sejong.metaservice.domain.like.controller.LikeController;
+import com.sejong.metaservice.domain.like.dto.response.LikeRes;
+import com.sejong.metaservice.domain.like.service.LikeService;
 import com.sejong.metaservice.support.common.enums.PostType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,12 @@ class LikeControllerTest {
 
 
     @PostMapping("/{postId}")
-    public ResponseEntity<LikeResponse> createLike(
+    public ResponseEntity<LikeRes> createLike(
             @RequestHeader("X-User-Id") String userId,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.createLike(Long.valueOf(userId), postId, postType);
+        LikeRes response = likeService.createLike(Long.valueOf(userId), postId, postType);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }

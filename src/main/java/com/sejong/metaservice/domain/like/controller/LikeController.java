@@ -1,8 +1,8 @@
-package com.sejong.metaservice.application.postlike.controller;
+package com.sejong.metaservice.domain.like.controller;
 
-import com.sejong.metaservice.application.postlike.dto.response.LikeCountResponse;
-import com.sejong.metaservice.application.postlike.dto.response.LikeResponse;
-import com.sejong.metaservice.application.postlike.service.LikeService;
+import com.sejong.metaservice.domain.like.dto.response.LikeCountRes;
+import com.sejong.metaservice.domain.like.dto.response.LikeRes;
+import com.sejong.metaservice.domain.like.service.LikeService;
 import com.sejong.metaservice.support.common.enums.PostType;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -24,34 +24,34 @@ public class LikeController {
 
     @PostMapping("/{postId}")
     @Operation(summary = "좋아요 토글 액션")
-    public ResponseEntity<LikeResponse> toggleLike(
+    public ResponseEntity<LikeRes> toggleLike(
             @RequestHeader("X-User-Id") String username,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse likeResponse = likeService.toggleLike(username, postId, postType);
-        return ResponseEntity.ok(likeResponse);
+        LikeRes likeRes = likeService.toggleLike(username, postId, postType);
+        return ResponseEntity.ok(likeRes);
     }
 
     @GetMapping("/{postId}/me")
     @Operation(summary = "해당 포스트에 대한 유저의 좋아요 여부 및 좋아요 수")
-    public ResponseEntity<LikeResponse> getLike(
+    public ResponseEntity<LikeRes> getLike(
             @RequestHeader("X-User-Id") String username,
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeResponse response = likeService.getLikeStatus(username, postId, postType);
+        LikeRes response = likeService.getLikeStatus(username, postId, postType);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping("/{postId}/count")
     @Operation(summary = "해당 글에 대한 좋아요 수")
-    public ResponseEntity<LikeCountResponse> getLikeCount(
+    public ResponseEntity<LikeCountRes> getLikeCount(
             @PathVariable(name="postId") Long postId,
             @RequestParam(name="postType") PostType postType
     ){
-        LikeCountResponse response = likeService.getLikeCount(postId, postType);
+        LikeCountRes response = likeService.getLikeCount(postId, postType);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

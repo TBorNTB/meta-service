@@ -1,8 +1,8 @@
 package com.sejong.metaservice.infrastructure.kafka;
 
 import com.sejong.metaservice.core.comment.domain.Comment;
-import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.core.reply.domain.Reply;
+import com.sejong.metaservice.domain.like.domain.Like;
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -23,16 +23,16 @@ public class DomainAlarmEvent {
     private String ownerUsername; // 해당 글의 주인을 의미합니다.
     private LocalDateTime createdAt;
 
-    public static DomainAlarmEvent from(PostLike postLike, AlarmType alarmType, String ownerUsername) {
-        DomainType makeDomainType = getDomainType(postLike.getPostType());
+    public static DomainAlarmEvent from(Like like, AlarmType alarmType, String ownerUsername) {
+        DomainType makeDomainType = getDomainType(like.getPostType());
 
         return DomainAlarmEvent.builder()
-                .domainId(postLike.getPostId())
+                .domainId(like.getPostId())
                 .alarmType(alarmType)
                 .domainType(makeDomainType)
-                .actorUsername(postLike.getUsername())
+                .actorUsername(like.getUsername())
                 .ownerUsername(ownerUsername)
-                .createdAt(postLike.getCreatedAt())
+                .createdAt(like.getCreatedAt())
                 .build();
     }
 

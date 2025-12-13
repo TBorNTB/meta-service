@@ -1,6 +1,6 @@
-package com.sejong.metaservice.application.postlike.service;
+package com.sejong.metaservice.domain.like.service;
 
-import com.sejong.metaservice.core.postlike.repository.LikeRepository;
+import com.sejong.metaservice.domain.like.repository.LikeRepository;
 import com.sejong.metaservice.infrastructure.redis.RedisService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LikeScheduler {
+
     private final LikeRepository likeRepository;
     private final RedisService redisService;
 

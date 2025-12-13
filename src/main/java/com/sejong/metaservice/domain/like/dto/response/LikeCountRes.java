@@ -1,4 +1,4 @@
-package com.sejong.metaservice.application.postlike.dto.response;
+package com.sejong.metaservice.domain.like.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LikeCountResponse {
+public class LikeCountRes {
     private Long likedCount;
 
-    public static LikeCountResponse of(Long likedCount) {
-        return LikeCountResponse.builder()
+    public static LikeCountRes of(Long likedCount) {
+        return LikeCountRes.builder()
                 .likedCount(likedCount)
                 .build();
     }

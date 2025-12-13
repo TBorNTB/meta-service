@@ -1,6 +1,5 @@
-package com.sejong.metaservice.infrastructure.postlike.entity;
+package com.sejong.metaservice.domain.like.domain;
 
-import com.sejong.metaservice.core.postlike.domain.PostLike;
 import com.sejong.metaservice.support.common.enums.PostType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,37 +27,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostLikeEntity {
+public class Like {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String username;
-    private Long postId;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(50)")
     private PostType postType;
+    private Long postId;
+    private String username;
+
     private LocalDateTime createdAt;
-
-    public static PostLikeEntity from(PostLike postLike) {
-        return PostLikeEntity.builder()
-                .id(null)
-                .username(postLike.getUsername())
-                .postId(postLike.getPostId())
-                .postType(postLike.getPostType())
-                .createdAt(postLike.getCreatedAt())
-                .build();
-    }
-
-    public PostLike toDomain() {
-        return PostLike.builder()
-                .id(getId())
-                .username(getUsername())
-                .postId(getPostId())
-                .postType(getPostType())
-                .createdAt(getCreatedAt())
-                .build();
-    }
 
 }
