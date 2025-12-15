@@ -3,7 +3,7 @@ package com.sejong.metaservice.infrastructure.reply.repository;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
 import com.sejong.metaservice.domain.comment.domain.CommentEntity;
-import com.sejong.metaservice.domain.comment.repository.CommentJpaRepository;
+import com.sejong.metaservice.domain.comment.repository.CommentRepository;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
 import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
@@ -21,12 +21,12 @@ import org.springframework.stereotype.Repository;
 public class ReplyRepositoryImpl implements ReplyRepository {
 
     private final ReplyJpaRepository replyJpaRepository;
-    private final CommentJpaRepository commentJpaRepository;
+    private final CommentRepository commentRepository;
 
     @Override
     public Reply save(Reply reply) {
         Long parentCommentId = reply.getParentCommentId();
-        CommentEntity commentEntity = commentJpaRepository.findById(parentCommentId)
+        CommentEntity commentEntity = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new RuntimeException("해당 정보가 없어"));
 
         ReplyEntity replyEntity = ReplyEntity.from(reply, commentEntity);

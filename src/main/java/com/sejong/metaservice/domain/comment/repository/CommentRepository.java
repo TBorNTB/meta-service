@@ -1,16 +1,39 @@
 package com.sejong.metaservice.domain.comment.repository;
 
-import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
-import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface CommentRepository {
-    List<Comment> findAllComments(Long postId, PostType postType, CursorPageRequest cursorPageRequest);
+public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
-    Comment updateComment(Comment comment);
+    @Query("""
+    SELECT c FROM CommentEntity c
+    WHERE c.postId = :postId
+      AND c.postType = :postType
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id < :cursorId)
+    """)
+    List<CommentEntity> findAllCommentsDesc(
+            @Param("postId") Long postId,
+            @Param("postType") PostType postType,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
 
-    Comment findByCommentId(Long commentId);
+    @Query("""
+    SELECT c FROM CommentEntity c
+    WHERE c.postId = :postId
+      AND c.postType = :postType
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id > :cursorId)
+    """)
+    List<CommentEntity> findAllCommentsAsc(
+            @Param("postId") Long postId,
+            @Param("postType") PostType postType,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
 
-    Long deleteComment(Long commentId);
 }

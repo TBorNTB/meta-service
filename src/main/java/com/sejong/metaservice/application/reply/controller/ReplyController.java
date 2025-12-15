@@ -6,7 +6,7 @@ import com.sejong.metaservice.application.reply.service.ReplyService;
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
-import com.sejong.metaservice.support.common.pagination.CursorPageResponse;
+import com.sejong.metaservice.support.common.pagination.CursorPageRes;
 import com.sejong.metaservice.support.pagination.CursorPageReqDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,12 +48,12 @@ public class ReplyController {
 
     @Operation(summary = "대댓글 목록 조회", description = "특정 댓글의 대댓글 목록을 커서 기반 페이징으로 조회합니다")
     @GetMapping("/{commentParentId}")
-    public ResponseEntity<CursorPageResponse<List<Reply>>> showReplyComments(
+    public ResponseEntity<CursorPageRes<List<Reply>>> showReplyComments(
             @PathVariable(name="commentParentId") Long commentParentId,
             @ParameterObject @Valid CursorPageReqDto cursorPageReqDto
             ){
         CursorPageRequest pageRequest = cursorPageReqDto.toPageRequest();
-        CursorPageResponse<List<Reply>> response = replyService.getAllReplyComments(commentParentId, pageRequest);
+        CursorPageRes<List<Reply>> response = replyService.getAllReplyComments(commentParentId, pageRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

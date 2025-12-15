@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentRequest {
+public class CommentReq {
     @NotBlank
     private String content;
-
 }

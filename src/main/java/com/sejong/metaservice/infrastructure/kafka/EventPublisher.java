@@ -3,7 +3,7 @@ package com.sejong.metaservice.infrastructure.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sejong.metaservice.core.reply.domain.Reply;
-import com.sejong.metaservice.domain.comment.domain.Comment;
+import com.sejong.metaservice.domain.comment.domain.CommentEntity;
 import com.sejong.metaservice.domain.like.domain.Like;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +34,14 @@ public class EventPublisher {
         kafkaTemplate.send(alarmTopic,key, toJsonString(event));
     }
 
-    public void publishCommentAlarm(Comment savedComment, String ownerUsername) {
+    public void publishCommentAlarm(CommentEntity savedComment, String ownerUsername) {
         log.info("알람 이벤트 발행 시작 comment :{}", savedComment);
         DomainAlarmEvent event = DomainAlarmEvent.from(savedComment, AlarmType.COMMENT_ADDED, ownerUsername);
         String key = "alarm-comment:" + savedComment.getId();
         kafkaTemplate.send(alarmTopic,key, toJsonString(event));
     }
 
-    public void publishReplyAlarm(Comment parentComment, Reply responseReply) {
+    public void publishReplyAlarm(CommentEntity parentComment, Reply responseReply) {
         log.info("알람 이벤트 발행 시작 comment :{}, responseReply : {}", parentComment);
         DomainAlarmEvent event = DomainAlarmEvent.from(parentComment, responseReply, AlarmType.COMMENT_REPLY_ADDED);
         String key = "alarm-reply:" + responseReply.getId();

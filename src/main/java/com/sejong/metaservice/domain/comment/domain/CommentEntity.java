@@ -1,7 +1,11 @@
 package com.sejong.metaservice.domain.comment.domain;
 
+import com.sejong.metaservice.domain.comment.command.CommentCommand;
+import com.sejong.metaservice.domain.comment.dto.response.CommentRes;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.exception.BaseException;
+import com.sejong.metaservice.support.common.exception.ExceptionType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,37 +49,40 @@ public class CommentEntity {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static CommentEntity from(Comment comment) {
+    public static CommentEntity of(CommentCommand command) {
+        return CommentEntity.builder()
+                .id(null)
+                .content(command.getContent())
+                .username(command.getUsername())
+                .postId(command.getPostId())
+                .postType(command.getPostType())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static CommentEntity from(CommentRes commentRes) {
 
         return CommentEntity.builder()
                 .id(null)
-                .content(comment.getContent())
-                .username(comment.getUsername())
-                .postId(comment.getPostId())
-                .postType(comment.getPostType())
+                .content(commentRes.getContent())
+                .username(commentRes.getUsername())
+                .postId(commentRes.getPostId())
+                .postType(commentRes.getPostType())
                 .replyEntities(new ArrayList<>())
-                .createdAt(comment.getCreatedAt())
-                .updatedAt(comment.getUpdatedAt())
+                .createdAt(commentRes.getCreatedAt())
+                .updatedAt(commentRes.getUpdatedAt())
                 .build();
     }
 
-    public Comment toDomain() {
-        return Comment.builder()
-                .id(this.id)
-                .content(this.content)
-                .username(this.username)
-                .postId(this.postId)
-                .postType(this.postType)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
-                .replyCount((long)replyEntities.size())
-                .build();
-    }
-
-    public Comment updateComment(String content, LocalDateTime updatedAt) {
+    public void update(String content, LocalDateTime updatedAt) {
         this.content = content;
         this.updatedAt = updatedAt;
+    }
 
-        return toDomain();
+    public void isWrittenBy(String username) {
+        if (!this.username.equals(username)) {
+            throw new BaseException(ExceptionType.BAD_REQUEST);
+        }
     }
 }
