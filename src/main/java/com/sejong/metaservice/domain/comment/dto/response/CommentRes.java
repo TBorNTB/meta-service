@@ -1,6 +1,6 @@
 package com.sejong.metaservice.domain.comment.dto.response;
 
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class CommentRes {
     private LocalDateTime updatedAt;
     private Long replyCount;
 
-    public static CommentRes from(CommentEntity comment) {
+    public static CommentRes from(Comment comment) {
         return CommentRes.builder()
                 .id(comment.getId())
                 .content(comment.getContent())

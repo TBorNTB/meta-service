@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface ReplyJpaRepository extends JpaRepository<ReplyEntity, Long> {
     @Query("""
     SELECT r FROM ReplyEntity r
-    WHERE r.commentEntity.id = :commentParentId
+    WHERE r.comment.id = :commentParentId
       AND (:cursorId IS NULL OR :cursorId <= 0 OR r.id < :cursorId)
     ORDER BY r.createdAt DESC
 """)
@@ -20,7 +20,7 @@ public interface ReplyJpaRepository extends JpaRepository<ReplyEntity, Long> {
             Pageable pageable);
     @Query("""
     SELECT r FROM ReplyEntity r
-    WHERE r.commentEntity.id = :commentParentId
+    WHERE r.comment.id = :commentParentId
       AND (:cursorId IS NULL OR :cursorId <= 0 OR r.id > :cursorId)
     ORDER BY r.createdAt ASC
 """)

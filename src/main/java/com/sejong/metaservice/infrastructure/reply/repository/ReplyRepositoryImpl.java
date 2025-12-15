@@ -2,14 +2,12 @@ package com.sejong.metaservice.infrastructure.reply.repository;
 
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.comment.repository.CommentRepository;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
-import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +24,10 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     @Override
     public Reply save(Reply reply) {
         Long parentCommentId = reply.getParentCommentId();
-        CommentEntity commentEntity = commentRepository.findById(parentCommentId)
+        Comment comment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new RuntimeException("해당 정보가 없어"));
 
-        ReplyEntity replyEntity = ReplyEntity.from(reply, commentEntity);
+        ReplyEntity replyEntity = ReplyEntity.from(reply, comment);
 
         ReplyEntity responseEntity = replyJpaRepository.save(replyEntity);
         return responseEntity.toDomain();
@@ -37,9 +35,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public List<Reply> findAllReplyComments(Long commentParentId, CursorPageRequest cursorRequest) {
-        Long cursorId = Optional.ofNullable(cursorRequest.getCursor())
-                .map(Cursor::getCommentId)
-                .orElse(null);
+        Long cursorId = cursorRequest.getCursorId();
 
         Sort.Direction sortDirection = cursorRequest.getDirection() == SortDirection.ASC
                 ? Sort.Direction.ASC

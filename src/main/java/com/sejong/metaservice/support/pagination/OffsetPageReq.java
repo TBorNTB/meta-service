@@ -1,7 +1,6 @@
 package com.sejong.metaservice.support.pagination;
 
-import com.sejong.metaservice.support.common.pagination.Cursor;
-import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
+import com.sejong.metaservice.support.common.pagination.CustomPageRequest;
 import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -11,9 +10,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CursorPageReqDto {
+public class OffsetPageReq {
 
-    private Cursor cursor; // null이면 첫 페이지
+    @Min(value = 0, message = "페이지 번호는 0 이상이어야 합니다.")
+    private int page = 0;
 
     @Min(value = 1, message = "페이지 크기는 최소 1이어야 합니다.")
     @Max(value = 100, message = "페이지 크기는 최대 100이어야 합니다.")
@@ -23,9 +23,10 @@ public class CursorPageReqDto {
     private String sortBy = "id";
 
     @Pattern(regexp = "^(ASC|DESC)$", message = "정렬 방향은 'ASC' 또는 'DESC'만 가능합니다.")
-    private String sortDirection = "DESC";
+    private String sortDirection = "ASC";
 
-    public CursorPageRequest toPageRequest() {
-        return CursorPageRequest.of(cursor, size, sortBy, SortDirection.valueOf(sortDirection));
+
+    public CustomPageRequest toPageRequest() {
+        return CustomPageRequest.of(page, size, sortBy, SortDirection.from(sortDirection));
     }
 }

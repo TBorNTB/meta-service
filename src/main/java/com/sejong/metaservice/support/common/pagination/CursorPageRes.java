@@ -14,26 +14,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CursorPageRes<T> {
 
-    private T content;
-    private Cursor nextCursor;
     private boolean hasNext;
+    private T content;
+    private Long nextCursorId;
 
-    private static <T> CursorPageRes<T> ok(Cursor nextCursor, boolean hasNext, T content) {
-        return CursorPageRes.<T>builder()
-                .content(content)
-                .nextCursor(nextCursor)
-                .hasNext(hasNext)
-                .build();
-    }
-
-    /**
-     * 커서 기반 페이지네이션을 위한 정적 생성 메서드
-     * (전체 데이터에서 size+1로 받은 리스트를 기반으로 생성)
-     */
     public static <T> CursorPageRes<List<T>> from(
             List<T> fullContent,
             int requestedSize,
-            Function<T, Cursor> cursorExtractor
+            Function<T, Long> idExtractor
     ) {
         boolean hasNext = fullContent.size() > requestedSize;
 
@@ -41,10 +29,14 @@ public class CursorPageRes<T> {
                 ? fullContent.subList(0, requestedSize)
                 : fullContent;
 
-        Cursor nextCursor = hasNext && !content.isEmpty()
-                ? cursorExtractor.apply(content.get(content.size() - 1)) //마지막 내용물을 받아서 Cursor 생성자 생성
+        Long nextCursorId = hasNext && !content.isEmpty()
+                ? idExtractor.apply(content.get(content.size() - 1))
                 : null;
 
-        return CursorPageRes.ok(nextCursor, hasNext, content);
+        return CursorPageRes.<List<T>>builder()
+                .content(content)
+                .nextCursorId(nextCursorId)
+                .hasNext(hasNext)
+                .build();
     }
 }

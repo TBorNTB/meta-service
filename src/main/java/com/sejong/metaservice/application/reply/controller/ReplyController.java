@@ -7,7 +7,6 @@ import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageRes;
-import com.sejong.metaservice.support.pagination.CursorPageReqDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -50,10 +49,9 @@ public class ReplyController {
     @GetMapping("/{commentParentId}")
     public ResponseEntity<CursorPageRes<List<Reply>>> showReplyComments(
             @PathVariable(name="commentParentId") Long commentParentId,
-            @ParameterObject @Valid CursorPageReqDto cursorPageReqDto
+            @ParameterObject @Valid CursorPageRequest cursorPageRequest
             ){
-        CursorPageRequest pageRequest = cursorPageReqDto.toPageRequest();
-        CursorPageRes<List<Reply>> response = replyService.getAllReplyComments(commentParentId, pageRequest);
+        CursorPageRes<List<Reply>> response = replyService.getAllReplyComments(commentParentId, cursorPageRequest);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

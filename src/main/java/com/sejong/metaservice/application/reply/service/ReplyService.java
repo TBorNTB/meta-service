@@ -7,11 +7,10 @@ import com.sejong.metaservice.application.reply.dto.response.ReplyCommentRespons
 import com.sejong.metaservice.core.reply.command.ReplyCreateCommand;
 import com.sejong.metaservice.core.reply.domain.Reply;
 import com.sejong.metaservice.core.reply.repository.ReplyRepository;
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.comment.repository.CommentRepository;
 import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import com.sejong.metaservice.support.common.exception.BaseException;
-import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageRes;
 import java.time.LocalDateTime;
@@ -32,7 +31,7 @@ public class ReplyService {
     public ReplyCommentResponse createReplyComment(ReplyCreateCommand command) {
         Reply reply = Reply.of(command, LocalDateTime.now());
         Reply responseReply = replyRepository.save(reply);
-        CommentEntity parentComment = commentRepository.findById(responseReply.getParentCommentId())
+        Comment parentComment = commentRepository.findById(responseReply.getParentCommentId())
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
         eventPublisher.publishReplyAlarm(parentComment , responseReply);
         return ReplyCommentResponse.from(responseReply);
@@ -42,7 +41,7 @@ public class ReplyService {
     public CursorPageRes<List<Reply>> getAllReplyComments(Long commentParentId, CursorPageRequest cursorPageRequest) {
 
         List<Reply> replies = replyRepository.findAllReplyComments(commentParentId, cursorPageRequest);
-        return CursorPageRes.from(replies,cursorPageRequest.getSize(), reply -> Cursor.of(reply.getId()));
+        return CursorPageRes.from(replies, cursorPageRequest.getSize(), Reply::getId);
     }
 
 

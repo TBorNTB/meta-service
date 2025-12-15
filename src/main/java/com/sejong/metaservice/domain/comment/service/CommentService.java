@@ -5,19 +5,17 @@ import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_
 
 import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.domain.comment.command.CommentCommand;
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.comment.dto.request.CommentReq;
 import com.sejong.metaservice.domain.comment.dto.response.CommentRes;
 import com.sejong.metaservice.domain.comment.repository.CommentRepository;
 import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
-import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +37,7 @@ public class CommentService {
     public CommentRes createComment(CommentCommand command) {
         String ownerUsername = postInternalFacade.checkPostExistenceAndOwner(command.getPostId(),
                 command.getPostType());
-        CommentEntity comment = toComment(command);
+        Comment comment = toComment(command);
 
         comment = commentRepository.save(comment);
         eventPublisher.publishCommentAlarm(comment, ownerUsername);
@@ -49,9 +47,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentRes> getComments(CursorPageRequest cursorPageRequest, Long postId,
                                                     PostType postType) {
-        Long cursorId = Optional.ofNullable(cursorPageRequest.getCursor())
-                .map(Cursor::getCommentId)
-                .orElse(null);
+        Long cursorId = cursorPageRequest.getCursorId();
 
         Sort.Direction sortDirection = cursorPageRequest.getDirection() == SortDirection.ASC
                 ? Sort.Direction.ASC
@@ -63,7 +59,7 @@ public class CommentService {
                 Sort.by(sortDirection, cursorPageRequest.getSortBy())
         );
 
-        List<CommentEntity> comments;
+        List<Comment> comments;
         if (sortDirection == Sort.Direction.ASC) {
             comments = commentRepository.findAllCommentsAsc(postId, postType, cursorId, pageable);
         } else {
@@ -75,18 +71,18 @@ public class CommentService {
 
     @Transactional
     public CommentRes updateComment(String username, Long commentId, CommentReq request) {
-        CommentEntity comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
-        comment.isWrittenBy(username);
+        comment.validateWriter(username);
         comment.update(request.getContent(), LocalDateTime.now());
         return CommentRes.from(comment);
     }
 
     @Transactional
     public void deleteComment(String username, Long commentId) {
-        CommentEntity comment = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
-        comment.isWrittenBy(username);
+        comment.validateWriter(username);
         commentRepository.deleteById(commentId);
     }
 }

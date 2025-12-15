@@ -1,7 +1,5 @@
 package com.sejong.metaservice.domain.comment.domain;
 
-import com.sejong.metaservice.domain.comment.command.CommentCommand;
-import com.sejong.metaservice.domain.comment.dto.response.CommentRes;
 import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
@@ -31,10 +29,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CommentEntity {
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String content;
     private String username;
@@ -44,43 +42,18 @@ public class CommentEntity {
     @Column(columnDefinition = "VARCHAR(50)")
     private PostType postType;
 
-    @OneToMany(mappedBy = "commentEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReplyEntity> replyEntities = new ArrayList<>();
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public static CommentEntity of(CommentCommand command) {
-        return CommentEntity.builder()
-                .id(null)
-                .content(command.getContent())
-                .username(command.getUsername())
-                .postId(command.getPostId())
-                .postType(command.getPostType())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-    }
-
-    public static CommentEntity from(CommentRes commentRes) {
-
-        return CommentEntity.builder()
-                .id(null)
-                .content(commentRes.getContent())
-                .username(commentRes.getUsername())
-                .postId(commentRes.getPostId())
-                .postType(commentRes.getPostType())
-                .replyEntities(new ArrayList<>())
-                .createdAt(commentRes.getCreatedAt())
-                .updatedAt(commentRes.getUpdatedAt())
-                .build();
-    }
 
     public void update(String content, LocalDateTime updatedAt) {
         this.content = content;
         this.updatedAt = updatedAt;
     }
 
-    public void isWrittenBy(String username) {
+    public void validateWriter(String username) {
         if (!this.username.equals(username)) {
             throw new BaseException(ExceptionType.BAD_REQUEST);
         }

@@ -1,7 +1,7 @@
 package com.sejong.metaservice.infrastructure.reply.entity;
 
 import com.sejong.metaservice.core.reply.domain.Reply;
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,35 +32,35 @@ public class ReplyEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
-    private CommentEntity commentEntity;
+    private Comment comment;
     private String username;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static ReplyEntity from(Reply reply, CommentEntity commentEntity) {
+    public static ReplyEntity from(Reply reply, Comment comment) {
 
         ReplyEntity replyEntity = ReplyEntity.builder()
                 .id(null)
                 .content(reply.getContent())
-                .commentEntity(null)
+                .comment(null)
                 .username(reply.getUsername())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt())
                 .build();
 
-        replyEntity.assignComment(commentEntity);
+        replyEntity.assignComment(comment);
         return replyEntity;
     }
 
-    private void assignComment(CommentEntity commentEntity) {
-        this.commentEntity = commentEntity;
-        commentEntity.getReplyEntities().add(this);
+    private void assignComment(Comment comment) {
+        this.comment = comment;
+        comment.getReplyEntities().add(this);
     }
 
     public Reply toDomain() {
         return Reply.builder()
                 .id(id)
-                .parentCommentId(commentEntity.getId())
+                .parentCommentId(comment.getId())
                 .content(content)
                 .username(username)
                 .createdAt(createdAt)

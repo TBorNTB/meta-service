@@ -5,10 +5,8 @@ import com.sejong.metaservice.domain.comment.dto.request.CommentReq;
 import com.sejong.metaservice.domain.comment.dto.response.CommentRes;
 import com.sejong.metaservice.domain.comment.service.CommentService;
 import com.sejong.metaservice.support.common.enums.PostType;
-import com.sejong.metaservice.support.common.pagination.Cursor;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.CursorPageRes;
-import com.sejong.metaservice.support.pagination.CursorPageReqDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -50,12 +48,10 @@ public class CommentController {
     @Operation(summary = "댓글 목록 조회", description = "특정 게시물의 댓글 목록을 커서 기반 페이징으로 조회합니다")
     @GetMapping("/{postId}")
     public CursorPageRes<List<CommentRes>>
-
     showComments(@PathVariable(name = "postId") Long postId, @RequestParam(name = "postType") PostType postType,
-        @ParameterObject @Valid CursorPageReqDto cursorPageReqDto) {
-        CursorPageRequest cursorRequest = cursorPageReqDto.toPageRequest();
-        List<CommentRes> comments = commentService.getComments(cursorRequest, postId, postType);
-        return CursorPageRes.from(comments, cursorRequest.getSize(), comment -> Cursor.of(comment.getId()));
+        @ParameterObject @Valid CursorPageRequest cursorPageRequest) {
+        List<CommentRes> comments = commentService.getComments(cursorPageRequest, postId, postType);
+        return CursorPageRes.from(comments, cursorPageRequest.getSize(), CommentRes::getId);
     }
 
     @Operation(summary = "댓글 수정", description = "작성한 댓글의 내용을 수정합니다")

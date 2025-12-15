@@ -1,6 +1,6 @@
 package com.sejong.metaservice.domain.comment.command;
 
-import com.sejong.metaservice.domain.comment.domain.CommentEntity;
+import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,8 @@ public class CommentCommand {
         return new CommentCommand(username, postId, postType, content);
     }
 
-    public static CommentEntity toComment(CommentCommand command) {
-        return CommentEntity.builder()
+    public static Comment toComment(CommentCommand command) {
+        return Comment.builder()
                 .id(null)
                 .content(command.getContent())
                 .username(command.getUsername())
