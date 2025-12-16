@@ -15,15 +15,18 @@ import lombok.NoArgsConstructor;
 public class CommentRes {
 
     private Long id;
-    private String content;
-    private String username;
-    private Long postId;
     private PostType postType;
+    private Long postId;
+
+    private String username;
+    private String content;
+
     private Long parentId;
     private int depth;
+    private int replyCount;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private int replyCount;
 
     public static CommentRes from(Comment comment) {
         return CommentRes.builder()

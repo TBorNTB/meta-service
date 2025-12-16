@@ -87,9 +87,6 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public CursorPageRes<List<CommentRes>> getReplies(Long parentId, CursorPageRequest cursorPageRequest) {
-        commentRepository.findById(parentId)
-                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
-
         Long cursorId = cursorPageRequest.getCursorId();
         Pageable pageable = PageRequest.of(0, cursorPageRequest.getSize() + 1);
 
