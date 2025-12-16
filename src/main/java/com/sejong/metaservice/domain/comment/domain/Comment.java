@@ -1,6 +1,5 @@
 package com.sejong.metaservice.domain.comment.domain;
 
-import com.sejong.metaservice.domain.reply.domain.ReplyEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.exception.ExceptionType;
@@ -13,6 +12,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -42,8 +43,16 @@ public class Comment {
     @Column(columnDefinition = "VARCHAR(50)")
     private PostType postType;
 
-    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReplyEntity> replyEntities = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
+    @Builder.Default
+    private int depth = 0;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

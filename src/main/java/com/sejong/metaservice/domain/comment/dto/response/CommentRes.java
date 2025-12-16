@@ -19,9 +19,11 @@ public class CommentRes {
     private String username;
     private Long postId;
     private PostType postType;
+    private Long parentId;
+    private int depth;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long replyCount;
+    private int replyCount;
 
     public static CommentRes from(Comment comment) {
         return CommentRes.builder()
@@ -29,8 +31,10 @@ public class CommentRes {
                 .content(comment.getContent())
                 .username(comment.getUsername())
                 .postId(comment.getPostId())
-                .replyCount(0L)
                 .postType(comment.getPostType())
+                .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
+                .depth(comment.getDepth())
+                .replyCount(comment.getChildren() != null ? comment.getChildren().size() : 0)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();

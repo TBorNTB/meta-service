@@ -13,24 +13,47 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CommentCommand {
-    private  String username;
-    private  Long postId;
-    private  PostType postType;
-    private  String content;
+    private String username;
+    private Long postId;
+    private PostType postType;
+    private String content;
+    private Long parentId;
 
     public static CommentCommand of(String username, Long postId, PostType postType, String content) {
-        return new CommentCommand(username, postId, postType, content);
+        return CommentCommand.builder()
+                .username(username)
+                .postId(postId)
+                .postType(postType)
+                .content(content)
+                .parentId(null)
+                .build();
     }
 
-    public static Comment toComment(CommentCommand command) {
+    public static CommentCommand ofReply(String username, Long postId, PostType postType, String content, Long parentId) {
+        return CommentCommand.builder()
+                .username(username)
+                .postId(postId)
+                .postType(postType)
+                .content(content)
+                .parentId(parentId)
+                .build();
+    }
+
+    public static Comment toComment(CommentCommand command, Comment parent) {
+        int depth = (parent != null) ? parent.getDepth() + 1 : 0;
         return Comment.builder()
-                .id(null)
                 .content(command.getContent())
                 .username(command.getUsername())
                 .postId(command.getPostId())
                 .postType(command.getPostType())
+                .parent(parent)
+                .depth(depth)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+    }
+
+    public boolean isReply() {
+        return parentId != null;
     }
 }
