@@ -19,11 +19,11 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.annotations.BatchSize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Table(name = "comment")
@@ -66,7 +66,7 @@ public class Comment {
 
     public void validateWriter(String username) {
         if (!this.username.equals(username)) {
-            throw new BaseException(ExceptionType.BAD_REQUEST);
+            throw new BaseException(ExceptionType.WRITER_INVALID);
         }
     }
 }
