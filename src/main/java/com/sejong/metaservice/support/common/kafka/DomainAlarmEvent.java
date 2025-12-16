@@ -2,7 +2,6 @@ package com.sejong.metaservice.support.common.kafka;
 
 import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.like.domain.Like;
-import com.sejong.metaservice.domain.reply.domain.Reply;
 import com.sejong.metaservice.support.common.enums.PostType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -50,11 +49,10 @@ public class DomainAlarmEvent {
                 .build();
     }
 
-    /*
-    이 친구는 따로 도메인 타입 포스트에 종류에 따라 구분할 필요가 없어서 바로 DomainType.COMMENT 넣었습니다.
-       그 이유는  이동호님이 댓글에 응답을 남겼습니다. 와 같이 포스트 종류가 필요 없어집니다.
-    */
-    public static DomainAlarmEvent from(Comment parentComment, Reply reply, AlarmType alarmType) {
+    /**
+     * 대댓글 알림용 - 부모 댓글 작성자에게 알림
+     */
+    public static DomainAlarmEvent fromReply(Comment parentComment, Comment reply, AlarmType alarmType) {
         DomainType makeDomainType = getDomainType(parentComment.getPostType());
 
         return DomainAlarmEvent.builder()

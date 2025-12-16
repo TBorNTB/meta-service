@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.like.domain.Like;
-import com.sejong.metaservice.domain.reply.domain.Reply;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -41,11 +40,11 @@ public class EventPublisher {
         kafkaTemplate.send(alarmTopic,key, toJsonString(event));
     }
 
-    public void publishReplyAlarm(Comment parentComment, Reply responseReply) {
-        log.info("알람 이벤트 발행 시작 comment :{}, responseReply : {}", parentComment);
-        DomainAlarmEvent event = DomainAlarmEvent.from(parentComment, responseReply, AlarmType.COMMENT_REPLY_ADDED);
-        String key = "alarm-reply:" + responseReply.getId();
-        kafkaTemplate.send(alarmTopic,key, toJsonString(event));
+    public void publishReplyAlarm(Comment parentComment, Comment reply) {
+        log.info("알람 이벤트 발행 시작 parentComment: {}, reply: {}", parentComment.getId(), reply.getId());
+        DomainAlarmEvent event = DomainAlarmEvent.fromReply(parentComment, reply, AlarmType.COMMENT_REPLY_ADDED);
+        String key = "alarm-reply:" + reply.getId();
+        kafkaTemplate.send(alarmTopic, key, toJsonString(event));
     }
 
     private String toJsonString(Object object) {
