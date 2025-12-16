@@ -1,8 +1,13 @@
 package com.sejong.metaservice.domain.meta;
 
+import static com.sejong.metaservice.support.common.exception.ExceptionType.EXTERNAL_SERVER_ERROR;
+
+import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.internal.PostInternalFacade;
 import com.sejong.metaservice.support.common.internal.UserInternalService;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,14 +19,26 @@ public class MetaService {
 
     private final UserInternalService userInternalService;
     private final PostInternalFacade postInternalFacade;
+    private final Executor metaAsyncExecutor;
 
     public MetaCountResponse getMetaCountInfo() {
         long start = System.currentTimeMillis();
 
         CompletableFuture<Long> userFuture = CompletableFuture
-                .supplyAsync(userInternalService::getUserCount); // commonPool 사용
+                .supplyAsync(userInternalService::getUserCount, metaAsyncExecutor)
+                .orTimeout(3, TimeUnit.SECONDS)
+                .exceptionally(ex -> {
+                    log.error("[MetaService] User count 조회 실패", ex);
+                    throw new BaseException(EXTERNAL_SERVER_ERROR);
+                });
+
         CompletableFuture<MetaPostCountDto> postFuture = CompletableFuture
-                .supplyAsync(postInternalFacade::getPostCount);
+                .supplyAsync(postInternalFacade::getPostCount, metaAsyncExecutor)
+                .orTimeout(5, TimeUnit.SECONDS)
+                .exceptionally(ex -> {
+                    log.error("[MetaService] Post count 조회 실패", ex);
+                    throw new BaseException(EXTERNAL_SERVER_ERROR);
+                });
 
         CompletableFuture.allOf(userFuture, postFuture).join();
 

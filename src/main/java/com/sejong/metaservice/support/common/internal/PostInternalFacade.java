@@ -5,7 +5,6 @@ import static com.sejong.metaservice.support.common.exception.ExceptionType.BAD_
 import com.sejong.metaservice.domain.meta.MetaPostCountDto;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,23 +34,12 @@ public class PostInternalFacade {
         }
     }
 
+    // MetaService에서 이미 async로 호출하므로 여기서는 직렬 호출
     public MetaPostCountDto getPostCount() {
-        long start = System.currentTimeMillis();
+        Long projectCount = projectInternalService.getProjectCount();
+        Long articleCount = CSKnowledgeInternalService.getCsCount();
+        Long newsCount = projectInternalService.getCategoryCount();
 
-        CompletableFuture<Long> projectFuture = CompletableFuture
-                .supplyAsync(projectInternalService::getProjectCount);
-        CompletableFuture<Long> articleFuture = CompletableFuture
-                .supplyAsync(CSKnowledgeInternalService::getCsCount);
-        CompletableFuture<Long> newsFuture = CompletableFuture
-                .supplyAsync(projectInternalService::getCategoryCount);
-
-        CompletableFuture.allOf(projectFuture, articleFuture, newsFuture).join();
-
-        log.info("[PostInternalFacade] 전체 조회 시간: {}ms", System.currentTimeMillis() - start);
-        return MetaPostCountDto.of(
-                projectFuture.join(),
-                articleFuture.join(),
-                newsFuture.join()
-        );
+        return MetaPostCountDto.of(projectCount, articleCount, newsCount);
     }
 }
