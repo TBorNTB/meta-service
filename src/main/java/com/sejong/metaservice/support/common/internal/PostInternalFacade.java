@@ -35,19 +35,6 @@ public class PostInternalFacade {
         }
     }
 
-    // TODO: 직렬 호출
-    // public MetaPostCountDto getPostCount() {
-    //     long start = System.currentTimeMillis();
-    //
-    //     Long projectCount = projectInternalService.getProjectCount();
-    //     Long articleCount = CSKnowledgeInternalService.getCsCount();
-    //     Long newsCount = projectInternalService.getCategoryCount();
-    //
-    //     log.info("[PostInternalFacade] 전체 조회 시간: {}ms", System.currentTimeMillis() - start);
-    //     return MetaPostCountDto.of(projectCount, articleCount, newsCount);
-    // }
-
-    // 병렬 호출
     public MetaPostCountDto getPostCount() {
         long start = System.currentTimeMillis();
 
