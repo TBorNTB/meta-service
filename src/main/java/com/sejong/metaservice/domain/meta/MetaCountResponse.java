@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MetaCountResponse {
+
     private Long userCount;
     private Long projectCount;
     private Long articleCount;
@@ -20,7 +21,7 @@ public class MetaCountResponse {
                 .userCount(userCount)
                 .projectCount(metaPostCountDto.getProjectCount())
                 .articleCount(metaPostCountDto.getArticleCount())
-                .csCount(metaPostCountDto.getCsCount())
+                .csCount(metaPostCountDto.getCategoryCount())
                 .build();
     }
 }

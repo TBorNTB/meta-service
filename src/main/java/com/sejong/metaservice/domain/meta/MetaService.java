@@ -14,7 +14,6 @@ public class MetaService {
     public MetaCountResponse getMetaCountInfo() {
         Long userCount = userInternalService.getUserCount();
         MetaPostCountDto metaPostcountDto = postInternalFacade.getPostCount();
-        MetaCountResponse metaCountResponse = MetaCountResponse.of(userCount, metaPostcountDto);
-        return metaCountResponse;
+        return MetaCountResponse.of(userCount, metaPostcountDto);
     }
 }

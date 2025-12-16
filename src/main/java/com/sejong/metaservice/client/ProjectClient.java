@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "project-service", path = "/internal/project")
+@FeignClient(name = "project-service", path = "/internal")
 public interface ProjectClient {
-    @GetMapping("/check/{postId}")
+    @GetMapping("/project/check/{postId}")
     ResponseEntity<PostLikeCheckResponse> checkProject(@PathVariable("postId") Long postId);
 
-    @GetMapping("/count")
+    @GetMapping("/category/count")
     ResponseEntity<Long> getProjectCount();
 }

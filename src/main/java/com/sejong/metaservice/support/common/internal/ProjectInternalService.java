@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class ProjectInternalService {
+
     private final ProjectClient projectClient;
 
     @CircuitBreaker(name = "myFeignClient", fallbackMethod = "validateExistsFallback")
@@ -44,6 +45,16 @@ public class ProjectInternalService {
 
     private Long getUserCountFallback(Throwable t) {
         // 예외 대신 기본값 0 반환
+        return 0L;
+    }
+
+    @CircuitBreaker(name = "myFeignClient", fallbackMethod = "getCategoryCountFallback")
+    public Long getCategoryCount() {
+        ResponseEntity<Long> response = projectClient.getCategoryCount();
+        return response.getBody();
+    }
+
+    private Long getCategoryCountFallback(Throwable t) {
         return 0L;
     }
 }

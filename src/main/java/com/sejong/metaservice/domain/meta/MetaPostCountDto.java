@@ -10,11 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class MetaPostCountDto {
-    private Long projectCount;
-    private Long csCount;
-    private Long articleCount;
 
-    public static MetaPostCountDto of(Long projectCount, Long csCount, Long articleCount) {
-        return new MetaPostCountDto(projectCount, csCount, articleCount);
+    private Long projectCount;
+    private Long articleCount;
+    private Long categoryCount;
+
+    public static MetaPostCountDto of(Long projectCount, Long articleCount, Long categoryCount) {
+        return MetaPostCountDto
+            .builder()
+            .projectCount(projectCount)
+            .articleCount(articleCount)
+            .categoryCount(categoryCount)
+            .build();
     }
 }
