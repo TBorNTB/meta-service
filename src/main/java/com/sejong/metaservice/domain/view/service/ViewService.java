@@ -2,14 +2,14 @@ package com.sejong.metaservice.domain.view.service;
 
 import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_POST_TYPE_POST_ID;
 
-import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.domain.view.domain.View;
 import com.sejong.metaservice.domain.view.dto.response.ViewCountResponse;
 import com.sejong.metaservice.domain.view.repository.ViewJPARepository;
-import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
-import com.sejong.metaservice.infrastructure.redis.RedisService;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
+import com.sejong.metaservice.support.common.internal.PostInternalFacade;
+import com.sejong.metaservice.support.common.redis.RedisKeyUtil;
+import com.sejong.metaservice.support.common.redis.RedisService;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

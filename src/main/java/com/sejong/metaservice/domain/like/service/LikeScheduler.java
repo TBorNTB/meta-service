@@ -1,7 +1,7 @@
 package com.sejong.metaservice.domain.like.service;
 
 import com.sejong.metaservice.domain.like.repository.LikeRepository;
-import com.sejong.metaservice.infrastructure.redis.RedisService;
+import com.sejong.metaservice.support.common.redis.RedisService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

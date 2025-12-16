@@ -1,6 +1,6 @@
 package com.sejong.metaservice.domain.comment.domain;
 
-import com.sejong.metaservice.infrastructure.reply.entity.ReplyEntity;
+import com.sejong.metaservice.domain.reply.domain.ReplyEntity;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
 import com.sejong.metaservice.support.common.exception.ExceptionType;

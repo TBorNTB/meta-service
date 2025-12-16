@@ -3,15 +3,15 @@ package com.sejong.metaservice.domain.comment.service;
 import static com.sejong.metaservice.domain.comment.command.CommentCommand.toComment;
 import static com.sejong.metaservice.support.common.exception.ExceptionType.NOT_FOUND_COMMENT;
 
-import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.domain.comment.command.CommentCommand;
 import com.sejong.metaservice.domain.comment.domain.Comment;
 import com.sejong.metaservice.domain.comment.dto.request.CommentReq;
 import com.sejong.metaservice.domain.comment.dto.response.CommentRes;
 import com.sejong.metaservice.domain.comment.repository.CommentRepository;
-import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
 import com.sejong.metaservice.support.common.enums.PostType;
 import com.sejong.metaservice.support.common.exception.BaseException;
+import com.sejong.metaservice.support.common.internal.PostInternalFacade;
+import com.sejong.metaservice.support.common.kafka.EventPublisher;
 import com.sejong.metaservice.support.common.pagination.CursorPageRequest;
 import com.sejong.metaservice.support.common.pagination.enums.SortDirection;
 import java.time.LocalDateTime;

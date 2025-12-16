@@ -1,15 +1,15 @@
 package com.sejong.metaservice.domain.like.service;
 
-import com.sejong.metaservice.application.internal.PostInternalFacade;
 import com.sejong.metaservice.domain.like.domain.Like;
 import com.sejong.metaservice.domain.like.domain.LikeStatus;
 import com.sejong.metaservice.domain.like.dto.response.LikeCountRes;
 import com.sejong.metaservice.domain.like.dto.response.LikeRes;
 import com.sejong.metaservice.domain.like.repository.LikeRepository;
-import com.sejong.metaservice.infrastructure.kafka.EventPublisher;
-import com.sejong.metaservice.infrastructure.redis.RedisKeyUtil;
-import com.sejong.metaservice.infrastructure.redis.RedisService;
 import com.sejong.metaservice.support.common.enums.PostType;
+import com.sejong.metaservice.support.common.internal.PostInternalFacade;
+import com.sejong.metaservice.support.common.kafka.EventPublisher;
+import com.sejong.metaservice.support.common.redis.RedisKeyUtil;
+import com.sejong.metaservice.support.common.redis.RedisService;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
