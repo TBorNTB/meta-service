@@ -64,9 +64,9 @@ public class CommentService {
     private void publishAlarm(Comment comment, Comment parent, String ownerUsername) {
         if (parent != null) {
             eventPublisher.publishReplyAlarm(parent, comment);
-        } else {
-            eventPublisher.publishCommentAlarm(comment, ownerUsername);
+            return;
         }
+        eventPublisher.publishCommentAlarm(comment, ownerUsername);
     }
 
     @Transactional(readOnly = true)
