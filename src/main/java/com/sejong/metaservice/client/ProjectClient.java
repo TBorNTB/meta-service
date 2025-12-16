@@ -11,6 +11,9 @@ public interface ProjectClient {
     @GetMapping("/project/check/{postId}")
     ResponseEntity<PostLikeCheckResponse> checkProject(@PathVariable("postId") Long postId);
 
-    @GetMapping("/category/count")
+    @GetMapping("/project/count")
     ResponseEntity<Long> getProjectCount();
+
+    @GetMapping("/category/count")
+    ResponseEntity<Long> getCategoryCount();
 }

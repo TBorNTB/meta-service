@@ -14,14 +14,14 @@ public class MetaCountResponse {
     private Long userCount;
     private Long projectCount;
     private Long articleCount;
-    private Long csCount;
+    private Long categoryCount;
 
     public static MetaCountResponse of(Long userCount, MetaPostCountDto metaPostCountDto) {
         return MetaCountResponse.builder()
                 .userCount(userCount)
                 .projectCount(metaPostCountDto.getProjectCount())
                 .articleCount(metaPostCountDto.getArticleCount())
-                .csCount(metaPostCountDto.getCategoryCount())
+                .categoryCount(metaPostCountDto.getCategoryCount())
                 .build();
     }
 }

@@ -34,10 +34,33 @@ public class PostInternalFacade {
         }
     }
 
+    // 직렬 호출
     public MetaPostCountDto getPostCount() {
+        long start = System.currentTimeMillis();
+
         Long projectCount = projectInternalService.getProjectCount();
-        Long csCount = CSKnowledgeInternalService.getCsCount();
-        Long categoryCount = projectInternalService.getNewsCount();
-        return MetaPostCountDto.of(projectCount, csCount, categoryCount);
+        Long articleCount = CSKnowledgeInternalService.getCsCount();
+        Long newsCount = projectInternalService.getCategoryCount();
+
+        log.info("[PostInternalFacade] 전체 조회 시간: {}ms", System.currentTimeMillis() - start);
+        return MetaPostCountDto.of(projectCount, articleCount, newsCount);
     }
+
+    // TODO: 병렬 호출로 성능 개선 가능
+    // public MetaPostCountDto getPostCount() {
+    //     CompletableFuture<Long> projectFuture = CompletableFuture
+    //             .supplyAsync(projectInternalService::getProjectCount);
+    //     CompletableFuture<Long> articleFuture = CompletableFuture
+    //             .supplyAsync(CSKnowledgeInternalService::getCsCount);
+    //     CompletableFuture<Long> newsFuture = CompletableFuture
+    //             .supplyAsync(projectInternalService::getCategoryCount);
+    //
+    //     CompletableFuture.allOf(projectFuture, articleFuture, newsFuture).join();
+    //
+    //     return MetaPostCountDto.of(
+    //             projectFuture.join(),
+    //             articleFuture.join(),
+    //             newsFuture.join()
+    //     );
+    // }
 }
