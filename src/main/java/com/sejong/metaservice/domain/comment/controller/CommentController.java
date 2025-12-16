@@ -36,7 +36,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 작성", description = "특정 게시물에 댓글을 작성합니다")
     @PostMapping("/{postId}")
-    public ResponseEntity<CommentRes> createComment(@RequestHeader("X-User-Id") String username,
+    public ResponseEntity<CommentRes> createComment(
+        @RequestHeader("X-User-Id") String username,
         @PathVariable(name = "postId") Long postId,
         @RequestParam(name = "postType") PostType postType,
         @Valid @RequestBody CommentReq request) {
@@ -48,15 +49,39 @@ public class CommentController {
     @Operation(summary = "댓글 목록 조회", description = "특정 게시물의 댓글 목록을 커서 기반 페이징으로 조회합니다")
     @GetMapping("/{postId}")
     public CursorPageRes<List<CommentRes>>
-    showComments(@PathVariable(name = "postId") Long postId, @RequestParam(name = "postType") PostType postType,
+    showComments(
+        @RequestParam(name = "postType") PostType postType,
+        @PathVariable(name = "postId") Long postId,
         @ParameterObject @Valid CursorPageRequest cursorPageRequest) {
         List<CommentRes> comments = commentService.getComments(cursorPageRequest, postId, postType);
         return CursorPageRes.from(comments, cursorPageRequest.getSize(), CommentRes::getId);
     }
 
+    @Operation(summary = "대댓글 작성", description = "특정 댓글에 대댓글을 작성합니다")
+    @PostMapping("/{postId}/reply/{parentId}")
+    public ResponseEntity<CommentRes> createReply(
+        @RequestHeader("X-User-Id") String username,
+        @RequestParam(name = "postType") PostType postType,
+        @PathVariable(name = "postId") Long postId,
+        @PathVariable(name = "parentId") Long parentId,
+        @Valid @RequestBody CommentReq request) {
+        CommentCommand command = CommentCommand.ofReply(username, postId, postType, request.getContent(), parentId);
+        CommentRes response = commentService.createComment(command);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "대댓글 목록 조회", description = "특정 댓글의 대댓글 목록을 커서 기반 페이징으로 조회합니다")
+    @GetMapping("/{commentId}/replies")
+    public CursorPageRes<List<CommentRes>> showReplies(
+        @PathVariable(name = "commentId") Long commentId,
+        @ParameterObject @Valid CursorPageRequest cursorPageRequest) {
+        return commentService.getReplies(commentId, cursorPageRequest);
+    }
+
     @Operation(summary = "댓글 수정", description = "작성한 댓글의 내용을 수정합니다")
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommentRes> updateComment(@RequestHeader("X-User-Id") String username,
+    public ResponseEntity<CommentRes> updateComment(
+        @RequestHeader("X-User-Id") String username,
         @PathVariable(name = "commentId") Long commentId,
         @Valid @RequestBody CommentReq request) {
         CommentRes response = commentService.updateComment(username, commentId, request);
@@ -65,7 +90,8 @@ public class CommentController {
 
     @Operation(summary = "댓글 삭제", description = "작성한 댓글을 삭제합니다")
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@RequestHeader("X-User-Id") String username,
+    public ResponseEntity<Void> deleteComment(
+        @RequestHeader("X-User-Id") String username,
         @PathVariable(name = "commentId") Long commentId) {
         commentService.deleteComment(username, commentId);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -14,6 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     SELECT c FROM Comment c
     WHERE c.postId = :postId
       AND c.postType = :postType
+      AND c.parent IS NULL
       AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id < :cursorId)
     """)
     List<Comment> findAllCommentsDesc(
@@ -27,11 +28,36 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     SELECT c FROM Comment c
     WHERE c.postId = :postId
       AND c.postType = :postType
+      AND c.parent IS NULL
       AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id > :cursorId)
     """)
     List<Comment> findAllCommentsAsc(
             @Param("postId") Long postId,
             @Param("postType") PostType postType,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT c FROM Comment c
+    WHERE c.parent.id = :parentId
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id < :cursorId)
+    ORDER BY c.id DESC
+    """)
+    List<Comment> findRepliesDesc(
+            @Param("parentId") Long parentId,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT c FROM Comment c
+    WHERE c.parent.id = :parentId
+      AND (:cursorId IS NULL OR :cursorId <= 0 OR c.id > :cursorId)
+    ORDER BY c.id ASC
+    """)
+    List<Comment> findRepliesAsc(
+            @Param("parentId") Long parentId,
             @Param("cursorId") Long cursorId,
             Pageable pageable
     );

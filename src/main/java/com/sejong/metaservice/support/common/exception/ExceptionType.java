@@ -16,7 +16,8 @@ public enum ExceptionType implements ExceptionTypeIfs {
 
     NOT_FOUND_POST_TYPE_POST_ID(400, "존재하지 않는 포스트 타입, 포스트 id"),
 
-    NOT_FOUND_COMMENT(400, "존재하지 않는 코멘트 id")
+    NOT_FOUND_COMMENT(400, "존재하지 않는 코멘트 id"),
+    DEPTH_LIMIT_EXCEEDED(400, "댓글의 깊이가 제한됩니다.")
     ;
 
     private final Integer httpStatus;
